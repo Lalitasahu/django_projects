@@ -1,0 +1,16 @@
+
+<form action="" method="post">
+    {% csrf_token %}
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" value="{{ student.name }}"><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" value="{{student.email}}" required><br><br>
+
+    <label for="message">Message:</label><br>
+    <textarea id="message" name="message" rows="4" cols="30" required>
+        {{student.message}}
+    </textarea><br><br>
+
+    <button type="submit">Updated</button>
+</form>

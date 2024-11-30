@@ -1,0 +1,80 @@
+
+html {
+    background-color: rgb(14, 210, 210); 
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    height: 100%; /* Ensures the background color covers the full viewport */
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+h1 {
+    
+    text-align: center;
+    margin-bottom: 30px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    text-decoration: none;
+    
+}
+
+
+a {
+    text-align: center;
+    text-decoration: none;
+    color: #18015e;
+    font-size: 20px;
+    display: block;
+    margin: 10px 0;
+    
+}
+
+a:hover {
+    color: #205eef;
+    text-decoration: underline;
+}
+
+button {
+    background-color: #063d78;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button a {
+    text-decoration: none;
+    color: white;
+}
+
+.form_css{
+    text-align: center;
+    font-size: 24px;
+}
+input{
+    color: rgb(75, 138, 140);
+    font-weight: 800;
+}
+
+
+label{
+    font-size: 24px;
+    color: #5b6b37;
+    
+}
+
+.detailp{
+    color:  #5b6b37;
+    font-size: 16px;
+    
+}

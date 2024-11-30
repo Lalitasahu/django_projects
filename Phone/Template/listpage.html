@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <title>Detailpage</title>
+</head>
+<body>
+    <div>
+        <h1>Product Informations </h1>
+        <form action="" class="form_css" method="POST">
+            {% csrf_token %}
+            <label for="brand">brand:</label>
+            <input type="text" id="name" name="brand" value="{{ Info_update.brand }}" required>
+            <br><br>
+
+            <label for="storage"> storage:</label>
+            <input type="text" id="storage" name="storage" value="{{ Info_update.storage }}" required>
+            <br><br>
+
+            <label for="camera"> camera:</label>
+            <input type="text" id="camera" name="camera" value="{{ Info_update.camera }}" required>
+            <br><br>
+
+            <label for="battery"> battery:</label>
+            <input type="text" id="battery" name="battery" value="{{ Info_update.battery }}" required>
+            <br><br>
+
+            <label for="display"> display:</label>
+            <input type="text" id="display" name="display" value="{{ Info_update.display }}" required>
+            <br><br>
+
+            <label for="price"> price:</label>
+            <input type="text" id="price" name="price" value="{{ Info_update.price }}" required>
+            <br><br>
+
+            <button type="submit">Save Products</button>
+        </form>
+        
+    </div>
+</body>
+</html>
+

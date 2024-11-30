@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'index.css' %}">
+        <title>Create form for css  </title>
+</head>
+    <body>
+
+        <h1>Edit Student Information</h1>
+        <form action="" class="form_css" method="POST">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ Info_update.name }}" required>
+            <br><br>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" value="{{ Info_update.address }}" required>
+            <br><br>
+
+            <label for="phone_no">Phone Number:</label>
+            <input type="number" id="phone_no" name="phone_no" value="{{ Info_update.phone_no }}" required>
+            <br><br>
+
+            <button type="submit">Save Information</button>
+        </form>
+
+    </body>
+</html>
+
+
+

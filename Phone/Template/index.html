@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <title>indexpage</title>
+</head>
+<body>
+            
+    <h1>Phones</h1>
+    {% for p in phn %}
+    <a href="detail/{{p.id}}"><h3>{{p.brand}}</h3></a>
+        <!-- <p>{{p.storage}}</p>
+        <p>{{p.camera}}</p>
+        <p>{{p.battery}}</p>
+        <p>{{p.display}}</p>
+        <p>{{p.price}}</p> -->
+    {% endfor %}
+
+    <a class="logout-button" href="/Userlogout">LOGOUT</a>
+
+</body>
+</html>

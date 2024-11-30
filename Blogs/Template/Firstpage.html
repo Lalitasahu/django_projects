@@ -1,0 +1,14 @@
+
+
+{% for Student in Students %}
+    <h1>
+        <a href="/detail/{{Student.id}}">{{Student.name}}</h1></a>
+        <p>{{Student.name}}</p>
+        <h3>{{Student.email}}</h3>
+        <p>{{Student.message}}</p>
+        <!-- <a href="//{{Student.id}}"><button>Edit_info</button></a> -->
+        <a href="/Edit/{{Student.id}}"><button>Updated</button></a>
+        
+{% endfor %}
+
+

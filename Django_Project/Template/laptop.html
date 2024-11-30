@@ -1,0 +1,12 @@
+
+
+
+
+
+
+
+<h1>Laptop Items</h1>
+{% for p in prd %}
+    <div>
+        <h2><a href="/detailpage/{{p.id}}">{{ p.title }}</h2></a>
+{% endfor %}

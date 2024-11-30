@@ -1,0 +1,19 @@
+
+
+
+
+
+<h1>Computers Items</h1>
+{% for p in prd %}
+    <div>
+        <h2><a href="/detailpage/{{p.id}}">{{ p.title }}</h2></a>
+        <!-- <p>Price: {{ p.price }}</p>
+        <p>Description: {{ p.description }}</p>
+        <p>Posted Date: {{ p.posted_date }}</p>
+        <p><a href="/edit_product/{{p.id}}"><button type="submit">Edit Product</button></a>
+        <a href="/delete_product/{{p.id}}">
+            <button type="button" onclick="return confirm('Are you sure you want to delete this product?');">
+                Delete Product
+            </button></a></p>
+    </div> -->
+{% endfor %}

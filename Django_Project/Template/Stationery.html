@@ -1,0 +1,10 @@
+
+
+
+
+
+<h1>Stationery Items</h1>
+{% for p in prd %}
+    <div>
+        <h2><a href="/detailpage/{{p.id}}">{{ p.title }}</h2></a>
+{% endfor %}

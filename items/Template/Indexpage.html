@@ -1,0 +1,15 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'index.css' %}">
+
+<a href="/logout">Logout</a>
+<h1>Student List</h1>
+{% for st in stud %}
+<a href="/detail/{{st.id}}"><h2>{{ st.name }}</h2></a>
+<!-- <h4>{{ st.address }}</h4>
+<p>{{ st.phone_no }}</p>
+<button><a href="/edit_info/{{ st.id }}">Edit Information</a></button>
+<button type="button" onclick="return confirm('Are you sure you want to delete this Student?');"><a href="/delete_student/{{ st.id }}">
+    Delete Information
+</a></button> -->
+{% endfor %}
+

@@ -1,0 +1,49 @@
+
+
+<h1>Edit Product</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="{{ Product_upadated.title }}" required>
+    <br><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" value="{{ Product_upadated.price }}" required>
+    <br><br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="5" required> {{ Product_upadated.description }} </textarea>
+    <br><br>
+
+    <label for="posted_date">Posted Date:</label>
+    <input type="date" id="posted_date" name="posted_date" value="{{ Product_upadated.posted_date|date:'Y-m-d' }}" required>
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+
+<!-- <form method="POST" action="">
+    {% csrf_token %}
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="{{ Product_upadated.title }}" required><br><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price"  value="{{ Product_upadated.price }}" required><br><br>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required> {{ Product_upadated.description }}  </textarea><br><br>
+
+    <label for="posted_date">Posted Date:</label>
+    <input type="date" id="posted_date" name="posted_date" value="{{ Product_upadated.posted_date|date:'Y-m-d' }}" required>
+    <br><br> -->
+
+    <!-- <label for="category">Category:</label>
+    <select id="category" name="category" required>
+        <option value="laptop">Laptop</option>
+        <option value="stationery">Stationery</option>
+        <option value="toys">Toys</option>
+    </select><br> -->
+
+    <!-- <button type="submit">Add Product</button>
+</form> -->
