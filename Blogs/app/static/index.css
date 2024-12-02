@@ -4,7 +4,6 @@ html {
     margin: 0; /* Remove default margin */
     padding: 0; /* Remove default padding */
     height: 100%; /* Ensures the background color covers the full viewport */
-    background-image: url('/Users/apple/Desktop/createuser.png');
 }
 
 
@@ -15,8 +14,12 @@ body {
     font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
     
+
 }
 
+.detail{
+    color: blue;
+}
 
 h1 {
     

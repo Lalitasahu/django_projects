@@ -20,10 +20,12 @@ from app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/<int:id>',homepage),
-    path('formpages/',formpages),
-    path('detail/<int:id>',detailpage),
-    path('Edit/<int:id>',edit_student),
-    
-    
+    path('',homepage),
+    path('detail/<int:id>',detail),
+    path('create/',create),
+    path('Edit_info/<int:id>',Edit_info),
+    path('delete_info/<int:id>',delete_info),
+    path('Userlogout/',Userlogout),
+    path('Userlogin/',Userlogin),
+    path('createUser/',createUser)
 ]

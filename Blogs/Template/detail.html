@@ -1,9 +1,12 @@
+{% load static %}
 
-    <p>{{Student.name}}</p>
-    <h3>{{Student.email}}</h3>
-    <p>{{Student.message}}</p>
-    <!-- <a href="/Edit/{{Student.id}}"><button>Edit_info</button></a> -->
-    <a href="/Edit/{{Student.id}}"><button>Updated</button></a>
-    
-    
-  
+<link rel="stylesheet" href="{% static 'index.css' %}">
+
+
+<h1>{{blog.Title}}</h1>
+<p>{{blog.discription}}</p>
+<p>By: {{blog.user}}</p>
+<p>{{blog.datetime}}</p>
+
+<button><a href="/Edit_info/{{blog.id}}">Edit</a></button>
+<button><a href="/delete_info/{{blog.id}}">Delete</a></button>

@@ -1,49 +1,108 @@
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect
-from app.models import Student
-
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
+from app.models import Blogs
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
-def homepage(request, id):
-    Students = Student.objects.get(id=id)
 
-    Students = Student.objects.all()
-    return render(request,'Firstpage.html',{'Students':Students})
+def homepage(request):
+    blog = Blogs.objects.all()
+    # html = ' this is my home page'
+    return  render(request, 'indexpage.html',{'blog':blog})
 
-def detailpage(request,id):
-    Students = Student.objects.get(id=id)
-    return render(request,'detail.html',{'Student':Students})
-    
-def formpages(request):
+def detail(request,id):
+    blog = Blogs.objects.get(id=id)
+    return render(request, 'detail.html', {'blog':blog})
+
+def create(request):
     if request.method == 'GET':
-        return render(request,'form.html')
+        return render(request, 'createform.html')
     else:
-        N = request.POST['name']
-        E = request.POST['email']
-        M = request.POST['message']
+        # request.method == 'POST'
+        t = request.POST['title']
+        d = request.POST['discription']
+        u = request.POST['user']
 
-        _Student = Student.objects.create(name=N,email=E,message=M)
-        _Student.save()
-    
-        return HttpResponse('Date is stored')
+        blogs = Blogs.objects.create(Title=t, discription=d, user=u)
+        blogs.save()
+        
+        
+        return HttpResponse('Save Successfully')
 
-
-def edit_student(request, id):
-    st = Student.objects.get(id=id)
+def Edit_info(request,id):
+    blogs = Blogs.objects.get(id=id)
     if request.method == 'POST':
-        n = request.POST.get('name')
-        e = request.POST.get('email')
-        m = request.POST.get('message')
-        
-        Student_updat = Student.objects.get(id = id)
+        t = request.POST['title']
+        d = request.POST['discription']
+        u = request.POST['user']    
 
-        Student_updat.name = n
-        Student_updat.email = e
-        Student_updat.message = m
-
-        # Student_updat = Student.objects.update(name=n,email=e,message=m)
-        Student_updat.save()
+        # update the information
+        blogs.title = t
+        blogs.discription = d
+        blogs.user = u
+        blogs.save()
         
-        # return redirect('detail.html', id=id)
-        return HttpResponseRedirect(f'/home/{id}')
+        return HttpResponseRedirect('/')
+    return render(request, 'createform.html', {'blogs':blogs})
     
-    return render(request, 'Edit.html', {'student': st})
+    
+def delete_info(request,id):
+    blogs = Blogs.objects.get(id=id)
+    blogs.delete()
+    
+    return HttpResponseRedirect('/')
 
+
+def Userlogout(request):
+    logout(request)
+    return HttpResponseRedirect("/")
+
+
+def Userlogin(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request,user)
+            return HttpResponseRedirect("/")
+            # return HttpResponse("user and password is correct")
+        else:
+            return HttpResponse("user or password is not valid")
+
+    else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect("/")
+        return render(request,'loginpage.html')
+
+
+def createUser(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        password = request.POST['password']
+        email = request.POST['email']
+
+        user = User.objects.create(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            # password=password,
+            email=email
+        )
+
+        user.set_password(password)
+
+        user.save()
+        return HttpResponseRedirect("/")
+
+
+    else:
+        return render(request,'createuser.html')
+
+
+    
+    
+    
+
+    
