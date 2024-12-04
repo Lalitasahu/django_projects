@@ -66,7 +66,6 @@ def createUser(request):
         return render(request,'createuser.html')
 
 
-
 def New_student(request):
     # st = Student.objects.get(id=id)
     if request.method == 'GET':
