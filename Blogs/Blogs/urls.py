@@ -27,5 +27,6 @@ urlpatterns = [
     path('delete_info/<int:id>',delete_info),
     path('Userlogout/',Userlogout),
     path('Userlogin/',Userlogin),
-    path('createUser/',createUser)
+    path('createUser/',createUser),
+    path('profile/',userProfile)
 ]

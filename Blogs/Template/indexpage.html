@@ -8,10 +8,30 @@
     <title>Index page</title>
 </head>
 <body>
-    <a href="/Userlogin">Login hare</a>
+    <!-- <a href="/Userlogin">Login hare</a> -->
+     <div style="display: flex; flex-flow: row; justify-content: space-between; align-items: center; background-color: black;padding: 10px;color: white;">
+        <div>
+            <a href="/create" style="color: white;">
+                Create Blog
+            </a>
+        </div>
+        <div>
+            <a href="/profile" style="color: white;">
+                Profile
+            </a>
+        </div>
+        <div>
+            {% if user.is_authenticated %}
+                <a href="/Userlogout" style="color: white;">Logout</a>
+                 <!-- <a href="/profile" style="color: white;">{{user.username}}</a> -->
+            {% else %}
+                <a href="/Userlogin" style="color: white;">Login here</a>
+            {% endif %}
+        </div>                
+     </div>
     <h1>List of Blog</h1>
     {% for b in blog %}
-    <a href="/detail/{{b.id}}"><h3 class="detail">{{b.Title}}</h3></a>
+    <a href="/detail/{{b.id}}"><h3 class="detail">{{b.title}}</h3></a>
     
     {% endfor  %}
     

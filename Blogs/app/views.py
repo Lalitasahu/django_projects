@@ -2,17 +2,21 @@ from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, Ht
 from app.models import Blogs
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def homepage(request):
     blog = Blogs.objects.all()
-    # html = ' this is my home page'
-    return  render(request, 'indexpage.html',{'blog':blog})
-
+    return  render(request, 'indexpage.html',{'blog':blog,'user':request.user})
 def detail(request,id):
     blog = Blogs.objects.get(id=id)
-    return render(request, 'detail.html', {'blog':blog})
+    return render(request, 'detail.html', {'blog':blog,'user':request.user})
 
+@login_required(login_url='/Userlogin')
+def userProfile(request):
+    return render(request, 'profile.html',{'user':request.user})
+
+@login_required(login_url='/Userlogin')
 def create(request):
     if request.method == 'GET':
         return render(request, 'createform.html')
@@ -20,13 +24,11 @@ def create(request):
         # request.method == 'POST'
         t = request.POST['title']
         d = request.POST['discription']
-        u = request.POST['user']
+        # u = request.POST['user']
 
-        blogs = Blogs.objects.create(Title=t, discription=d, user=u)
+        blogs = Blogs.objects.create(title=t, discription=d, user=request.user)
         blogs.save()
-        
-        
-        return HttpResponse('Save Successfully')
+        return HttpResponseRedirect('/')
 
 def Edit_info(request,id):
     blogs = Blogs.objects.get(id=id)
