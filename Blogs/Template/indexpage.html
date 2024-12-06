@@ -1,15 +1,17 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'index.css' %}">
     <title>Index page</title>
 </head>
+
 <body>
-    <!-- <a href="/Userlogin">Login hare</a> -->
-     <div style="display: flex; flex-flow: row; justify-content: space-between; align-items: center; background-color: black;padding: 10px;color: white;">
+    <div
+        style="display: flex; flex-flow: row; justify-content: space-between; align-items: center; background-color: black;padding: 10px;color: white;">
         <div>
             <a href="/create" style="color: white;">
                 Create Blog
@@ -22,19 +24,33 @@
         </div>
         <div>
             {% if user.is_authenticated %}
-                <a href="/Userlogout" style="color: white;">Logout</a>
-                 <!-- <a href="/profile" style="color: white;">{{user.username}}</a> -->
+            <a href="/Userlogout" style="color: white;">Logout</a>
+            <!-- <a href="/profile" style="color: white;">{{user.username}}</a> -->
             {% else %}
-                <a href="/Userlogin" style="color: white;">Login here</a>
+            <a href="/Userlogin" style="color: white;">Login here</a>
             {% endif %}
-        </div>                
-     </div>
-    <h1>List of Blog</h1>
-    {% for b in blog %}
-    <a href="/detail/{{b.id}}"><h3 class="detail">{{b.title}}</h3></a>
+        </div>
+    </div>
+    <div style=" background-color: rgb(88, 226, 210);">
+        <h1>
+            List of Blogs
+        </h1>
+    </div>
+    <!-- <div style="background-color:rgb(4, 166, 164);"> -->
+    <div  class="blogs">
+        {% for b in blog %}
+        <a class="product-box" href="/detail/{{b.id}}">
+            <h3 style="color: rgb(3, 3, 156);">{{b.title}}</h3>
+        </a>
+        {% endfor %}
+    </div>
     
-    {% endfor  %}
-    
-    <a href="/Userlogout">Logout hare</a>
+    <footer>
+        <div>
+            <!-- <p>&copy; 2024 My Website. All rights reserved.</p> -->
+                <a href="/createuser" style="color: white;"> Create User </a>
+        </div>
+    </footer>
 </body>
+
 </html>

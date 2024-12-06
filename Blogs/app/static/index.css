@@ -10,25 +10,53 @@ html {
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    /* padding: 20px; */
+    /* padding: 10px; */
     font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
     
 
 }
-
-.detail{
-    color: blue;
+/* Blogs container */
+.blogs {
+    display: flex; /* Enables Flexbox */
+    flex-direction: column; /* Align items vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+    min-height: 50vh; /* Full height of the viewport */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
 }
 
+/* Blog items */
+.blogs .product-box {
+    display: block; /* Makes the link behave like a block element */
+    width: 50%; /* Set a width for the blog boxes */
+    margin: 10px 0; /* Add vertical spacing between blog items */
+    text-decoration: none; /* Remove underline */
+    background-color: #f4f4f4; /* Light background */
+    color: #333; /* Text color */
+    border: 1px solid #ddd; /* Border for box */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Center-align text */
+    /* padding: 5px; Add padding inside the box */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+}
+
+/* Hover effect for <a> tags */
+.blogs .product-box:hover {
+    background-color: rgb(4, 166, 164); /* Change background color on hover */
+    color: white; /* Change text color on hover */
+    transform: scale(1.05); /* Slightly enlarge the box */
+    text-decoration: none; /* Keep underline removed on hover */
+}
+
+
 h1 {
-    
     text-align: center;
     margin-bottom: 30px;
     padding-top: 7px;
     padding-bottom: 7px;
-    text-decoration: none;
-    
+    text-decoration: none; 
 }
 
 
@@ -82,4 +110,15 @@ label{
     color:  #5b6b37;
     font-size: 16px;
     
+}
+
+footer {
+    display: flex; /* Enable Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    text-align: center; /* Optional: Center align text within the block */
+    background-color: black; /* Footer background color */
+    padding: 10px; /* Space inside the footer */
+    color: white; /* White text color */
+    height: 60px; /* Set a fixed height for the footer (optional) */
 }

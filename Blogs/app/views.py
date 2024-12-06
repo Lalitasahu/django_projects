@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 def homepage(request):
     blog = Blogs.objects.all()
     return  render(request, 'indexpage.html',{'blog':blog,'user':request.user})
+
 def detail(request,id):
     blog = Blogs.objects.get(id=id)
     return render(request, 'detail.html', {'blog':blog,'user':request.user})
@@ -77,7 +78,7 @@ def Userlogin(request):
         return render(request,'loginpage.html')
 
 
-def createUser(request):
+def createuser(request):
     if request.method == 'POST':
         username = request.POST['username']
         first_name = request.POST['first_name']
