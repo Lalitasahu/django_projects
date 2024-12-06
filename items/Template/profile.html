@@ -1,0 +1,27 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    
+    <div>
+        <p>Name : {{user.username}}</p>
+        <p>First Name : {{user.first_name}}</p>
+        <p>Last Name : {{user.last_name}}</p>
+        <p>Email : {{user.email}}</p>
+    </div>
+    <div style="border-top: 1px solid;">
+        {% for blog in user.blogs_set.all %}
+            <p><b>{{blog.title}}</b></p>
+            <p>{{blog.discription   }}</p>
+
+        {% endfor %}
+    </div>
+
+</body>
+</html>

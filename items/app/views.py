@@ -1,20 +1,26 @@
-
-
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
 from app.models import Student
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
-# Display all students
+
 def home(request):
     stud = Student.objects.all()
-    return render(request, 'Indexpage.html', {'stud': stud})
+    return render(request, 'Indexpage.html', {'stud': stud,'name':request.user})
+
 
 def detail(request,id):
     student = Student.objects.get(id = id)
-    return render(request, 'detail.html', {'student':student})
+    return render(request, 'detail.html', {'student':student,'name':request.user})
 
+def profile(request):
+    return render(request,'profile.html', {'name':request.user})
+
+@login_required(login_url='/Userlogin')
+def userprofile(request):
+    return render(request, 'profile.html', {'name':request.user})
 
 
 def Userlogout(request):
@@ -73,11 +79,11 @@ def New_student(request):
 
     else:
         request.method == "POST"
-        n = request.POST['name']
+        # n = request.POST['name']
         a = request.POST['address']
         p = request.POST['phone_no']
 
-        stud = Student.objects.create(name=n, address=a, phone_no=p)
+        stud = Student.objects.create(name=request.user, address=a, phone_no=p)
         stud.save()
 
         return HttpResponse('Successfully Saved')
