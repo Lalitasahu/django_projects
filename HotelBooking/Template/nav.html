@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>navigation </title>
+</head>
+<body>
+        
+    <div>
+        <div style="display: flex; justify-content: space-between;background-color: teal;">
+            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                {% if user.is_authenticated %}
+                    {{user.username}}
+                {% else %}
+                    <a href="/userlogin">
+                        User Login
+                    </a>
+                {% endif %}
+            </div>
+            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                <a href="/booking_history/">
+                Booking History
+            </a>
+            </div>        
+            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                    <a href="/userlogout/"> 
+                        User Logout
+                    </a>
+                <br> <br>
+            </div>
+        </div>
+    </div>
+   
+</body>
+</html>

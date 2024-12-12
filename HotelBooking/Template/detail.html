@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Detail</title>
+</head>
+<body>
+    {% include 'nav.html' %}
+    <!-- this page like confirm booking  -->
+    <h1>Room Detail</h1>
+    <p><strong>Room Number:</strong> {{ rooms.Room_no }}</p>
+    <p><strong>Room Type:</strong> {{ rooms.Room_type }}</p>
+    <p><strong>Description:</strong> {{ rooms.Room_description }}</p>
+    <p><strong>Price per Night:</strong> ${{ rooms.Price_per_night }}</p>
+    <p><strong>Available:</strong> {{ rooms.Room_available }}</p>
+    <button><a href="/Booking_edi/{{rooms.id}}">Edit details</a></button>
+
+    <button><a href="/delete_rooms/{{rooms.id}}">Delete rooms</a></button>
+    
+    
+    <button><a href="/Confirm_booking/{{rooms.id}}"> Confirm Room Booking</a></button><br> <br>
+    <a href="/">Back to Home</a>
+</body>
+</html>
+
+
+

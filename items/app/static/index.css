@@ -80,3 +80,15 @@ label{
     font-size: 16px;
     
 }
+
+
+footer {
+    display: flex; /* Enable Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    text-align: center; /* Optional: Center align text within the block */
+    background-color: black; /* Footer background color */
+    padding: 10px; /* Space inside the footer */
+    color: white; /* White text color */
+    height: 60px; /* Set a fixed height for the footer (optional) */
+}

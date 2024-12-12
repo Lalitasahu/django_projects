@@ -1,0 +1,75 @@
+
+{% include 'nav.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .details {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .details strong {
+            display: inline-block;
+            width: 150px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Booking Confirmed!</h1>
+        <p>Thank you for booking with us! Here are the details of your booking:</p>
+        
+        <div class="details">
+            <p><strong>Customer Name:</strong> {{ request.user.username }} {{ request.user.last_name }}</p>
+            <p><strong>Room No:</strong> {{ booking.Room.Room_no }} </p>
+            <p><strong>Room Type:</strong> {{ booking.Room.Room_type }}</p>
+            <p><strong>Room Description:</strong> {{ booking.Room.Room_description }} </p>
+            <p><strong>Check-in Date:</strong> {{ booking.Check_in }}</p>
+            <p><strong>Check-out Date:</strong> {{ booking.Check_out }}</p>
+            <p><strong>Total Price:</strong> {{ booking.Total_price }}</p>
+        </div>
+        <div class="button-container">
+            <a href="/" class="button">Return to Homepage</a>
+            <a href="/Edit_confirm_booking/{{booking.id}}" class="button"> Edit Room Booking</a>
+            <!-- <a href="/Confirm_booking/{{booking.id}}/" class="button">Edit Info</a> -->
+            <a href="/Delete_confirm_booking/{{booking.id}}" class="button">Delete rooms</a>
+        </div>
+    </div>
+    
+</body>
+</html>

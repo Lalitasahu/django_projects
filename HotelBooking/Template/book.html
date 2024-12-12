@@ -1,0 +1,27 @@
+{% include 'nav.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book page</title>
+</head>
+<body>
+    
+    <h1>Book Room: {{ room.Room_type }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="Check_in">Check-in Date:</label>
+        <input type="date" id="Check_in" name="Check_in" required><br><br>
+
+        <label for="Check_out">Check-out Date:</label>
+        <input type="date" id="Check_out" name="Check_out" required><br><br>
+
+        <label for="total_price">Total Price</label>
+        <input type="number" id="total_price" name="total_price" required><br><br>
+        
+        <button type="submit">Book Now</button>
+    </form>
+    <a href="/" class="button">Return to Homepage</a>
+</body>
+</html>

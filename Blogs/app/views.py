@@ -68,7 +68,6 @@ def Userlogin(request):
         if user is not None:
             login(request,user)
             return HttpResponseRedirect("/")
-            # return HttpResponse("user and password is correct")
         else:
             return HttpResponse("user or password is not valid")
 

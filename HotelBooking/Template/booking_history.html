@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static  'index.css%}">
+    <title>Booking history</title>
+</head>
+<body>
+    <h1>Confirm Room List</h1>
+    {%  for b in booking %}
+        <a href="/detail_confirm_booking/{{b.id}}">User Name: {{ b.user }}</a><br><br>
+        <!-- <p><strong>User ID:</strong> {{ b.user_id }}</p> -->
+        <!-- <p><strong>Room ID:</strong> {{ b.Room_id }}</p> -->
+        <!-- <p><strong>check_in_date:</strong> {{ b.Check_in }}</p>
+        <p><strong>check_out_date:</strong> {{ b.Check_out }}</p>
+        <p><strong>Total Price:</strong> {{ b.Total_price }}</p> -->
+    {% endfor %}
+    <a href="/" >Return to Homepage</a>
+</body>
+</html>
