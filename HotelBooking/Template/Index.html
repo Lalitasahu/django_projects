@@ -13,8 +13,8 @@
     <div>
         {% for r in rooms %}
         <li style="color: {% if r.Room_available %} black; {% else %} grey {% endif %}">
-            <!-- <strong>Room_no:</strong>{{r.Room_no}} <br> -->
-            <strong>Room Type:</strong> {{ r.Room_type }}<br>
+            <strong>Room_no:</strong>{{r.Room_no}} <br>
+            <!-- <strong>Room Type:</strong> {{ r.Room_type }}<br> -->
             <!-- <strong>Price per Night:</strong> ${{ r.Price_per_night }}<br> -->
             <!-- <strong>Description:</strong> {{ r.Room_description }}<br> -->
             <strong>Available:</strong> {% if r.Room_available %} Yes {% else %} No {% endif %}<br>

@@ -33,7 +33,7 @@ def Booking_edi(request,id):
         return HttpResponseRedirect('/')
     return render(request, 'Bookingform.html', {'rooms':rooms})
 
-@login_required(login_url='/userlogin')
+# @login_required(login_url='/userlogin')
 def Add_rooms(request):
     rooms = Room.objects.all()
     if request.method == 'GET':
@@ -54,7 +54,8 @@ def delete_rooms(request,id):
 
 @login_required(login_url='/userlogin')
 def booking_history(request):
-    booking = Booking.objects.all()
+    if request.user.is_authenticated:
+        booking = Booking.objects.filter(user=request.user)
     return render(request,  'booking_history.html', {'booking':booking})
 
 def detail_confirm_booking(request,id):
@@ -64,6 +65,7 @@ def detail_confirm_booking(request,id):
 @login_required(login_url='/userlogin')
 def Confirm_booking(request, id):
     room = get_object_or_404(Room, id=id)
+    
     if request.method == "POST":
         check_in_date = request.POST.get('Check_in')
         check_out_date = request.POST.get('Check_out')
@@ -79,6 +81,8 @@ def Confirm_booking(request, id):
             Total_price=total_price,
         )
         booking.save()
+        room.Room_available = False
+        room.save()
         return HttpResponseRedirect('/')
     return render(request, 'book.html', {'room': room})
 
