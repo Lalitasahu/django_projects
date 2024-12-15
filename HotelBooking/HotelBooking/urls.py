@@ -32,5 +32,8 @@ urlpatterns = [
     path('createuser/',createuser),
     path('detail_confirm_booking/<int:id>/',detail_confirm_booking),
     path('Edit_confirm_booking/<int:id>/',Edit_confirm_booking),
-    path('Delete_confirm_booking/<int:id>/',Delete_confirm_booking)
+    path('Delete_confirm_booking/<int:id>/',Delete_confirm_booking),
+    path('check_out/<int:id>/',check_out),
+    path('check_out_view/<int:id>/',check_out_view),
+    path('cancel/<int:id>',cancel_booking)
 ]

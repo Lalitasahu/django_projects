@@ -58,16 +58,19 @@
             <p><strong>Customer Name:</strong> {{ request.user.username }} {{ request.user.last_name }}</p>
             <p><strong>Room No:</strong> {{ booking.Room.Room_no }} </p>
             <p><strong>Room Type:</strong> {{ booking.Room.Room_type }}</p>
-            <p><strong>Room Description:</strong> {{ booking.Room.Room_description }} </p>
+            <p><strong>Booking Date:</strong> {{ booking.Booking_date }}</p>
             <p><strong>Check-in Date:</strong> {{ booking.Check_in }}</p>
             <p><strong>Check-out Date:</strong> {{ booking.Check_out }}</p>
             <p><strong>Total Price:</strong> {{ booking.Total_price }}</p>
+            <p><strong>Room Description:</strong> {{ booking.Room.Room_description }} </p>
+            <p><strong>Status:</strong> {{ booking.status }} </p>
         </div>
         <div class="button-container">
-            <a href="/" class="button">Return to Homepage</a>
-            <a href="/Edit_confirm_booking/{{booking.id}}" class="button"> Edit Room Booking</a>
-            <!-- <a href="/Confirm_booking/{{booking.id}}/" class="button">Edit Info</a> -->
-            <a href="/Delete_confirm_booking/{{booking.id}}" class="button">Delete rooms</a>
+            
+                <a href="/check_out/{{ booking.id }}" class="button">Check Out</a>
+            
+                <a href="/cancel/{{ booking.id }}" class="button cancel">Cancel Booking</a>
+            
         </div>
     </div>
     

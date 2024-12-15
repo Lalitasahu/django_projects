@@ -10,10 +10,10 @@
     <h1>Confirm Room List</h1>
     <!-- {% if user.is_authenticated %} -->
         {%  for b in booking %}
+        <strong>Room No:</strong> {{ b.Room.Room_no }} <br>
             <a href="/detail_confirm_booking/{{b.id}}">User Name: {{ b.user }}</a><br><br>
         {% endfor %}    
     <!-- {% endif %}  -->
-        <!-- <p><strong>User ID:</strong> {{ b.user_id }}</p> -->
         <!-- <p><strong>Room ID:</strong> {{ b.Room_id }}</p> -->
         <!-- <p><strong>check_in_date:</strong> {{ b.Check_in }}</p>
         <p><strong>check_out_date:</strong> {{ b.Check_out }}</p>

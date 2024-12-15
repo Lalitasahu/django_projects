@@ -58,6 +58,29 @@ def booking_history(request):
         booking = Booking.objects.filter(user=request.user)
     return render(request,  'booking_history.html', {'booking':booking})
 
+def check_out_view(request,id):
+    booking = get_object_or_404(Booking, id=id)
+    return render(request,  'booking_history.html', {'booking':booking})
+
+
+@login_required(login_url='/userlogin')
+def cancel_booking(request,id):
+    booking = Booking.objects.get(id=id)
+    booking.status = "Cancelled"
+    booking.Room.Room_available = True
+    booking.Room.save()
+    booking.save()
+    return HttpResponseRedirect('/')
+
+@login_required(login_url='/userlogin')
+def check_out(request,id):
+    booking = Booking.objects.get(id=id)
+    booking.status = "Completed"
+    booking.Room.Room_available = True
+    booking.Room.save()
+    booking.save()
+    return HttpResponseRedirect('/')
+
 def detail_confirm_booking(request,id):
     booking = Booking.objects.get(id=id)
     return render(request, 'detail_confirm_booking.html', {'booking':booking})
@@ -69,8 +92,10 @@ def Confirm_booking(request, id):
     if request.method == "POST":
         check_in_date = request.POST.get('Check_in')
         check_out_date = request.POST.get('Check_out')
-        # total_price = request.POST.get('Total_price')
-        total_price = (datetime.strptime(check_out_date, '%Y-%m-%d') - datetime.strptime(check_in_date, '%Y-%m-%d')).days * room.Price_per_night
+        N_of_Person = int(request.POST.get('Num_of_Person'))
+        room_price = int(room.Price_per_night)
+        total_price = N_of_Person * room_price
+        status = request.POST.get('status')
         # Create a booking
         booking = Booking.objects.create(
             Room=room,
@@ -78,13 +103,16 @@ def Confirm_booking(request, id):
             Booking_date=now(),
             Check_in=check_in_date,
             Check_out=check_out_date,
+            Num_of_Person=N_of_Person,
             Total_price=total_price,
+            status = status
         )
         booking.save()
         room.Room_available = False
         room.save()
         return HttpResponseRedirect('/')
-    return render(request, 'book.html', {'room': room})
+    return render(request, 'book.html', {'room': room, 'price_per_night': room.Price_per_night})
+
 
 def Edit_confirm_booking(request, id):
     booking = get_object_or_404(Room, id=id)
@@ -92,13 +120,17 @@ def Edit_confirm_booking(request, id):
     if request.method == "POST":
         check_in_date = request.POST.get('Check_in')
         check_out_date = request.POST.get('Check_out')
-        # total_price = request.POST.get('Total_price')
-        total_price = (datetime.strptime(check_out_date, '%Y-%m-%d') - datetime.strptime(check_in_date, '%Y-%m-%d')).days * room.Price_per_night
+        status = request.POST.get('status')
+        N_of_Person = int(request.POST.get('Num_of_Person'))
+        room_price = int(room.Price_per_night)
+        total_price = N_of_Person * room_price
         # update the date
         booking.Check_in = check_in_date
         booking.Check_out = check_out_date
         booking.Total_price = total_price
+        booking.Num_of_Person = N_of_Person
         booking.room.id = room
+        booking.status = status
         booking.reques.user = User
         booking.save()
         return HttpResponseRedirect('/')
@@ -147,10 +179,3 @@ def createuser(request):
         return HttpResponseRedirect("/")
     else:
         return render(request,'createuser.html')
-
-
-    
-    
-    
-
-    
