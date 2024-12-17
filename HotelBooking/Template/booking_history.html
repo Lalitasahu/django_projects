@@ -1,23 +1,90 @@
 
+{% include 'nav.html' %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>list of Booking history</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            
+        }
+        .button:hover {
+            background: #45a049;
+        }
+            /* Room List Container */
+        /* .room-list {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: #fff;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 3px 5px rgba(13, 13, 13, 0.1);
+        } */
+
+        /* Individual Room Item */
+        .room-item {
+            padding: 1rem 0;
+            position: relative;
+        }
+
+        /* Add a line between items */
+        .room-item:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #ddd;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Confirm Room List</h1>
-    <!-- {% if user.is_authenticated %} -->
-        {%  for b in booking %}
-        <strong>Room No:</strong> {{ b.Room.Room_no }} <br>
-            <a href="/detail_confirm_booking/{{b.id}}">User Name: {{ b.user }}</a><br><br>
-        {% endfor %}    
-    <!-- {% endif %}  -->
-        <!-- <p><strong>Room ID:</strong> {{ b.Room_id }}</p> -->
-        <!-- <p><strong>check_in_date:</strong> {{ b.Check_in }}</p>
-        <p><strong>check_out_date:</strong> {{ b.Check_out }}</p>
-        <p><strong>Total Price:</strong> {{ b.Total_price }}</p> -->
-    <a href="/" >Return to Homepage</a>
+    <div class="container">
+        <h1>Confirm Room List</h1>
+        <div > 
+            {%  for b in booking %}
+            <div class="room-item">
+                <strong >Room No:</strong> {{ b.Room.Room_no }} <br> 
+                <strong>Room ID:</strong> {{ b.Room_id }} <br>
+                <a href="/detail_confirm_booking/{{b.id}}" >User: {{ b.user }}</a>
+            </div><br><br>
+            {% endfor %}   
+        </div> 
+            
+            <!-- <p><strong>check_in_date:</strong> {{ b.Check_in }}</p>
+            <strong>Total Price:</strong> {{ b.Total_price }} <br>
+            <p><strong>check_out_date:</strong> {{ b.Check_out }}</p> -->
+        <button class="button"><a href="/" >Return to Homepage</a></button>
+    </div>
 </body>
 </html>

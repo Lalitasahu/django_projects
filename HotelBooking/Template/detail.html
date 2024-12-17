@@ -1,27 +1,76 @@
+{% include 'nav.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Detail</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .details {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .details strong {
+            display: inline-block;
+            width: 150px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+    </style>
 </head>
 <body>
-    {% include 'nav.html' %}
+    
     <!-- this page like confirm booking  -->
-    <h1>Room Detail</h1>
-    <p><strong>Room Number:</strong> {{ rooms.Room_no }}</p>
-    <p><strong>Room Type:</strong> {{ rooms.Room_type }}</p>
-    <p><strong>Description:</strong> {{ rooms.Room_description }}</p>
-    <p><strong>Price per Night:</strong> ${{ rooms.Price_per_night }}</p>
-    <p><strong>Available:</strong> {{ rooms.Room_available }}</p>
-    <button><a href="/Booking_edi/{{rooms.id}}">Edit details</a></button>
+<div class="container">
+        <h1>Room Detail</h1>
+    
 
-    <button><a href="/delete_rooms/{{rooms.id}}">Delete rooms</a></button>
-    
-    
-    <button><a href="/Confirm_booking/{{rooms.id}}"> Confirm Room Booking</a></button><br> <br>
-    
-    <a href="/">Back to Home</a>
+    <div class="details">
+        <p><strong>Room Number:</strong> {{ rooms.Room_no }}</p>
+        <p><strong>Room Type:</strong> {{ rooms.Room_type }}</p>
+        <p><strong>Description:</strong> {{ rooms.Room_description }}</p>
+        <p><strong>Price per Night:</strong> ${{ rooms.Price_per_night }}</p>
+        <p><strong>Available:</strong> {{ rooms.Room_available }}</p>
+    </div>
+    <div class="button-container">
+        <a href="/Booking_edi/{{rooms.id}}"  class="button">Edit details</a>
+        <a href="/delete_rooms/{{rooms.id}}"  class="button">Delete rooms</a>        
+        <a href="/Confirm_booking/{{rooms.id}}"  class="button"> Confirm Room Booking</a><br> <br>
+        
+        <a href="/">Back to Home</a>
+    </div>
+</div>
 </body>
 </html>
 

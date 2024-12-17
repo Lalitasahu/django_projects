@@ -1,4 +1,5 @@
 {% include 'nav.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,41 +7,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index page</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4CAF50;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>All Type of Rooms</h1>
-    <div>
-        {% for r in rooms %}
-        <li style="color: {% if r.Room_available %} black; {% else %} grey {% endif %}">
-            <strong>Room_no:</strong>{{r.Room_no}} <br>
-            <!-- <strong>Room Type:</strong> {{ r.Room_type }}<br> -->
-            <!-- <strong>Price per Night:</strong> ${{ r.Price_per_night }}<br> -->
-            <!-- <strong>Description:</strong> {{ r.Room_description }}<br> -->
-            <strong>Available:</strong> {% if r.Room_available %} Yes {% else %} No {% endif %}<br>
-            {% if r.Room_available %}
-            <a href="/detail/{{r.id}}">View Details</a>
-            {% endif %}
-        </li>
-        <hr>
-        {% endfor %}
-        <!-- <button>
-                <a href="/Add_rooms/"> 
-                    Add New Rooms 
-                </a>
-        </button> -->
-    </div>
-    <div style="display: flex; justify-content: space-between; background-color: teal;">
-        <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-            <a href="/createuser/">Create New User</a>
+    <div class="container">
+        <h1>All Type of Rooms</h1>
+        <div>
+            {% for r in rooms %}
+            <div style="color: {% if r.Room_available %} black; {% else %} grey {% endif %}">
+                <strong>Room_no:</strong>{{r.Room_no}} <br>
+                <strong>Available:</strong> {% if r.Room_available %} Yes {% else %} No {% endif %}<br>
+                {% if r.Room_available %}
+                <a href="/detail/{{r.id}}">View Details</a>
+                {% endif %}
+            </div>
+            <hr>
+            {% endfor %}
         </div>
-        <!-- <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-            <a href="/check_out_view/{{booking.id}}">check_out</a>
-        </div> -->
-        <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-            <a href="/Add_rooms/">Add Room</a>
+        <div style="display: flex; justify-content: space-between; background-color: teal;">
+            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                <a href="/createuser/">Create New User</a>
+            </div>
+            <!-- <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                <a href="/check_out_view/{{booking.id}}">check_out</a>
+            </div> -->
+            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                <a href="/Add_rooms/">Add Room</a>
+            </div>
+        
         </div>
-       
     </div>
 </body>
 

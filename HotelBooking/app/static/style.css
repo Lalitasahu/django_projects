@@ -1,126 +1,147 @@
-/* General Reset */
-* {
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
-
-/* Body Styling */
-body {
     background-color: #f4f4f9;
     color: #333;
-    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    color: #2c3e50;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #0c48b8;
 }
 
 /* Navigation Bar */
-nav {
+.navbar {
     display: flex;
     justify-content: space-between;
-    background-color: teal;
-    padding: 10px 20px;
     align-items: center;
+    background-color: #34495e;
+    padding: 1rem 2rem;
 }
 
-nav div {
-    padding: 10px;
-    background-color: rgb(42, 166, 166);
+.navbar a {
+    color: #ecf0f1;
+    margin: 0 1rem;
+    font-weight: bold;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Hero Section */
+.hero {
+    background: url('hero-image.jpg') no-repeat center center/cover;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero h1 {
+    font-size: 3rem;
+}
+
+/* Room Listings */
+.room-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.room-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    overflow: hidden;
 }
 
-nav div a {
-    color: white;
-    text-decoration: none;
+.room-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.room-card .details {
+    padding: 1rem;
+}
+
+.room-card h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.room-card p {
+    margin: 0.5rem 0;
+}
+
+.room-card .price {
+    color: #27ae60;
     font-weight: bold;
 }
 
-nav div a:hover {
-    text-decoration: underline;
-}
-
-/* Footer Styling */
-footer {
-    margin-top: 20px;
-    background-color: teal;
-    color: white;
-    text-align: center;
-    padding: 15px 0;
-}
-
-footer a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 0 10px;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-/* Button Styling (Optional) */
-button {
-    background-color: teal;
-    color: white;
+.room-card button {
+    background-color: #3498db;
+    color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 0.5rem 1rem;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
 }
 
-button:hover {
-    background-color: rgb(42, 166, 166);
+.room-card button:hover {
+    background-color: #2980b9;
 }
 
-/* Links Styling */
-a {
-    color: teal;
-    text-decoration: none;
+/* Booking Form */
+.booking-form {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-a:hover {
-    text-decoration: underline;
+.booking-form label {
+    display: block;
+    font-weight: bold;
+    margin: 0.5rem 0 0.2rem;
 }
 
-/* Containers */
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-/* Flexbox Utilities */
-.flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.booking-form button {
+    background-color: #2ecc71;
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Grid Utilities */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    footer div {
-        flex-direction: column;
-    }
+.booking-form button:hover {
+    background-color: #27ae60;
 }
