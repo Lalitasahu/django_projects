@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.models import Room, Booking
+from app.models import Room, Booking, Profile
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
@@ -33,7 +33,7 @@ def Booking_edi(request,id):
         return HttpResponseRedirect('/')
     return render(request, 'Bookingform.html', {'rooms':rooms})
 
-# @login_required(login_url='/userlogin')
+
 def Add_rooms(request):
     rooms = Room.objects.all()
     if request.method == 'GET':
@@ -168,6 +168,11 @@ def createuser(request):
         last_name = request.POST['last_name']
         password = request.POST['password']
         email = request.POST['email']
+        phone_no = request.POST['phone_number']
+        is_vendor = request.POST['is_vendor']
+
+        if User.objects.filter(username=username).exists():
+            return HttpResponse("Error: Username already exists. Please enter another username.")
 
         user = User.objects.create(
             username=username,
@@ -176,6 +181,14 @@ def createuser(request):
         )
         user.set_password(password)
         user.save()
+
+        profile = Profile.objects.create(
+            phone_number = phone_no,
+            is_vendor = is_vendor,
+            user = user
+        )
+        profile.save()
+
         return HttpResponseRedirect("/")
     else:
         return render(request,'createuser.html')
