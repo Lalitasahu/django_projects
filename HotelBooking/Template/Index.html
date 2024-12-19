@@ -44,17 +44,21 @@
             <hr>
             {% endfor %}
         </div>
+
         <div style="display: flex; justify-content: space-between; background-color: teal;">
-            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-                <a href="/createuser/">Create New User</a>
-            </div>
-            <!-- <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-                <a href="/check_out_view/{{booking.id}}">check_out</a>
-            </div> -->
-            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-                <a href="/Add_rooms/">Add Room</a>
-            </div>
-        
+            
+            {% if user.profile.is_vendor %}
+            
+            
+                <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                    <a href="/createuser/">Create New User</a>
+                </div>
+
+                <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                    <a href="/Add_rooms/">Add Room</a>
+                </div>
+
+            {% endif %}
         </div>
     </div>
 </body>

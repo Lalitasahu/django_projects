@@ -64,8 +64,10 @@
         <p><strong>Available:</strong> {{ rooms.Room_available }}</p>
     </div>
     <div class="button-container">
-        <a href="/Booking_edi/{{rooms.id}}"  class="button">Edit details</a>
-        <a href="/delete_rooms/{{rooms.id}}"  class="button">Delete rooms</a>        
+        {% if user.profile.is_vendor %}
+            <a href="/Booking_edi/{{rooms.id}}"  class="button">Edit details</a>
+            <a href="/delete_rooms/{{rooms.id}}"  class="button">Delete rooms</a>        
+        {% endif %}
         <a href="/Confirm_booking/{{rooms.id}}"  class="button"> Confirm Room Booking</a><br> <br>
         
         <a href="/">Back to Home</a>

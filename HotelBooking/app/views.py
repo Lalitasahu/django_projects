@@ -29,9 +29,13 @@ def Booking_edi(request,id):
         rooms.Room_description = R_description
         rooms.Price_per_night = P_p_night
         rooms.Room_available = R_available
-        rooms.save()    
-        return HttpResponseRedirect('/')
-    return render(request, 'Bookingform.html', {'rooms':rooms})
+        rooms.save()   
+
+        profile = Profile.objects.get(user=request.user)
+        if profile.is_vendor:
+            booking = Booking.objects.all()
+            return HttpResponseRedirect('/')
+    return render(request, 'Bookingform.html', {'rooms':rooms, 'booking':booking})
 
 
 def Add_rooms(request):
@@ -54,9 +58,13 @@ def delete_rooms(request,id):
 
 @login_required(login_url='/userlogin')
 def booking_history(request):
-    if request.user.is_authenticated:
-        booking = Booking.objects.filter(user=request.user)
-    return render(request,  'booking_history.html', {'booking':booking})
+    try:
+        profile = Profile.objects.get(user=request.user)
+        if profile.is_vendor:
+            booking = Booking.objects.all()
+    except Profile.DoesNotExist:
+        return HttpResponseRedirect('/userlogin')
+    return render(request, 'booking_history.html', {'booking': booking})
 
 def check_out_view(request,id):
     booking = get_object_or_404(Booking, id=id)
