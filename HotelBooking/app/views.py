@@ -7,9 +7,18 @@ from django.shortcuts import render, get_object_or_404, HttpResponse, HttpRespon
 from django.contrib.auth.decorators import login_required 
  
 
+@login_required(login_url='/userlogin')
 def homepage(request):
-    rooms = Room.objects.all()  
-    return render(request, 'Index.html',{'rooms':rooms,'user':request.user})
+    
+    profile = Profile.objects.get(user=request.user)
+    if profile.is_vendor:
+        rooms = Room.objects.filter(user=request.user)
+        booking = Booking.objects.filter(user=request.user)
+        return render(request, 'Index.html', {'rooms': rooms, 'booking': booking})
+    else:
+        rooms = Room.objects.all()
+        return render(request, 'Index.html', {'rooms': rooms, 'user': request.user})
+
 
 def detail(request,id):
     rooms = Room.objects.get(id=id)
@@ -47,7 +56,8 @@ def Add_rooms(request):
     R_description = request.POST['Room_description']
     P_p_night = request.POST['Price_per_night']
     R_available = request.POST['Room_available']
-    rooms = Room.objects.create( Room_no= R_no, Room_type= R_type, Room_description=R_description, Price_per_night=P_p_night,Room_available=R_available)
+    rooms = Room.objects.create( Room_no= R_no, Room_type= R_type, Room_description=R_description, 
+                                Price_per_night=P_p_night,Room_available=R_available,user = request.user)
     rooms.save()
     return HttpResponseRedirect('/')
 
@@ -61,7 +71,7 @@ def booking_history(request):
     try:
         profile = Profile.objects.get(user=request.user)
         if profile.is_vendor:
-            booking = Booking.objects.all()
+            booking = Booking.objects.all()        
     except Profile.DoesNotExist:
         return HttpResponseRedirect('/userlogin')
     return render(request, 'booking_history.html', {'booking': booking})
@@ -172,12 +182,15 @@ def userlogin(request):
 
 def createuser(request):
     if request.method == 'POST':
+        # print(request.POST)
+        # print(request.FILES['image'])
         username = request.POST['username']
         last_name = request.POST['last_name']
         password = request.POST['password']
         email = request.POST['email']
         phone_no = request.POST['phone_number']
         is_vendor = request.POST['is_vendor']
+        profile_pic = request.FILES['image']
 
         if User.objects.filter(username=username).exists():
             return HttpResponse("Error: Username already exists. Please enter another username.")
@@ -193,6 +206,7 @@ def createuser(request):
         profile = Profile.objects.create(
             phone_number = phone_no,
             is_vendor = is_vendor,
+            profile_pic = profile_pic,
             user = user
         )
         profile.save()
@@ -200,3 +214,8 @@ def createuser(request):
         return HttpResponseRedirect("/")
     else:
         return render(request,'createuser.html')
+
+
+
+def get_profile(request):
+    return render(request,'profile.html',{'user':request.user})

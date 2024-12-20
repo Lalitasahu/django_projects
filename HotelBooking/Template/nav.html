@@ -20,13 +20,17 @@
                     <a href="/userlogin">
                         User Login
                     </a>
+                    
                 {% endif %}
             </div>
+
+            {% if user.profile.is_vendor %}
             <div style="background-color: rgb(42, 166, 166);padding: 15px;">
                 <a href="/booking_history/">
-                Booking History
-            </a>
+                    Booking History
+                </a>
             </div>        
+            {% endif %}
             <div style="background-color: rgb(42, 166, 166);padding: 15px;">
                     <a href="/userlogout/"> 
                         User Logout

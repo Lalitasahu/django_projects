@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app.views import *
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,5 +37,6 @@ urlpatterns = [
     path('Delete_confirm_booking/<int:id>/',Delete_confirm_booking),
     path('check_out/<int:id>/',check_out),
     path('check_out_view/<int:id>/',check_out_view),
-    path('cancel/<int:id>',cancel_booking)
-]
+    path('cancel/<int:id>',cancel_booking),
+    path('profile/',get_profile)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

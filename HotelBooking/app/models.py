@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     phone_number = models.CharField(max_length=10)
     is_vendor = models.BooleanField(default=False)
-    profile_pic = models.ImageField(null=True,blank=True)
+    profile_pic = models.ImageField(upload_to='photos/', null=True,blank=True)
     user = models.OneToOneField(User,on_delete=models.CASCADE)
 
 
@@ -17,7 +17,9 @@ class Room(models.Model):
     Room_type = models.CharField(max_length=20)
     Room_description = models.TextField()
     Price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
-    Room_available = models.BooleanField(default=True)  # This seems to represent availability
+    Room_available = models.BooleanField(default=True) 
+    image = models.ImageField(upload_to='rooms/',null=True,blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Room {self.Room_no} ({self.Room_type})"

@@ -12,7 +12,7 @@
 </head>
 <body>
     
-    <form method="POST" action="">
+    <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
         <h1>Create New User</h1>
 
@@ -38,6 +38,11 @@
         
         <input type="radio" name="is_vendor" value="False">
         <label for="is_vendor_no">No</label>
+        <br><br>
+
+        <label for="image" >Upload your pic</label>
+        <input type="file" name="image" />
+
         <br><br>
         
         <button type="submit">Create</button>
