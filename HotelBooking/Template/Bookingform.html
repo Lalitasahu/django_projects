@@ -12,28 +12,38 @@
 <body>
     <h1>Add Room Details</h1>
     
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        
         <label for="Room_no">Room Number:</label>
         <input type="text" id="Room_no" name="Room_no" value="{{ rooms.Room_no }}" required><br><br>
-
+    
         <label for="Room_type">Room Type:</label>
         <input type="text" id="Room_type" name="Room_type" value="{{ rooms.Room_type }}" required><br><br>
-
+    
         <label for="Room_description">Room Description:</label>
-        <textarea id="Room_description" name="Room_description" required>
-            {{ rooms.Room_description }}
-        </textarea><br><br>
-        
-        <label for="Price_per_night">Price Per Night</label>
-        <input type="number" id="Price_per_night" name="Price_per_night" required><br><br>
+        <textarea id="Room_description" name="Room_description" required>{{ rooms.Room_description }}</textarea><br><br>
+    
+        <label for="Price_per_night">Price Per Night:</label>
+        <input type="number" id="Price_per_night" name="Price_per_night" value="{{ rooms.Price_per_night }}" required><br><br>
+    
+        <label for="Room_available">Available:</label>
+        <select id="Room_available" name="Room_available" required>
+            <option value="True" {% if rooms.Room_available == "True" %}selected{% endif %}>Yes</option>
+            <option value="False" {% if rooms.Room_available == "False" %}selected{% endif %}>No</option>
+        </select><br><br>
+    
+        <!-- <label for="image">Upload Room Picture:</label>
+        <input type="file" id="image" name="image"><br><br> -->
+        <label for="image">Upload Room Picture:</label><br>
+        {% if rooms.image %}
+            <img src="{{ rooms.image.url }}" alt="Room Image" style="max-width: 200px; margin-bottom: 10px;"><br>
+        {% endif %}
+        <input type="file" id="image" name="image"><br><br>
 
-        <label for="Room_available">Available (True/False):</label>
-        <input type="text" id="Room_available" name="Room_available" value="{{ rooms.Room_available }}" required><br><br>
-
-        <button type="submit">Add Room</button>
-        <!-- <button><a href="/">Back to Home</a></button> -->
-        <a href="/" class="button">Return to Homepage</a>
+    
+        <button type="submit">Update Room</button>
     </form>
+    
 </body>
 </html>

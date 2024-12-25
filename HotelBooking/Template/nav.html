@@ -15,12 +15,13 @@
         <div style="display: flex; justify-content: space-between;background-color: teal;">
             <div style="background-color: rgb(42, 166, 166);padding: 15px;">
                 {% if user.is_authenticated %}
-                    {{user.username}}
+                    <a href="/profile">
+                        {{user.username}}
+                    </a>
                 {% else %}
                     <a href="/userlogin">
                         User Login
-                    </a>
-                    
+                    </a>                    
                 {% endif %}
             </div>
 

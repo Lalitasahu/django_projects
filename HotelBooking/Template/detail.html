@@ -56,12 +56,18 @@
         <h1>Room Detail</h1>
     
 
-    <div class="details">
+    <div class="details" >
         <p><strong>Room Number:</strong> {{ rooms.Room_no }}</p>
         <p><strong>Room Type:</strong> {{ rooms.Room_type }}</p>
         <p><strong>Description:</strong> {{ rooms.Room_description }}</p>
         <p><strong>Price per Night:</strong> ${{ rooms.Price_per_night }}</p>
         <p><strong>Available:</strong> {{ rooms.Room_available }}</p>
+        <p><strong>Image:</strong></p>
+        {% if rooms.image %}
+            <img src="{{ rooms.image.url }}" alt="Room Image" style="max-width: 500px; margin-top: 10px;">
+        {% else %}
+            <p>No image available for this room.</p>
+        {% endif %}
     </div>
     <div class="button-container">
         {% if user.profile.is_vendor %}

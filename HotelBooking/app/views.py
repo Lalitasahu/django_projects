@@ -26,18 +26,23 @@ def detail(request,id):
 
 def Booking_edi(request,id):
     rooms = Room.objects.get(id=id)
+    booking = None  # Initialize `booking` to avoid the error
+
+
     if request.method == 'POST':
         R_no = request.POST['Room_no']
         R_type = request.POST['Room_type']
         R_description = request.POST['Room_description']
         P_p_night = request.POST['Price_per_night']
         R_available = request.POST['Room_available']  
+        room_pic = request.FILES['image']
         # update the informatio
         rooms.Room_no = R_no
         rooms.Room_type = R_type
         rooms.Room_description = R_description
         rooms.Price_per_night = P_p_night
         rooms.Room_available = R_available
+        rooms.image = room_pic
         rooms.save()   
 
         profile = Profile.objects.get(user=request.user)
@@ -56,8 +61,10 @@ def Add_rooms(request):
     R_description = request.POST['Room_description']
     P_p_night = request.POST['Price_per_night']
     R_available = request.POST['Room_available']
+    room_pic = request.FILES['image']
     rooms = Room.objects.create( Room_no= R_no, Room_type= R_type, Room_description=R_description, 
-                                Price_per_night=P_p_night,Room_available=R_available,user = request.user)
+                                Price_per_night=P_p_night,Room_available=R_available,user = request.user,
+                                image=room_pic)
     rooms.save()
     return HttpResponseRedirect('/')
 
@@ -214,7 +221,6 @@ def createuser(request):
         return HttpResponseRedirect("/")
     else:
         return render(request,'createuser.html')
-
 
 
 def get_profile(request):
