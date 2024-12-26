@@ -6,11 +6,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'room.css' %}">
     <title>Index page</title>
 
     <style>
-        body {
+        /* body {
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #f9f9f9;
@@ -39,58 +39,74 @@
 
         h1 {
             color: #4CAF50;
-        }
-   
+        } */
     </style>
 </head>
 
 <body>
-    <div class="room-card">
-        <div class="room-card-details">
-        <h1 style="text-align: center;"> All Type of Rooms</h1>
+    <h1 style="text-align: center;"> All Type of Rooms</h1>
+    <div class="room-items">
         {% for r in rooms %}
-        <div class="room-card-image">
-            <div style="display: flex;">
-            {% if r.image %}
-            <img src="{{ r.image.url }}" class="room-image" style="width:150px; " />
-            {% endif %}
-        </div>
-            <div style="color: {% if r.Room_available %} black; {% else %} grey {% endif %}">
-                <strong>Room_no: </strong>{{r.Room_no}} <br>
-                <strong> <b>₹</b></strong>{{r.Price_per_night}} <br>
-                <strong>Available: </strong> {% if r.Room_available %} Yes {% else %} No {% endif %}<br>
-                
-                <div class="actions">
-                    {% if r.Room_available %}
-                    <button ><a href="/detail/{{r.id}}" class="view-details">View Details</a></button>
-                    <button style="background-color: #0fd216; color: #fff; "><a href="/Confirm_booking/{{r.id}}"  > Book Now</a></button>
-                    {% endif %}
+        <div class="room-item">
+            <div class="img-comp">
+                <img src="{{ r.image.url }}" class="room-image" />
+            </div>
+            <div class="right-comp">
+                <div>
+                    <div class="flx align-center" style="font-size: 20px; font-weight: bold;">
+                        <b>Room No : </b>
+                        <p>{{r.Room_no}}</p>
+                    </div>
+                    <div class="flx align-center">
+                        <b>Room Type : </b>
+                        <p>{{r.Room_type}}</p>
+                    </div>
+                    <div class="flx align-center">
+                        <b>Room Description : </b>
+                        <p>{{r.Room_description}}</p>
+                    </div>
+                    <!-- <div class="flx align-center">
+                        <b>Room No : </b>  <p>{{r.Room_no}}</p>
+                    </div>                                                                                     -->
                 </div>
-                <hr>
+                <div class="end-comp">
+                    <div>
+                        <div class="price">{{r.Price_per_night}}/-</div>
+                        {% if r.Room_available == True %}
+                        <div class="avail">Available</div>
+                        {% else %}
+                        <div class="not-avail">Not Available</div>
+                        {% endif %}
+                    </div>
+                </div>
+            <div>
+                {% if r.Room_available %}
+                    <button ><a href="/detail/{{r.id}}" class="view-details">View Details</a></button>
+                    <!-- <button ><a href="/Confirm_booking/{{r.id}}"  > Book Now</a></button> -->
+                {% endif %}
+            </div>
             </div>
         </div>
         
         {% endfor %}
-        <hr>
     </div>
-
     <div style="justify-content: space-between; background-color: teal;">
 
-        {% if user.profile.is_vendor %}
+            {% if user.profile.is_vendor %}
 
 
-        <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-            <a href="/createuser/">Create New User</a>
+            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                <a href="/createuser/">Create New User</a>
+            </div>
+            <br><br>
+            <div style="background-color: rgb(42, 166, 166);padding: 15px;">
+                <a href="/Add_rooms/">Add Room</a>
+            </div>
+
+            {% endif %}
         </div>
-        <br><br>
-        <div style="background-color: rgb(42, 166, 166);padding: 15px;">
-            <a href="/Add_rooms/">Add Room</a>
-        </div>
-
-        {% endif %}
     </div>
     </div>
-</div>
 </body>
 
 </html>
