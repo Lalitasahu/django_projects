@@ -12,7 +12,7 @@
     <div style="text-align: center;"> 
         <h1>Book Room: {{ room.Room_no }}</h1>
     </div> 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="Check_in">Check-in Date:</label>
         <input type="date" id="Check_in" name="Check_in" required><br><br>
