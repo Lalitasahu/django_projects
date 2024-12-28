@@ -1,7 +1,7 @@
 
 {% include 'nav.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'room.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,12 +10,19 @@
     <title>Add Room</title>
 </head>
 <body>
-    <h1>Add Room Details</h1>
+    <div style="text-align: center;">
+        {% if Add_rooms %}
+            <h1> Update the Room Detail </h1>
+        {% else %}
+            <h1> Add New Room </h1>
+        {% endif %}
+    </div>  
     
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
-        <label for="Room_no">Room Number:</label>
+        <b>
+        <label class="label" for="Room_no">Room Number:</label>
         <input type="text" id="Room_no" name="Room_no" value="{{ rooms.Room_no }}" required><br><br>
     
         <label for="Room_type">Room Type:</label>
@@ -32,17 +39,18 @@
             <option value="True" {% if rooms.Room_available == "True" %}selected{% endif %}>Yes</option>
             <option value="False" {% if rooms.Room_available == "False" %}selected{% endif %}>No</option>
         </select><br><br>
-    
-        <!-- <label for="image">Upload Room Picture:</label>
-        <input type="file" id="image" name="image"><br><br> -->
-        <label for="image">Upload Room Picture:</label><br>
+        
+        <label for="image">Upload Room Picture:</label>
         {% if rooms.image %}
             <img src="{{ rooms.image.url }}" alt="Room Image" style="max-width: 200px; margin-bottom: 10px;"><br>
         {% endif %}
-        <input type="file" id="image" name="image"><br><br>
-
-    
-        <button type="submit">Update Room</button>
+        <input type="file" id="image" name="image"  ><br><br>
+        
+        <div style="text-align: center;">
+            <button type="submit">Update Room</button> <br>
+            <a href="/">Back to Home</a>
+        </div>
+        </b>
     </form>
     
 </body>

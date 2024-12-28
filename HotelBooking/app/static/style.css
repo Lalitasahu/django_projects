@@ -4,7 +4,7 @@
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(9, 9, 9, 0.1);
+    box-shadow: 0 4px 6px   rgba(9, 9, 9, 0.1);
     background-color: #fff;
   }
   
@@ -37,7 +37,6 @@
     font-size: 1rem;
     cursor: pointer;
   }
-  
   
   
   .actions .book-now {

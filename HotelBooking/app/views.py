@@ -24,32 +24,33 @@ def detail(request,id):
     rooms = Room.objects.get(id=id)
     return render(request, 'detail.html',{'rooms':rooms})
 
-def Booking_edi(request,id):
+def Booking_edi(request,id, Add_rooms=True):
     rooms = Room.objects.get(id=id)
     booking = None  # Initialize `booking` to avoid the error
-
-
+    print(request.POST)
     if request.method == 'POST':
         R_no = request.POST['Room_no']
         R_type = request.POST['Room_type']
         R_description = request.POST['Room_description']
         P_p_night = request.POST['Price_per_night']
         R_available = request.POST['Room_available']  
-        room_pic = request.FILES['image']
+        room_pic = request.FILES.get('image')
+        
         # update the informatio
         rooms.Room_no = R_no
         rooms.Room_type = R_type
         rooms.Room_description = R_description
         rooms.Price_per_night = P_p_night
         rooms.Room_available = R_available
-        rooms.image = room_pic
+        if room_pic :
+            rooms.image = room_pic
         rooms.save()   
-
+        
         profile = Profile.objects.get(user=request.user)
         if profile.is_vendor:
             booking = Booking.objects.all()
             return HttpResponseRedirect('/')
-    return render(request, 'Bookingform.html', {'rooms':rooms, 'booking':booking})
+    return render(request, 'Bookingform.html', {'rooms':rooms, 'booking':booking, 'Add_rooms':Add_rooms})
 
 
 def Add_rooms(request):
