@@ -1,7 +1,7 @@
 
 {% include 'nav.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'room.css' %}">
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,10 +44,10 @@
         <input type="file" name="image" />
 
         <br><br>
-        
-        <button type="submit">Create</button>
-        <!-- <input type="submit" name="Create" value="Create" /> -->
-        <a href="/" class="button">Return to Homepage</a>
+        <div style="text-align: center;">
+            <button type="submit" class="button-css">Create</button>
+            <a href="/" class="button-css">Return to Homepage</a>
+        </div>
     </form>
 </body>
 </html>

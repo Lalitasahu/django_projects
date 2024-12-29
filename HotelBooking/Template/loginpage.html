@@ -1,7 +1,7 @@
 {% include 'nav.html' %}
 
 {% load static %}
-<link rel="stylesheet" href="{% static 'style.css' %}">
+<link rel="stylesheet" href="{% static 'room.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +10,7 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Login Page</h1>
+    <h1 style="text-align: center;">Login </h1>
     <form method="POST" action="">
         {% csrf_token %}
         <label for="username">User Name: </label>
@@ -19,8 +19,9 @@
         <label for="password">Password: </label>
         <input type="password" name="password" placeholder="Enter Password" /> <br><br>
         
-        <button type="submit">Login</button>
-        <a href="/" class="button">Return to Homepage</a>
+        <div style="text-align: center; padding: 10px 5px;" >
+            <button type="submit" >Login</button>
+        </div>
     </form>
 </body>
 </html>

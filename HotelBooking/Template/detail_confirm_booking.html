@@ -1,6 +1,7 @@
 
 {% include 'nav.html' %}
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'room.css' %}">
 
 <!DOCTYPE html>
 <html lang="en">
@@ -69,9 +70,9 @@
         </div>
         <div class="button-container">
             
-                <a href="/check_out/{{ booking.id }}" class="button">Check Out</a>
+                <a href="/check_out/{{ booking.id }}" class="button-css">Check Out</a>
             
-                <a href="/cancel/{{ booking.id }}" class="button cancel">Cancel Booking</a>
+                <a href="/cancel/{{ booking.id }}" class="button-css">Cancel Booking</a>
             
         </div>
     </div>

@@ -1,4 +1,6 @@
 {% include 'nav.html' %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'room.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,10 +75,10 @@
     </div>
     <div class="button-container">
         {% if user.profile.is_vendor %}
-            <a href="/Booking_edi/{{rooms.id}}"  class="button">Edit details</a>
-            <a href="/delete_rooms/{{rooms.id}}"  class="button">Delete rooms</a>        
+            <a href="/Booking_edi/{{rooms.id}}"  class="button-css">Edit details</a>
+            <a href="/delete_rooms/{{rooms.id}}"  class="button-css">Delete rooms</a>        
         {% endif %}
-        <a href="/Confirm_booking/{{rooms.id}}"  class="button"> Confirm Room Booking</a><br> <br>
+        <a href="/Confirm_booking/{{rooms.id}}"  class="button-css"> Confirm Room Booking</a><br> <br>
         
         <a href="/">Back to Home</a>
     </div>

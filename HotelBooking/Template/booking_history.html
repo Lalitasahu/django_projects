@@ -1,10 +1,12 @@
 
 {% include 'nav.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'room.css'%}">
     <title>list of Booking history</title>
 
     <style>
@@ -38,24 +40,11 @@
         .button:hover {
             background: #45a049;
         }
-            /* Room List Container */
-        /* .room-list {
-            max-width: 600px;
-            margin: 2rem auto;
-            background-color: #fff;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 3px 5px rgba(13, 13, 13, 0.1);
-        } */
-
-        /* Individual Room Item */
         .room-item {
             padding: 1rem 0;
             position: relative;
         }
 
-        /* Add a line between items */
         .room-item:not(:last-child)::after {
             content: "";
             position: absolute;
@@ -85,8 +74,7 @@
             {% endif %}
         </div> 
             
-            <!-- <p><strong>check_in_date:</strong> {{ b.Check_in }}</p>
-        <button class="button"><a href="/" >Return to Homepage</a></button>
+        <button class="button-css"><a href="/" >Return to Homepage</a></button>
     </div>
 </body>
 </html>
