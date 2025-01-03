@@ -17,9 +17,14 @@
         {% for r in rooms %}
         <div class="room-item">
             <div class="img-comp">
-                {% if r.image %}
-                <img src="{{ r.image.url }}" class="room-image" />
-                {% endif %}
+                <!-- {% for i in rooms.images_set.all %} -->
+                    <!-- {% if i.image %}
+                    <img src="{{r.images_set.all.0.image.url}}" class="room-image" />
+                    {% endif %} -->
+                <!-- {% endfor %} -->
+                <!-- {{rooms.images_set.all.first.image.url}} -->
+                 
+                <img src="{{r.images_set.all.0.image.url}}" class="room-image" />
             </div>
             
             <div class="right-comp">

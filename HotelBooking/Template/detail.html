@@ -55,15 +55,13 @@
     
     <!-- this page like confirm booking  -->
 <div class="container">
-        <h1 style="text-align: center;">Room Detail</h1>
-    
-
+    <h1 style="text-align: center;">Room Detail</h1>
     <div class="details" >
-        {% if rooms.image %}
-            <img src="{{ rooms.image.url }}" alt="Room Image" style="max-width: 600px;">
-        {% else %}
-            <p>No image available for this room.</p>
-        {% endif %}
+        {% for i in rooms.images_set.all %}
+            {% if i.image %}
+                <img src="{{ i.image.url }}" alt="Room Image" style="max-width: 600px;">
+            {% endif %}
+        {% endfor %}
         <b>
         <p><strong>Room Number:</strong> {{ rooms.Room_no }}</p>
         <p><strong>Room Type:</strong> {{ rooms.Room_type }}</p>
@@ -75,7 +73,7 @@
     </div>
     <div class="button-container">
         {% if user.profile.is_vendor %}
-            <a href="/Booking_edi/{{rooms.id}}"  class="button-css">Edit details</a>
+            <a href="/room_edit/{{rooms.id}}"  class="button-css">Edit details</a>
             <a href="/delete_rooms/{{rooms.id}}"  class="button-css">Delete rooms</a>        
         {% endif %}
         <a href="/Confirm_booking/{{rooms.id}}"  class="button-css"> Confirm Room Booking</a><br> <br>

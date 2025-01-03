@@ -26,7 +26,7 @@ urlpatterns = [
     path('Add_rooms/',Add_rooms),
     path('detail/<int:id>/',detail),
     path('delete_rooms/<int:id>/',delete_rooms),
-    path('Booking_edi/<int:id>/',Booking_edi),
+    path('room_edit/<int:id>/',room_edit),
     path('Confirm_booking/<int:id>/',Confirm_booking),
     path('booking_history/',booking_history),
     path('userlogout/',userlogout),
@@ -38,5 +38,6 @@ urlpatterns = [
     path('check_out/<int:id>/',check_out),
     path('check_out_view/<int:id>/',check_out_view),
     path('cancel/<int:id>',cancel_booking),
-    path('profile/',get_profile)
+    path('profile/',get_profile),
+    path('delete_image/<int:id>',DeleteImage)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -18,11 +18,15 @@ class Room(models.Model):
     Room_description = models.TextField()
     Price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     Room_available = models.BooleanField(default=True) 
-    image = models.ImageField(upload_to='rooms/',null=True,blank=True)
+    # image = models.ImageField(upload_to='rooms/',null=True,blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Room {self.Room_no} ({self.Room_type})"
+    
+class Images(models.Model):
+    room = models.ForeignKey(Room,on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='rooms/')
 
 class Booking(models.Model):
     STATUS_CHOICES = [
@@ -42,6 +46,7 @@ class Booking(models.Model):
     def __str__(self) ->str:
         return self.user
     
+
     
 # class Payment(models.Model):
 #     Booking = models.OneToOneField(Booking, on_delete=models.CASCADE)

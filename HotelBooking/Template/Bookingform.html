@@ -40,18 +40,40 @@
             <option value="False" {% if rooms.Room_available == "False" %}selected{% endif %}>No</option>
         </select><br><br>
         
-        <label for="image">Upload Room Picture:</label>
-        {% if rooms.image %}
-            <img src="{{ rooms.image.url }}" alt="Room Image" style="max-width: 200px; margin-bottom: 10px;"><br>
-        {% endif %}
-        <input type="file" id="image" name="image"  ><br><br>
-
+        
+        <div>
+            <label for="image">Upload Room Picture:</label>
+            <input type="file" id="image" name="image" multiple>
+        </div>
+        
+        
         <div style="text-align: center;">
-            <button type="submit" class="button-css">Update Room</button> <br>
+            <button type="submit" class="button-css">Update Room</button> 
             <a href="/" >Back to Home</a>
         </div>
         </b>
     </form>
+
+
+
+    <div> 
+        <form method="post" action="/delete_image/{{rooms.id}}">
+            {% csrf_token %}
+            <h1>Room images...</h1>
+            <div class="image-content">
+                {% for i in rooms.images_set.all %}
+                    {% if i.image %}
+                    <div>
+                        <img src="{{ i.image.url }}" alt="Room Image">
+                        <input type="checkbox" name="images" value="{{i.id}}"  />
+                    </div>    
+                    {% endif %}
+                {% endfor %}
+            </div>            
+            <input type="submit" value="Delete" />
+        </form>
+    </div>
+
     
 </body>
 </html>
