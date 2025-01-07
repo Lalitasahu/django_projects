@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation</title>
+</head>
+<body>
+    <div
+        style="display: flex; flex-flow: row; justify-content: space-between; align-items: center; background-color: black;padding: 10px;color: white;">
+       
+        <div>
+            <a href="/userProfile" style="color: white;">{{user.username}}</a>
+        </div>
+        {% if user.profile.is_admin %}
+            <div>
+                <a href="/blog_histroy" style="color: white;">
+                    History
+                </a>
+            </div> 
+        {% endif %}
+            <div>
+            {% if user.is_authenticated %}
+            <a href="/Userlogout" style="color: white;">Logout</a>
+            <!-- <a href="/Userlogout" style="color: white;">{{user.username}}</a> -->
+            {% else %}
+            <a href="/Userlogin" style="color: white;">Login </a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

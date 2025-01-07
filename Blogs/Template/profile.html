@@ -1,3 +1,4 @@
+{% include 'nav.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,12 +13,19 @@
         <p>First Name : {{user.first_name}}</p>
         <p>Last Name : {{user.last_name}}</p>
         <p>Email : {{user.email}}</p>
+        <p>Phone No : {{user.profile.phone_no}}</p>
+        <!-- {{user.profile.profile_pic}} -->
+        {% if user.profile.profile_pic %}
+            <img src="{{ user.profile.profile_pic.url }}" style="width:200px;"/>
+        {% else %}
+            <p>No profile picture available</p>
+        {% endif %}
     </div>
     <div style="border-top: 1px solid;">
+        <h5>All Blogs</h5>
         {% for blog in user.blogs_set.all %}
             <p><b>{{blog.title}}</b></p>
-            <p>{{blog.discription   }}</p>
-
+            <p>{{blog.discription }}</p>
         {% endfor %}
     </div>
 

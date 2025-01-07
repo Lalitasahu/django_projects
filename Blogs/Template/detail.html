@@ -1,14 +1,56 @@
+{% include 'nav.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <title>detail page </title>
+</head>
+<body>
 
-<link rel="stylesheet" href="{% static 'index.css' %}">
+        
+    <h1>{{blog.title}}</h1>
+    <p>{{blog.description}}</p>
+    <p>By: {{blog.user.username}}</p>
+    <p>{{blog.datetime}}</p>
+    
+
+    <label for="count_of_Like">Like: </label>
+    <input type="number" id="count_of_Like" name="count_of_Like" >
+    <br><br>
+
+    <label for="count_of_comment">Comment: </label>
+    <input type="text" id="count_of_comment" name="count_of_comment" value="{{ comment_count }}" >
+    <br><br>
+
+    {% if blog.user.id == user.id %}
+        <button><a href="/Edit_blog/{{blog.id}}">Edit</a></button>
+        <button><a href="/delete_info/{{blog.id}}">Delete</a></button>
+    {% endif %}
+
+    <div> 
+        <form method="post" action="/DeleteImage/{{blog.id}}">
+            {% csrf_token %}
+            <h1>Blog images...</h1>
+            <div style="display: flex;" >
+                {% for i in blog.images_set.all %}
+                    {% if i.image %}
+                    <div >
+                        <img src="{{ i.image.url }}" alt="Blog Image" style="height: 200px; width: 300px;">
+                        <input type="checkbox" name="image" value="{{i.id}}"  />
+                    </div>   
+                    {% else %}
+                        <p>No image available for this blog.</p> 
+                    {% endif %}
+                {% endfor %}
+            </div>          
+            <input type="submit" value="Delete" />
+        </form>
+    </div>
+    
 
 
-<h1>{{blog.title}}</h1>
-<p>{{blog.discription}}</p>
-<p>By: {{blog.user.username}}</p>
-<p>{{blog.datetime}}</p>
-
-{% if blog.user.id == user.id %}
-    <button><a href="/Edit_info/{{blog.id}}">Edit</a></button>
-    <button><a href="/delete_info/{{blog.id}}">Delete</a></button>
-{% endif %}
+</body>
+</html>

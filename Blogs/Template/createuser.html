@@ -11,7 +11,7 @@
 </head>
 <body>
     
-    <form method="POST" action="">
+    <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
         <h1>Create New User</h1>
 
@@ -30,8 +30,23 @@
         <label for="password">Password: </label>
         <input type="password" name="password" placeholder="Enter Password" /> <br><br>
 
-        <button type="submit">Create</button>
-        <!-- <input type="submit" name="Create" value="Create" /> -->
+        <label for="phone_no">Phone Number: </label>
+        <input type="text" name="phone_no" id="phone_no" placeholder="Enter your phone no" /> <br><br>
+
+        <label for="is_admin">Are you a superuser?: </label>
+        <input type="radio" name="is_admin" value="True">
+        <label for="is_admin">Yes</label>
+        
+        <input type="radio" name="is_admin" value="False">
+        <label for="is_admin">No</label> 
+        <br><br>
+
+        <label for="image" >Upload your pic</label>
+        <input type="file" name="image" /> <br><br>
+
+        <button type="submit">Create User </button>
+        
     </form>
+    <!-- <a href="/">Go to Home </a> -->
 </body>
 </html>
