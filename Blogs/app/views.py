@@ -4,9 +4,20 @@ from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from rest_framework.views import APIView  
+from rest_framework.response import Response  
+from rest_framework import status  
+from .serializers import BlogsSerializer  
 # Create your views here.
 
-
+  
+class BlogsView(APIView):   
+  
+    def get(self, request, *args, **kwargs):  
+        result = Blogs.objects.all()  
+        serializers = BlogsSerializer(result, many=True)  
+        return Response({'status': 'success', "Blogs":serializers.data}, status=200)  
+  
 @login_required(login_url='/Userlogin')
 def homepage(request):
     blog = Blogs.objects.all()
@@ -48,12 +59,10 @@ def create(request):
 
         blogs = Blogs.objects.create(title=t, description=d, user=request.user)
         blogs.save()
-
         for  img in i:
             images = Images.objects.create(blog=blogs,image=img)
-
         return HttpResponseRedirect('/')
-    
+
 
 def Edit_blog(request,id):
     blogs = Blogs.objects.get(id=id)

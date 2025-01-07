@@ -7,9 +7,9 @@
     <title>Blogs History</title>
 </head>
 <body>
-    <h1>Blogs History </h1>
+    <h1 style="text-align: center;">Blogs History </h1>
     {% for b in blog %}
-        <h1>{{b.title}}</h1>
+        <h2>{{b.title}}</h2>
         <p>{{b.description}}</p>
         <p>By: {{b.user.username}}</p>
         <p>{{b.datetime}}</p>
