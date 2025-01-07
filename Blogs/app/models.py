@@ -34,6 +34,12 @@ class Images(models.Model):
     image = models.ImageField(upload_to='photos/')
     blog = models.ForeignKey(Blogs,on_delete=models.CASCADE)
 
+
+class Likes(models.Model):
+    blog = models.ForeignKey(Blogs,on_delete=models.CASCADE)
+    liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
 class Comment(models.Model):
     blog = models.ForeignKey(Blogs, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

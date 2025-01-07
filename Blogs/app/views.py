@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
-from app.models import Blogs,Images
+from app.models import Blogs,Images, Likes
 from .models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -7,17 +7,45 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status  
-from .serializers import BlogsSerializer  
+from .serializers import BlogsSerializer, UserSerializer
+from rest_framework import viewsets
 # Create your views here.
 
   
-class BlogsView(APIView):   
+# class BlogsView(APIView):   
   
-    def get(self, request, *args, **kwargs):  
-        result = Blogs.objects.all()  
-        serializers = BlogsSerializer(result, many=True)  
-        return Response({'status': 'success', "Blogs":serializers.data}, status=200)  
+#     def get(self, request, *args, **kwargs):  
+#         result = Blogs.objects.all()  
+#         serializers = BlogsSerializer(result, many=True)  
+#         return Response({'status': 'success', "Blogs":serializers.data}, status=200)  
   
+
+class BlogSet(viewsets.ModelViewSet):
+    queryset = Blogs.objects.all()
+    serializer_class = BlogsSerializer
+
+
+    # def create(self, request, *args, **kwargs):
+    #     req_data = request.data.dict()
+    #     req_data['count_of_Like'] = str(int(req_data['count_of_Like'])*2)
+    #     serializer_context = {
+    #         'request': request,
+    #     }           
+    #     serializer = BlogsSerializer(data = req_data, context=serializer_context)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+
+
+class UserSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer    
+
+# class LikeSet(viewsets.ModelViewSet):
+#     queryset = Likes.objects.all()
+
+
+
 @login_required(login_url='/Userlogin')
 def homepage(request):
     blog = Blogs.objects.all()

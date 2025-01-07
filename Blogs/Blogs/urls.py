@@ -20,6 +20,16 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path
 from app.views import *
+from rest_framework import routers
+
+
+router=routers.DefaultRouter()
+router.register('blog',BlogSet)
+router.register('user',UserSet)
+# router.register('user',UserSet),
+# router.register('photo',PhotoSet),
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,5 +44,6 @@ urlpatterns = [
     path('userProfile/',userProfile),
     path('blog_histroy/',blog_histroy),
     path('DeleteImage/<int:id>',DeleteImage),
-    path('api/', include('app.urls'))  
+    # path('api/', include('app.url'))
+    path('api/',include(router.urls)),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
