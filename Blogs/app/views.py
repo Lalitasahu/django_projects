@@ -1,19 +1,19 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
 from app.models import Blogs,Images, Likes
 from .models import Profile
+from django.db.models import F
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status  
-from .serializers import BlogsSerializer, UserSerializer
+from .serializers import BlogSerializer, UserSerializer, LikeSerializer
 from rest_framework import viewsets
 # Create your views here.
 
-  
+
 # class BlogsView(APIView):   
-  
 #     def get(self, request, *args, **kwargs):  
 #         result = Blogs.objects.all()  
 #         serializers = BlogsSerializer(result, many=True)  
@@ -22,9 +22,9 @@ from rest_framework import viewsets
 
 class BlogSet(viewsets.ModelViewSet):
     queryset = Blogs.objects.all()
-    serializer_class = BlogsSerializer
+    serializer_class = BlogSerializer
 
-
+# if we need to change in created file extra informtion so do like this 
     # def create(self, request, *args, **kwargs):
     #     req_data = request.data.dict()
     #     req_data['count_of_Like'] = str(int(req_data['count_of_Like'])*2)
@@ -36,14 +36,34 @@ class BlogSet(viewsets.ModelViewSet):
     #         serializer.save()
     #         return Response(serializer.data)
 
-
 class UserSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer    
+    serializer_class = UserSerializer
+    
+class LikesSet(viewsets.ModelViewSet):
+    queryset = Likes.objects.all()
+    serializer_class = LikeSerializer
 
-# class LikeSet(viewsets.ModelViewSet):
-#     queryset = Likes.objects.all()
+    def create(self, request, *args, **kwargs):
+        blog_id = request.data.get("blog_id")
+        user_id = request.data.get('liked_by')
+        blog = get_object_or_404(Blogs, id=blog_id)
+        like = Likes.objects.filter(liked_by_id=user_id, blog_id=blog_id)
 
+        if like:
+            like.delete()
+            blog.like_count -= 1 
+            blog.save(update_fields=['like_count'])
+            blog.refresh_from_db()
+            liked = False
+        else:
+            Likes.objects.create(liked_by_id=user_id, blog=blog)
+            blog.like_count +=  1
+            blog.save(update_fields=['like_count'])
+            blog.refresh_from_db()
+            liked = True
+
+        return Response({'message':'sucess','liked':liked})
 
 
 @login_required(login_url='/Userlogin')

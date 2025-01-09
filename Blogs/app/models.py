@@ -24,7 +24,7 @@ class Blogs(models.Model):
     description = models.TextField()
     datetime = models.DateTimeField(default=datetime.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    count_of_Like = models.IntegerField(default=0)
+    like_count = models.IntegerField(default=0)
     count_of_comment = models.IntegerField(default=0)
 
     def __str__(self) -> str:
@@ -38,6 +38,7 @@ class Images(models.Model):
 class Likes(models.Model):
     blog = models.ForeignKey(Blogs,on_delete=models.CASCADE)
     liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    # date = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):

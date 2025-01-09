@@ -15,20 +15,27 @@ from datetime import datetime
 #         model = Blogs  
 #         fields = '__all__'
 
+# class BlogSerializer(serializers.HyperlinkedModelSerializer):
+#     likes_count = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Blogs
+#         fields = '__all__'
+
+#     def get_likes_count(self, obj):
+#         return obj.likes.count()
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    # user_id = serializers.ReadOnlyField()
     class Meta:
         model = User
-        fields = ('id','first_name','last_name','username')
+        fields = ('id','username', 'email')
 
-
-class BlogsSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:  
-        model = Blogs  
+class BlogSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    class Meta:
+        model = Blogs
         fields = '__all__'
-
-
-
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
