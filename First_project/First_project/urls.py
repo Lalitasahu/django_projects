@@ -14,20 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",HomePage),
-    path('about/',Aboutpage),
-    path("Sum/<int:val1>/<int:val2>",SumPro),
-    path("Sub/<int:val1>/<int:val2>",SubPro),
-    path('mult/<int:val1>/<int:val2>',MultProduct),
-    path('prime_no/<int:val1>',prime),
-    path("pattern/<int:val1>",pattern),
-    path('series/<int:val1>/<int:val2>',series),
-    path('createblog/',createForm)
-]   
+    path('',homepage),
+    path("createuser/",createuser),
+    path('userlogin/',userlogin),
+    path('userlogout/',userlogout),
+    path('userprofile/',userprofile),
+    path('add_category/',add_category),
+    path('edit_category/<int:id>/',edit_category),
+    path('category_list/',category_list),
+    path('del_category/<int:id>/',del_category),
+    path('add_pro_list/',add_pro_list),
+    path('del_product/<int:id>/',del_product),
+    path('edit_product/<int:id>/',edit_product),
+    path('pro_list/',pro_list)
+
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 

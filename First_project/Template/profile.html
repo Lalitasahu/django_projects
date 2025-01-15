@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>profile page</title>
+</head>
+<body>
+    <p>First Name : {{user.first_name}}</p>
+    <p>Last Name : {{user.last_name}}</p>
+    <p>Email Name : {{user.email}}</p>
+    <p>Address : {{user.profile.address}}</p>
+    <p>Phone Number : {{user.profile.phone_no}}</p>
+    <!-- <p>Profile Picture : {{user.profile.profile_pic}}</p> -->
+    {% if user.profile.profile_pic %}
+    <img src="{{ user.profile.profile_pic.url }}" style="width:200px;" />
+    {% else %}
+    <p>No profile picture available</p>
+    {% endif %}
+</body>
+</html>

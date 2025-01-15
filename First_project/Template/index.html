@@ -1,7 +1,43 @@
+{% include 'nav.html' %}
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index page</title>
+</head>
 
+<body>
+    <div style=" background-color: rgb(88, 226, 210); text-align: center;">
+        <h1>
+            List of Category
+        </h1>
+    </div>
+    <div >
+        {% for category in categories %}
+        <div class="list-item">
+            {% if category.image %}
+                <a href="/pro_list/"><img src="{{ category.image.url }}" alt="{{ category.name }}" style="width:200px;" ></a>
+            {% endif %}
+            <div>
+                <h3>{{ category.name }}</h3>
+            </div>
+            <div>
+                <button><a href="/del_category/{{category.id}}">Delete</a></button>
+                <button><a href="/edit_category/{{category.id}}">edit</a></button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div>
+        <a href="/add_category/" style="color: rgb(218, 17, 17);">
+            add new category
+        </a>
+    </div>
+    </div>
+    
+</body>
 
-{% for blog in blogs %}
-    <h1>{{blog.title}}</h1>
-    <p>{{blog.discription}}</p>
-{% endfor %}
+</html>
+
