@@ -1,0 +1,42 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #d55c6c;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Profile Container */
+.profile-container {
+    background-color: #db7e8a;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Profile Header */
+.profile-container h1 {
+    font-size: 1.8em;
+    color: #053361;
+    margin-bottom: 10px;
+}
+
+/* Profile Information */
+.profile-container .info {
+    text-align: left;
+    margin-top: 20px;
+}
+
+/* Labels */
+.profile-container .info p span.label {
+    font-weight: bold;
+    color: black;
+}
+

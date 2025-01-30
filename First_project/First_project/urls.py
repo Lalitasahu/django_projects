@@ -31,10 +31,15 @@ urlpatterns = [
     path('edit_category/<int:id>/',edit_category),
     path('category_list/',category_list),
     path('del_category/<int:id>/',del_category),
-    path('add_pro_list/',add_pro_list),
     path('del_product/<int:id>/',del_product),
     path('edit_product/<int:id>/',edit_product),
-    path('pro_list/',pro_list)
+    path('pro_list/<int:id>/',pro_list),
+    path('DeleteImage/<int:id>/',DeleteImage),
+    path('add_product/<int:id>/',add_pro_list),
+    path('pro_detail/<int:id>/',pro_detail),
+    path('order_item/<int:id>/',order_item),
+    path('order_history/',order_history),
+    path('cancel_order/<int:id>/',cancel_order)
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

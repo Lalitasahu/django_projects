@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+</head>
+<body>
+    <div>
+        <h1> Order List</h1>
+        <div > 
+            {% if user.profile.is_vendor %}
+                {%  for o in order %}
+                <div>
+                    <!-- <a href="/order_history/{{o.id}}" ></a> -->
+                    <strong> Name: </strong> {{ o.product }} </a><br> 
+                    <strong>Price:</strong> {{ o.price }} <br>
+                    <strong>status: </strong> {{ o.status }} <br>
+                    <strong>User: </strong> {{ o.user }} <br>
+                    <!-- <strong>Status:</strong> {{ o.status }} <br> -->
+                    
+                </div><br><br>
+                {% endfor %}   
+            {% endif %}
+        </div> 
+            
+        <button class="button-css"><a href="/" >Return to Homepage</a></button>
+    </div>
+</body>
+</html>

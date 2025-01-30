@@ -27,6 +27,7 @@ class Product(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 class Order(models.Model):
     STATUS = [
@@ -40,7 +41,7 @@ class Order(models.Model):
     quantity = models.IntegerField()
     booking_date = models.DateTimeField(auto_now_add=True)
     delivery_date = models.DateField(null=True, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS, default='pending')
+    status = models.CharField(max_length=10, choices=STATUS, default='Cancelled')
     shipping_address = models.TextField()
 
 class Images(models.Model):

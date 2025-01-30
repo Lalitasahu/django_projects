@@ -1,0 +1,41 @@
+<!-- {% include 'nav.html' %} -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{% static 'pro_detail.css' %}">
+        <title>Product Detail</title>
+    </head>
+<body>
+    <div class="product-container">
+        <h1>Product Detail</h1>
+        <div class="image-container">
+        {% for i in product.images_set.all %} 
+            {% if i.image %}
+                <img src="{{ i.image.url }}" alt="Image"  />
+            {% endif %} 
+        {% endfor %} <br><br>
+        </div>
+        <div>
+            <p>Product Name: {{product.name}}</p>
+            <p>Product Price: {{product.price}}</p>
+            <p>Discount Price: {{product.dis_price}}</p>
+            <p>Product brand: {{product.brand}}</p>
+            <p>Product Model: {{product.model}}</p>
+            <p>Product Storage: {{product.storage}}</p>
+            <p>Product Stock: {{product.stock}}</p>
+            <p>Product is_available: {{product.is_available}}</p>
+            <p>Product Description: {{product.description}}</p>
+            <p>Product Created_at: {{product.created_at}}</p>
+            
+            <button><a href="/order_item/{{product.id}}">Order  </a></button>
+            <button><a href="/cancel_order/{{product.id}}">Cencel Order</a></button>
+            <!-- <button><a href="/pro_detail/{{pro.id}}">more </a></button> -->
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+h1 {
+    text-align: center;
+    font-size: 2em;
+    color: #2c3e50;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+table, th, td {
+    border: 1px solid #ddd;
+}
+th, td {
+    text-align: left;
+    padding: 10px;
+}
+th {
+    background-color: #f4f4f4;
+}
+.status-pending {
+    color: #e67e22;
+    font-weight: bold;
+}
+.status-confirmed {
+    color: #27ae60;
+    font-weight: bold;
+}
+.status-cancelled {
+    color: #e74c3c;
+    font-weight: bold;
+}
+.edit-btn {
+    padding: 5px 10px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.edit-btn:hover {
+    background-color: #2980b9;
+}
+    

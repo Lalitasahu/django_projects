@@ -14,45 +14,117 @@ def homepage(request):
     categories = Category.objects.all()
     return render(request, 'index.html', {'categories':categories})
 
+@login_required(login_url='/userlogin')
+def cancel_order(request,id):
+    # product = Product.objects.get(id=id)
+    order = get_object_or_404(Order, id=id)
+    order.status = "cancelled"
+    # order.product.is_available = True
+    # order.product.save()
+    order.save()
+    return HttpResponseRedirect('/')
+
+@login_required(login_url='/userlogin')
+def order_history(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+        if Profile.is_vendor:
+            order = Order.objects.all()
+    except Profile.DoesNotExist:
+        return HttpResponseRedirect('/')
+    return render(request, 'order_history.html', {'order':order})
+
+@login_required(login_url='/userlogin')
+def order_item(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.method == 'POST':
+        data = request.POST
+        
+        quantity = int(data['quantity'])
+        if quantity > product.stock:
+            return render(request, 'order_pro.html', {'product': product,
+                                                      'error': 'Quantity exceeds available stock.'})
+        order = Order.objects.create(
+            user=request.user,
+            product=product.name,
+            price=product.price,
+            quantity=quantity,
+            shipping_address=data['shipping_address'],
+            status=data['status']
+        )
+        order.save()
+  
+        # Update product stock
+        product.stock -= quantity
+        product.is_available = product.stock > 0  
+        product.save()
+
+        # Redirect to the product detail page
+        return HttpResponseRedirect('/')
+
+    return render(request, 'order_pro.html', {'product': product})
+
+
+def pro_detail(request,id):
+    product = Product.objects.get(id=id)
+    return render(request, 'pro_detail.html', {'product':product})
+
+@login_required(login_url='/userlogin')
+def DeleteImage(request, id):
+    if request.method == "POST":
+        image_ids = request.POST.getlist('image')  
+        for _id in image_ids:
+            img = get_object_or_404(Images, id=_id)
+            img.delete()
+        
+    return HttpResponseRedirect('/')
+
+@login_required(login_url='/userlogin')
 def del_product(request,id):
     product = Product.objects.get(id=id)
     product.delete()
     return HttpResponseRedirect('/')
-    
-def pro_list(request):
-    product = Product.objects.all()
-    return render(request, 'product_list.html', {'product':product})
 
-def edit_product(request,id):
+@login_required(login_url='/userlogin')    
+def edit_product(request, id):
     product = Product.objects.get(id=id)
+    categories = Category.objects.all()
     if request.method == 'POST':
         data = request.POST
-        product.name = data['name'],
-        product.price = data['price'],
-        product.dis_price = data['dis_price'],
-        product.brand = data['brand'],
-        product.model = data['model'],
-        product.storage = data['storage'],
-        product.stock = data['stock'],
-        product.is_available = data['is_available'],
-        product.description = data['description'],
-        product.category = data['category'],
-        
+        print(data)
+        files = request.FILES.getlist('image')
+
+        product.name = data['name']
+        product.price = data['price']
+        product.dis_price = data['dis_price']
+        product.brand = data['brand']
+        product.model = data['model']
+        product.storage = data['storage']
+        product.stock = data['stock']
+        if data.get('is_available') == 'True':
+            product.is_available = 1
+        else:
+            product.is_available = 0
+
+        product.description = data['description']
+
         product.save()
-        return HttpResponseRedirect('product_list')# Redirect to a list or detail page after editing
+        for img in files:
+            image = Images.objects.create(product=product, image=img) 
+            image.save()
+        return HttpResponseRedirect('/') 
+    
+    return render(request, 'add_product.html', {'product': product, 'categories': categories})
 
-    return render(request, 'add_product.html', {'product':product})
+def pro_list(request,id):
+    product = Product.objects.filter(category_id=id)
+    return render(request, 'product_list.html', {'product':product,'category_id':id})
 
-def add_pro_list(request):
-    print(request.POST)
+@login_required(login_url='/userlogin')
+def add_pro_list(request,id):
     if request.method == 'POST':
         data = request.POST
         files = request.FILES.getlist('image')
-        category_name = data.get('category')  # Get the category name from the form
-        
-        category,created = Category.objects.get_or_create(name=category_name)
-        is_available = data.get('is_available') == 'on'
-
         product = Product.objects.create(
             name = data['name'],
             price = data['price'],
@@ -61,9 +133,10 @@ def add_pro_list(request):
             model = data['model'],
             storage = data['storage'],
             stock = data['stock'],
-            is_available = is_available,
+            is_available = data['is_available'],
             description = data['description'],
-            category = category
+            category_id = id,
+            user=request.user
             )
         product.save()
         for img in files:
@@ -73,6 +146,7 @@ def add_pro_list(request):
     else:
         return render(request, 'add_product.html')
         
+@login_required(login_url='/userlogin')        
 def del_category(request,id):
     categories = Category.objects.get(id=id)
     categories.delete()
@@ -82,24 +156,29 @@ def category_list(request):
     categories = Category.objects.all()
     return render(request, 'category_det.html', {'categories': categories})
 
+@login_required(login_url='/userlogin')
 def edit_category(request,id):
+    print(request.POST)
     categories = Category.objects.get(id=id)
     if request.method == 'POST':
         data = request.POST
+        image = request.FILES['image']
         categories.name = data['name']
-        categories.image = data['image']
+        categories.image = image
         categories.save()
+        return HttpResponseRedirect('/')
+    return render(request, 'add_category.html', {'categories':categories})
 
-    return render(request, 'add_category.html')
-
+@login_required(login_url='/userlogin')
 def add_category(request):
     if request.method == 'POST':
         name = request.POST['name']
         image = request.FILES['image']
-        cateory_list = Category.objects.create(
+        categories = Category.objects.create(
             name=name,
-            image=image
-        )
+            image=image)
+        categories.save()
+        return HttpResponseRedirect('/')
     return render(request, 'add_category.html')
 
 def userlogout(request):
@@ -121,8 +200,8 @@ def userlogin(request):
             return HttpResponseRedirect("/")
         return render(request,'login.html')
 
+@login_required(login_url='/userlogin')
 def createuser(request):
-    
     if request.method == 'POST':
         data = request.POST
         files = request.FILES

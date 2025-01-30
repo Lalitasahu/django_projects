@@ -1,23 +1,55 @@
+<!-- {% include 'nav.html' %} -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product list</title>
-</head>
-
+    
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{% static 'pro_detail.css' %}">
+        <title>Product list</title>
+    </head>
+    
 <body>
-    {% for pro in product %}
-    <p>Product Name: {{pro.name}}</p>
-    <p>Product Price: {{pro.price}}</p>
-    <p>Product brand: {{pro.brand}}</p>
-    <p>Product is_available: {{pro.is_available}}</p>
-    {% for i in product.images_set.all %} {% if i.image %}
-    <img src="{{ i.image.url }}" alt="Room Image" style="max-width: 600px" />
-    {% endif %} {% endfor %}
-    <button><a href="/edit_product/">Edit Product </a></button>
-    {% endfor %}
+    <div>
+        
+        <div>
+            {% if user.profile.is_vendor == 1  %}
+            <button><a href="/add_product/{{category_id}}">Add a new product</a></button>
+            {% endif %}
+        </div>
+        <div>
+            
+                {% for pro in product %}
+                <div>
+                    <a href="/pro_detail/{{pro.id}}"><p>{{pro.name}}</p></a>
+                </div>
+                <div>
+                    <p> Price: {{pro.price}}</p>
+                    <p> Stock: {{pro.stock}}</p>
+                </div>
+                <div>
+                    <p>Product is_available: {{pro.is_available}}</p>
+                    <p> created by: {{pro.user}}</p>
+                </div>
+                <div>
+                    {% if pro.images_set.all %}
+                        <img src="{{ pro.images_set.first.image.url }}" style="width: 300px;" />
+                    {% else %}
+                        <img src="{% static 'images/default-product.jpg' %}" style="width: 300px;" />
+                    {% endif %}
+                </div>
+                <div>
+                <button><a href="/pro_detail/{{pro.id}}">more </a></button>
+                <!-- {% if product.user.id == user.id %} -->
+                    {% if user.profile.is_vendor == 1  %}
+                        <button><a href="/edit_product/{{ pro.id }}">Edit Product </a></button>
+                        <button><a href="/del_product/{{pro.id}}">Delete Product</a></button>
+                    {% endif %}
+                <!-- {% endif %} -->
+                {% endfor %}
+        </div>
+    </div>
 </body>
 
 </html>

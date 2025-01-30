@@ -1,21 +1,29 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'profile.css' %}">
     <title>profile page</title>
 </head>
 <body>
-    <p>First Name : {{user.first_name}}</p>
-    <p>Last Name : {{user.last_name}}</p>
-    <p>Email Name : {{user.email}}</p>
-    <p>Address : {{user.profile.address}}</p>
-    <p>Phone Number : {{user.profile.phone_no}}</p>
-    <!-- <p>Profile Picture : {{user.profile.profile_pic}}</p> -->
-    {% if user.profile.profile_pic %}
-    <img src="{{ user.profile.profile_pic.url }}" style="width:200px;" />
-    {% else %}
-    <p>No profile picture available</p>
-    {% endif %}
+    <div class="profile-container">
+        <h1>My Profile</h1>
+    
+        <div class="info">
+            <p> <span class="label" > First Name : {{user.first_name}}</span></p>
+            <p> <span class="label" > Last Name : {{user.last_name}}</span></p>
+            <p> <span class="label" > Email Name : {{user.email}}</span></p>
+            <p> <span class="label" > Address : {{user.profile.address}}</span></p>
+            <p> <span class="label" > Phone Number :{{user.profile.phone_no}} </span></p>
+            <!-- <p>Profile Picture : {{user.profile.profile_pic}}</p> -->
+            {% if user.profile.profile_pic %}
+            <img src="{{ user.profile.profile_pic.url }}" style="width:200px;" />
+            {% else %}
+            <p> No profile picture available</p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>
