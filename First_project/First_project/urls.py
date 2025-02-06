@@ -39,7 +39,9 @@ urlpatterns = [
     path('pro_detail/<int:id>/',pro_detail),
     path('order_item/<int:id>/',order_item),
     path('order_history/',order_history),
-    path('cancel_order/<int:id>/',cancel_order)
+    path('order_detail/<int:id>/',order_detail),
+    path('cancel_order/<int:id>/',cancel_order),
+    path('confirm_order/<int:id>/',confirm_order)
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

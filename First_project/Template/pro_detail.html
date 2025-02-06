@@ -1,41 +1,107 @@
-<!-- {% include 'nav.html' %} -->
+{% include 'navbar.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="{% static 'pro_detail.css' %}">
-        <title>Product Detail</title>
-    </head>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Product Detail</title>
+</head>
+
 <body>
-    <div class="product-container">
-        <h1>Product Detail</h1>
-        <div class="image-container">
-        {% for i in product.images_set.all %} 
-            {% if i.image %}
-                <img src="{{ i.image.url }}" alt="Image"  />
-            {% endif %} 
-        {% endfor %} <br><br>
+    <div class="page">
+
+        <div class="item-de flex">
+            <div class="left">
+                <div style="width: 100%; height: 500px;">
+                    <div>
+                        <img src="{{ product.images_set.first.image.url }}" alt="Image"
+                            style="height: 100%;width: 100%;object-fit: cover;" />
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div>
+                    <h1>{{product.name}}</h1>
+                    <div>
+                        <div class="flex gap">
+                            <div class="flex align-center" style="font-size: 32px;font-weight: bold;gap:5px">
+                                <i class="fa-solid fa-indian-rupee-sign"> </i>
+                                <div>{{product.price}}</div>
+                            </div>
+                            <div>
+                                <p><i class="fa-solid fa-indian-rupee-sign strikethrough"> {{product.dis_price}}</i></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sp-item">
+                        <div class="sp-key"> brand:</div>
+                        <div class="sp-value">{{product.brand}}</div>
+                    </div>
+                    <div class="sp-item">
+                        <div class="sp-key"> Model:</div>
+                        <div class="sp-value">{{product.model}}</div>
+                    </div>
+                    <div class="sp-item">
+                        <div class="sp-key"> Storage:</div>
+                        <div class="sp-value">{{product.storage}}</div>
+                    </div>
+                    <div class="sp-item">
+                        <div class="sp-key"> Stock:</div>
+                        <div class="sp-value">{{product.stock}}</div>
+                    </div>
+                    <div class="sp-item">
+                        <div class="sp-key"> is_available:</div>
+                        <div class="sp-value">{{product.is_available}}</div>
+                    </div>
+                    <div class="sp-item">
+                        <div class="sp-key"> Created_at:</div>
+                        <div class="sp-value">{{product.created_at}}</div>
+                    </div>
+                    <!-- <div class="sp-item">
+                    <div class="sp-key"> Description:</div> 
+                    <div class="sp-value">{{product.description}}</div>
+                    </div> -->
+
+                    <div class="flex gap ">
+                        <div>
+                            {% if user.profile.is_vendor == 0 %}
+                            <button class="button" style="width: 250px; ">
+                                <a href="/order_item/{{product.id}}">Buy Now</a>
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {% if user.profile.is_vendor == 0 %}
+                            <button class="button-cart" style="width: 250px; ">
+                                <!-- <a href="/order_item/{{product.id}}">Add to cart</a> -->
+                                <a href="/{{product.id}}">Add to cart</a>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div>
-            <p>Product Name: {{product.name}}</p>
-            <p>Product Price: {{product.price}}</p>
-            <p>Discount Price: {{product.dis_price}}</p>
-            <p>Product brand: {{product.brand}}</p>
-            <p>Product Model: {{product.model}}</p>
-            <p>Product Storage: {{product.storage}}</p>
-            <p>Product Stock: {{product.stock}}</p>
-            <p>Product is_available: {{product.is_available}}</p>
-            <p>Product Description: {{product.description}}</p>
-            <p>Product Created_at: {{product.created_at}}</p>
-            
-            <button><a href="/order_item/{{product.id}}">Order  </a></button>
-            <button><a href="/cancel_order/{{product.id}}">Cencel Order</a></button>
-            <!-- <button><a href="/pro_detail/{{pro.id}}">more </a></button> -->
+            <div class="sp-item">
+                <div class="sp-key"> Description:</div>
+                <div class="sp-value">{{product.description}}</div>
+            </div>
+        </div>
+        <div>
+            {% if product.user.id == user.id %}
+            <div>
+                <button class="button"><a href="/edit_product/{{ product.id }}">Edit Product</a></button>
+                <button class="button"><a href="/del_product/{{ product.id }}">Delete Product</a></button>
+            </div>
+            {% endif %}
         </div>
     </div>
 </body>
-
 </html>

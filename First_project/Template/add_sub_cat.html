@@ -1,26 +1,23 @@
 {% include 'navbar.html' %}
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'form.css' %}">
-    
-    <title>add new category</title>
+    <title>Sub Category</title>
 </head>
 <body>
     <div>
         <form  method="POST" enctype="multipart/form-data">
             <h1>Add New Category</h1>
             {% csrf_token %}
-            <label for="name">Category Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter category name"  value="{{ categories.name }}"required><br><br>
+            <label for="name">Sub Category </label>
+            <input type="text" id="name" name="name" placeholder="Enter sub category name"  value="{{ categories.name }}"required><br><br>
 
-            <label for="image">Category Image</label>
+            <label for="image">Sub Category Image</label>
             <input type="file" id="image" name="image" ><br><br>
 
-            <button type="submit">Add Category</button>
+            <button type="submit">Add Sub Category</button>
         </form>
     </div>
 </body>

@@ -1,4 +1,4 @@
-<!-- {% include 'nav.html' %} -->
+{% include 'navbar.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -6,49 +6,55 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="{% static 'pro_detail.css' %}">
+        <link rel="stylesheet" href="{% static 'home.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <title>Product list</title>
     </head>
     
 <body>
-    <div>
-        
-        <div>
-            {% if user.profile.is_vendor == 1  %}
-            <button><a href="/add_product/{{category_id}}">Add a new product</a></button>
-            {% endif %}
-        </div>
-        <div>
-            
-                {% for pro in product %}
-                <div>
-                    <a href="/pro_detail/{{pro.id}}"><p>{{pro.name}}</p></a>
-                </div>
-                <div>
-                    <p> Price: {{pro.price}}</p>
-                    <p> Stock: {{pro.stock}}</p>
-                </div>
-                <div>
-                    <p>Product is_available: {{pro.is_available}}</p>
-                    <p> created by: {{pro.user}}</p>
-                </div>
-                <div>
+    <div class="main flex">
+        <div class="sub-main flex">
+
+            {% for pro in product %}
+            <div class="product-item">
+                <div class="image-i">
                     {% if pro.images_set.all %}
-                        <img src="{{ pro.images_set.first.image.url }}" style="width: 300px;" />
-                    {% else %}
-                        <img src="{% static 'images/default-product.jpg' %}" style="width: 300px;" />
-                    {% endif %}
+                    <a href="/pro_detail/{{pro.id}}">
+                        <img src="{{ pro.images_set.first.image.url }}" class="product-image" />
+                        {% else %}
+                        <img src="{% static 'images/default-product.jpg' %}" class="product-image" />
+                            <!-- <i class="fa-solid fa-heart"></i> -->
+                        {% endif %}
+                    </a>
                 </div>
+
                 <div>
-                <button><a href="/pro_detail/{{pro.id}}">more </a></button>
-                <!-- {% if product.user.id == user.id %} -->
-                    {% if user.profile.is_vendor == 1  %}
-                        <button><a href="/edit_product/{{ pro.id }}">Edit Product </a></button>
-                        <button><a href="/del_product/{{pro.id}}">Delete Product</a></button>
-                    {% endif %}
-                <!-- {% endif %} -->
-                {% endfor %}
+                    <div class="flex justify-between b-item">
+                        <div class="title">
+                            <a href="/pro_detail/{{pro.id}}">{{pro.name}}</a>
+                        </div>
+                        <div class="hear">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                    </div>
+
+                    <div class="price">
+                        <i class="fa-solid fa-indian-rupee-sign">   {{pro.price}}</i>
+                    </div>
+                </div>
+            </div>
+            
+            {% endfor %} 
         </div>
+        <footer>
+            <div>
+                {% if user.profile.is_vendor == 1  %}
+                    <button>
+                        <a href="/add_product/{{category_id}}">Add a new product</a>
+                    </button>
+                {% endif %}
+            </div>
+        </footer>
     </div>
 </body>
 

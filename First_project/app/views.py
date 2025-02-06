@@ -12,17 +12,42 @@ from rest_framework import viewsets
 
 def homepage(request):
     categories = Category.objects.all()
-    return render(request, 'index.html', {'categories':categories})
+    return render(request, 'homepage.html', {'categories':categories})
+
+
+# def searching(request):
+#     search=request.POST.get("search")
+#     data = JOB_POSTING.objects.filter(title__contains=search)
+#     return render(request,"home.html",{"search":data,"key":search})
+    
+
+# def homepage(request):
+#     categories = Category.objects.all()
+#     return render(request, 'index.html', {'categories':categories})
+
+@login_required(login_url='/userlogin')
+def confirm_order(request,id):
+    order = Order.objects.get(id=id)
+    order.status = "Confirmed"
+    order.save()
+    return HttpResponseRedirect('/')
 
 @login_required(login_url='/userlogin')
 def cancel_order(request,id):
-    # product = Product.objects.get(id=id)
-    order = get_object_or_404(Order, id=id)
-    order.status = "cancelled"
-    # order.product.is_available = True
-    # order.product.save()
+    order = Order.objects.get(id=id)
+    order.status = "Cancelled"
     order.save()
     return HttpResponseRedirect('/')
+
+@login_required(login_url='/userlogin')
+def order_detail(request,id):
+    try:
+        profile = Profile.objects.get(user=request.user)
+        if Profile.is_vendor:
+            order = Order.objects.get(id=id)
+    except Profile.DoesNotExist:
+        return HttpResponseRedirect('/')
+    return render(request, 'order_detail.html', {'order':order})
 
 @login_required(login_url='/userlogin')
 def order_history(request):
@@ -119,6 +144,9 @@ def edit_product(request, id):
 def pro_list(request,id):
     product = Product.objects.filter(category_id=id)
     return render(request, 'product_list.html', {'product':product,'category_id':id})
+
+# def pro_list(request,id):#change function name 'sub_cat'
+#     return render(request, 'add_sub_cat.html')
 
 @login_required(login_url='/userlogin')
 def add_pro_list(request,id):

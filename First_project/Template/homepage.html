@@ -1,0 +1,59 @@
+
+{% include 'navbar.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'home.html'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>index</title>
+</head>
+<body>
+    <div class="flex main-con">
+        {% for category in categories %}
+        <div>
+            <div class="container">
+                <a href="/pro_list/{{category.id}}">
+                    <div class="image-container">
+                        {% if category.image %}
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                        {% endif %}
+                    </div> 
+                    <div><b>{{ category.name }}</b></div>
+                </a>
+            </div>
+            <div class="flex justify-between">
+                {% if user.profile.is_vendor == 1  %}
+                <div>
+                    <a href="/edit_category/{{category.id}}/">
+                        <i class="fa-solid fa-pencil" style="color: green;"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="/del_category/{{category.id}}">
+                        <i class="fa-solid fa-trash" style="color: red;"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    <footer>
+        <div class="flex justify-between">
+            {% if user.profile.is_vendor == 1  %}
+            <div>
+                <a class="f-item" href="/add_category/" style="color: black;">add new category</a>
+            </div>
+            <div>
+                <a class="f-item" href="/createuser/" style="color: black;">Create New User</a>
+            </div>
+            {% endif %}
+        </div>
+    </footer>
+</body>
+
+</html>
