@@ -1,0 +1,24 @@
+{% include 'navbar.html' %} 
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <title>Add to Cart </title>
+</head>
+<body>
+    <div class="nav-margin">
+        <h1>Your Shopping Cart</h1>
+
+        {% for c in cart %}
+            <p><strong>Product: </strong> {{c.product.name}}</p> 
+            <p><strong>Quantity: </strong> {{c.quantity}} </p>
+            <p><strong>Dated: </strong> {{c.date}}</p> 
+            <p><strong>By: </strong> {{request.user}} </p>
+            <button><a href="/remove_car/{{c.id}}">Remove Cart</a></button>
+        {% endfor %}
+    </div>
+</body>
+</html>

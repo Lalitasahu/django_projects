@@ -1,27 +1,32 @@
+
 {% include 'navbar.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'home.css' %}">
     <title>Order History</title>
 </head>
 <body>
-    <div>
-        <h1> Order List</h1>
-        <div > 
-            {%  for o in user.order_set.all %}
-            <div>
-                <strong> Name: </strong> {{ o.product }} </a><br> 
-                <strong>Price:</strong> {{ o.price }} <br>
-                <strong>status: </strong> {{ o.status }} <br>
-                <strong>User: </strong> {{ o.user }} <br>
-                <button><a href="/order_detail/{{o.id}}"> Order Detail</a></button>
-                
-            </div><br><br>
-            {% endfor %}   
-        </div> 
-        <button class="button-css"><a href="/" >Return to Homepage</a></button>
+    <div class="nav-margin">
+        <div>
+            <h1> Order List</h1>
+            <div > 
+                {%  for o in user.order_set.all %}
+                <div>
+                    <strong> Name: </strong> {{ o.product }} </a><br> 
+                    <strong>Price:</strong> {{ o.price }} <br>
+                    <strong>status: </strong> {{ o.status }} <br>
+                    <strong>User: </strong> {{ o.user }} <br>
+                    <button><a href="/order_detail/{{o.id}}"> Order Detail</a></button>
+                    
+                </div><br><br>
+                {% endfor %}   
+            </div> 
+            <!-- <button class="button-css"><a href="/" >Return to Homepage</a></button> -->
+        </div>
     </div>
 </body>
 </html>

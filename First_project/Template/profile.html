@@ -1,4 +1,4 @@
-<!-- {% include 'navbar.html' %} -->
+{% include 'navbar.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,20 +9,28 @@
     <title>profile page</title>
 </head>
 <body>
-    <div class="profile-container">
-        <h1>My Profile</h1>
-    
-        <div class="info">
-            <p> <span class="label" > First Name : {{user.first_name}}</span></p>
-            <p> <span class="label" > Last Name : {{user.last_name}}</span></p>
-            <p> <span class="label" > Email Name : {{user.email}}</span></p>
-            <p> <span class="label" > Address : {{user.profile.address}}</span></p>
-            <p> <span class="label" > Phone Number :{{user.profile.phone_no}} </span></p>
-            {% if user.profile.profile_pic %}
-            <img src="{{ user.profile.profile_pic.url }}" style="width:200px;" />
-            {% else %}
-            <p> No profile picture available</p>
-            {% endif %}
+    <div class="nav-margin">
+        <div class="user-container ">
+            <div style="text-align: center;">
+                <h1>My Profile</h1>
+            </div>
+            <div class="flex">
+                <div class="img-d">
+                    {% if user.profile.profile_pic %}
+                        <img src="{{ user.profile.profile_pic.url }}" style="width:200px; border-radius: 20px;" />
+                    {% else %}
+                        <p> No profile picture available</p>
+                    {% endif %}
+                </div>
+                <div class="info">   
+                    <p> <span class="label" > First Name : {{user.first_name}}</span></p>
+                    <p> <span class="label" > Last Name : {{user.last_name}}</span></p>
+                    <p> <span class="label" > Email Name : {{user.email}}</span></p>
+                    <p> <span class="label" > Address : {{user.profile.address}}</span></p>
+                    <p> <span class="label" > Phone Number :{{user.profile.phone_no}} </span></p>
+                    <p> <span class="label" > Phone Signature :</span></p>
+                </div>
+            </div>
         </div>
     </div>
 </body>

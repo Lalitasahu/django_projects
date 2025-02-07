@@ -1,5 +1,5 @@
 
-from app.models import Profile, Product, Order, Images, Category
+from app.models import Profile, Product, Order, Images, Category, Cart
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -14,16 +14,40 @@ def homepage(request):
     categories = Category.objects.all()
     return render(request, 'homepage.html', {'categories':categories})
 
-
 # def searching(request):
 #     search=request.POST.get("search")
 #     data = JOB_POSTING.objects.filter(title__contains=search)
 #     return render(request,"home.html",{"search":data,"key":search})
-    
 
-# def homepage(request):
-#     categories = Category.objects.all()
-#     return render(request, 'index.html', {'categories':categories})
+def remove_car(request, id):
+    cart = Cart.objects.get(id=id)
+    cart.delete()
+    return HttpResponseRedirect('/')
+
+def show_cart(request):
+    cart = Cart.objects.all()
+    # cart = Cart.objects.filter(user=request.user)
+    return render(request, 'add_cart.html', {'cart':cart})
+
+@login_required(login_url='/userlogin')
+def add_to_cart(request, id):
+    print(request.POST)
+    product  = Product.objects.get(id=id)
+    if request.method == 'POST':
+        data = request.POST
+
+        quantity = data['quantity']
+        
+
+        cart = Cart.objects.create( 
+            user = request.user,
+            product = product,
+            quantity = quantity,
+            # date = date,
+        )
+        cart.save()
+        return HttpResponseRedirect('/')
+    return render(request, 'confirm_cart.html',{'product':product})
 
 @login_required(login_url='/userlogin')
 def confirm_order(request,id):

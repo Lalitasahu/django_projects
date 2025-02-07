@@ -17,6 +17,8 @@ for pro in soup.find_all('div','tUxRFH'):
     name = soup1.find('h1').text
     price = soup1.find('div','Nx9bqj').text
     dis_price = soup1.find('div','yRaY8j').text
+    brands = []
+    model = []
     for t in soup.find_all('table'):
         for row in t.find_all('tr'):
             cols = row.find_all('td')
@@ -25,6 +27,7 @@ for pro in soup.find_all('div','tUxRFH'):
                 value = cols[1].text.strip()
                 #if key == " Brand":
                 #   brands.append(value)
+                    # model.append(value)
                 
     # brand = 
     # model 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confimed Add to cart</title>
+</head>
+<body>
+    <div>
+        <div class="product-item">
+            <div>
+                {{product.name}}
+            </div>
+            <div>
+                {{product.price}}
+            </div>
+        
+            <div>
+                <img src="{{ product.images_set.first.image.url }}" style="width: 200px;" />
+            </div>
+
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div>
+                    <label for="quantity">Quantity</label>
+                    <input type="number" name="quantity" min="1" required>
+                </div>
+                <div>
+                    <button type="submit"> Add to Cart </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
