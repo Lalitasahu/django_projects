@@ -18,7 +18,15 @@
         <div class="page">
             <div class="item-de flex">
                 <div class="left">
-                    <div style="width: 100%; height: 500px; border: 1px solid gray;">
+                    <div class="thumb-images">
+                        {% for im in product.images_set.all %}
+                            <!-- <p>{{im.image.url}}</p> -->
+                             <div>
+                                 <img src="{{im.image.url}}" style="width: 100px; height: 100px;" />
+                             </div>
+                        {% endfor %}
+                    </div>
+                    <div style="width: 80%; height: 500px; border: 1px solid gray;">
                         <div>
                             <img src="{{ product.images_set.first.image.url }}" alt="Image"
                                 style="height: 100%;width: 100%;object-fit: cover;" />
@@ -74,14 +82,28 @@
                                 <button class="button" style="width: 250px; ">
                                     <a href="/order_item/{{product.id}}">Buy Now</a>
                                 </button>
+                                {% else %}
+                                    {% if product.user.id == user.id %}
+                                    <div>
+                                        <button class="button"><a href="/edit_product/{{ product.id }}">Edit Product</a></button>
+                                        <button class="button"><a href="/del_product/{{ product.id }}">Delete Product</a></button>
+                                    </div>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             <div>
-                                {% if user.profile.is_vendor == 0 %}
-                                <button class="button-cart" style="width: 250px; ">
-                                    <!-- <a href="/order_item/{{product.id}}">Add to cart</a> -->
-                                    <a href="/add_to_cart/{{product.id}}">Add to cart</a>
-                                </button>
+                                {% if user.is_authenticated and user.profile.is_vendor == 0 %}
+                                    {% if is_in_cart %}
+                                        <button class="button-cart" style="width: 250px; ">
+                                            <a href="/show_cart/">
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                            </a>
+                                        </button>
+                                    {% else %}
+                                    <button class="button-cart" style="width: 250px; ">
+                                        <a href="/add_to_cart/{{product.id}}">Add to cart</a>
+                                    </button>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
@@ -95,14 +117,14 @@
                 <div class="sp-value">{{product.description}}</div>
             </div>
         </div>
-        <div>
+        <!-- <div>
             {% if product.user.id == user.id %}
             <div>
                 <button class="button"><a href="/edit_product/{{ product.id }}">Edit Product</a></button>
                 <button class="button"><a href="/del_product/{{ product.id }}">Delete Product</a></button>
             </div>
             {% endif %}
-        </div>
+        </div> -->
     </div>
 </body>
 </html>

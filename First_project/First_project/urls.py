@@ -44,7 +44,8 @@ urlpatterns = [
     path('confirm_order/<int:id>/',confirm_order),
     path('add_to_cart/<int:id>/',add_to_cart),
     path('show_cart/',show_cart),
-    path('remove_car/<int:id>/',remove_car)
+    path('remove_car/<int:id>/',remove_car),
+    path('search/',searching)
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -10,15 +10,25 @@
 </head>
 <body>
     <div class="nav-margin">
-        <h1>Your Shopping Cart</h1>
-
-        {% for c in cart %}
-            <p><strong>Product: </strong> {{c.product.name}}</p> 
-            <p><strong>Quantity: </strong> {{c.quantity}} </p>
-            <p><strong>Dated: </strong> {{c.date}}</p> 
-            <p><strong>By: </strong> {{request.user}} </p>
-            <button><a href="/remove_car/{{c.id}}">Remove Cart</a></button>
-        {% endfor %}
+        <div class="main-container" style="text-align: center;">
+            <h1>Your Shopping Cart</h1>
+        </div>
+        <div>
+            {% for c in cart %}
+                <div class="main-container">
+                    <p><strong>Product: </strong> {{c.product.name}}</p> 
+                    <p><strong>Quantity: </strong> {{c.quantity}} </p>
+                    <p><strong>Dated: </strong> {{c.date}}</p> 
+                    <p><strong>By: </strong> {{request.user}} </p>
+                    <button>
+                        <a href="/remove_car/{{c.id}}">Remove Cart</a>
+                    </button>
+                    <button>
+                        <a href="/order_item/{{c.product.id}}">Buy Now</a>
+                    </button>
+                </div>
+            {% endfor %}    
+        </div>
     </div>
 </body>
 </html>

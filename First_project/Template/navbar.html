@@ -34,7 +34,13 @@
 
             <div class="right-nav flex gap">
                 <div class="r-item">
-                    <input class="search-bar" type="text"  placeholder="Search products...">
+                    <!-- <input class="search-bar" type="text" name="search" placeholder="Search products..."> -->
+                    <form method="GET" action="/search">
+                        <input class="search-bar" type="text" name="search" placeholder="Search products...">
+                        <button type="submit" >search</button>
+                        <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+                    </form>
+                    
                 </div>
                 <div class="r-item">
                     {% if user.is_authenticated %}

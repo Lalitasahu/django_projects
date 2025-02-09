@@ -14,10 +14,17 @@ def homepage(request):
     categories = Category.objects.all()
     return render(request, 'homepage.html', {'categories':categories})
 
-# def searching(request):
-#     search=request.POST.get("search")
-#     data = JOB_POSTING.objects.filter(title__contains=search)
-#     return render(request,"home.html",{"search":data,"key":search})
+def searching(request):
+    search = request.GET.get("search", " ")  
+    data = Product.objects.none()  
+
+    if search:
+        data = Product.objects.filter(name__icontains = search
+                ) | Product.objects.filter(brand__icontains = search
+                ) | Product.objects.filter(model__icontains = search
+                ) | Product.objects.filter(description__icontains = search)
+
+    return render(request, "search.html", {"search": search, "data": data})
 
 def remove_car(request, id):
     cart = Cart.objects.get(id=id)
@@ -116,7 +123,9 @@ def order_item(request, id):
 
 def pro_detail(request,id):
     product = Product.objects.get(id=id)
-    return render(request, 'pro_detail.html', {'product':product})
+    # details = Product.product.first()
+    is_in_cart = Cart.objects.filter(user=request.user, product=product).exists() if request.user.is_authenticated else False 
+    return render(request, 'pro_detail.html', {'product':product,  'is_in_cart':is_in_cart})
 
 @login_required(login_url='/userlogin')
 def DeleteImage(request, id):
