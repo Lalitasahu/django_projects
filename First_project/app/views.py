@@ -10,9 +10,9 @@ from rest_framework import status
 # from .serializers import  UserSerializer, LikeSerializer
 from rest_framework import viewsets
 
-def homepage(request):
-    categories = Category.objects.all()
-    return render(request, 'homepage.html', {'categories':categories})
+# def homepage(request):
+#     categories = Category.objects.all()
+#     return render(request, 'homepage.html', {'categories':categories})
 
 def searching(request):
     search = request.GET.get("search", " ")  
