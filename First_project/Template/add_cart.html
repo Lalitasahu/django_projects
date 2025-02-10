@@ -1,5 +1,7 @@
 {% include 'navbar.html' %} 
 {% load static %}
+{% load math_filter %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,16 +18,35 @@
         <div>
             {% for c in cart %}
                 <div class="main-container">
-                    <p><strong>Product: </strong> {{c.product.name}}</p> 
-                    <p><strong>Quantity: </strong> {{c.quantity}} </p>
-                    <p><strong>Dated: </strong> {{c.date}}</p> 
-                    <p><strong>By: </strong> {{request.user}} </p>
-                    <button>
-                        <a href="/remove_car/{{c.id}}">Remove Cart</a>
-                    </button>
-                    <button>
-                        <a href="/order_item/{{c.product.id}}">Buy Now</a>
-                    </button>
+                    <div class="flex align-center">
+                        <div class="" style="width: 250px;height: 250px;">
+                            <img src="{{c.product.images_set.first.image.url}}" alt="" style="width: 100%;height: 100%;object-fit: cover;border-radius: 5px;">
+                        </div>
+                        <div style="margin-left: 20px;">
+                            <div class="prd-name">
+                                {{c.product.name}}
+                            </div>
+                            <p><strong>Quantity: </strong> {{c.quantity}} </p>
+                            <p><strong>Dated: </strong> {{c.date}}</p> 
+                            <p><strong>By: </strong> {{request.user}} </p>
+                            
+                            <p><strong>Total: </strong> {{ c.product.price|multiply:c.quantity }}</p>
+                            
+                        </div>
+
+                    </div>
+                    <!-- <p><strong>Product: </strong> {{c.product.name}}</p>  -->
+
+
+
+                   <div style="margin-top: 10px;">
+                        <button>
+                            <a href="/remove_car/{{c.id}}">Remove Cart</a>
+                        </button>
+                        <button>
+                            <a href="/order_item/{{c.product.id}}">Buy Now</a>
+                        </button>
+                    </div>
                 </div>
             {% endfor %}    
         </div>

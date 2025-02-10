@@ -11,49 +11,76 @@
     <title>index</title>
 </head>
 <body>
-    <div class="flex main-con">
-        {% for category in categories %}
-        <div>
-            <div class="container">
-                <a href="/pro_list/{{category.id}}">
-                    <div class="image-container">
-                        {% if category.image %}
-                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
-                        {% endif %}
-                    </div> 
-                    <div><b>{{ category.name }}</b></div>
-                </a>
-            </div>
-            <div class="flex justify-between">
-                {% if user.profile.is_vendor == 1  %}
-                <div>
-                    <a href="/edit_category/{{category.id}}/">
-                        <i class="fa-solid fa-pencil" style="color: green;"></i>
-                    </a>
+    <div class="nav-margin">
+        <div style="display: flex; width: 100%;" >
+            <div class="filter-bar-left">
+                <div style="width: 100%; ">
+                    {% if user.profile.is_vendor == 1  %}
+                    <div class="flex" style="margin: 10px;">
+                        <a href="/add_category/" style="margin: 0 auto;">
+                            <input type="button"  value="Add Category">
+                        </a>
+                    </div>
+                    <div class="flex">
+                        <a href="/createuser/" style="margin: 0 auto;">
+                            <input type="button"  value="Create User">
+                        </a>
+                    </div>                    <!-- <button style="margin: 8px;">
+                        <a  href="/add_category/" style="color: white;">add new category</a>
+                    </button>
+                    <button style="margin: 8px;">
+                        <a href="/createuser/" style="color: white;">Create New User</a>
+                    </button> -->
+                    {% endif %}
                 </div>
-                <div>
-                    <a href="/del_category/{{category.id}}">
-                        <i class="fa-solid fa-trash" style="color: red;"></i>
-                    </a>
+            </div>
+            <div class="filter-bar-right">
+                <div class="flex main-con">
+                    {% for category in categories %}
+                    <div>
+                        <div class="container">
+                            <a href="/pro_list/{{category.id}}">
+                                <div class="image-container">
+                                    {% if category.image %}
+                                    <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                                    {% endif %}
+                                </div> 
+                                <div><b>{{ category.name }}</b></div>
+                            </a>
+                        </div>
+                        <div class="flex justify-between">
+                            {% if user.profile.is_vendor == 1  %}
+                            <div>
+                                <a href="/edit_category/{{category.id}}/">
+                                    <i class="fa-solid fa-pencil" style="color: green;"></i>
+                                </a>
+                            </div>
+                            <div>
+                                <a href="/del_category/{{category.id}}">
+                                    <i class="fa-solid fa-trash" style="color: red;"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- <footer>
+            <div class="flex justify-between" style="border: 1px solid gray; background-color: black;">
+                {% if user.profile.is_vendor == 1  %}
+                <div class="f-item">
+                    <a  href="/add_category/" style="color: white;">add new category</a>
+                </div>
+                <div class="f-item">
+                    <a href="/createuser/" style="color: white;">Create New User</a>
                 </div>
                 {% endif %}
             </div>
-
-        </div>
-        {% endfor %}
+        </footer> -->
     </div>
-    <footer>
-        <div class="flex justify-between">
-            {% if user.profile.is_vendor == 1  %}
-            <div>
-                <a class="f-item" href="/add_category/" style="color: black;">add new category</a>
-            </div>
-            <div>
-                <a class="f-item" href="/createuser/" style="color: black;">Create New User</a>
-            </div>
-            {% endif %}
-        </div>
-    </footer>
 </body>
 
 </html>

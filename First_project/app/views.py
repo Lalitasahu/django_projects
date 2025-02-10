@@ -10,9 +10,10 @@ from rest_framework import status
 # from .serializers import  UserSerializer, LikeSerializer
 from rest_framework import viewsets
 
-# def homepage(request):
-#     categories = Category.objects.all()
-#     return render(request, 'homepage.html', {'categories':categories})
+
+def homepage(request):
+    categories = Category.objects.all()
+    return render(request, 'homepage.html', {'categories':categories})
 
 def searching(request):
     search = request.GET.get("search", " ")  
@@ -23,8 +24,11 @@ def searching(request):
                 ) | Product.objects.filter(brand__icontains = search
                 ) | Product.objects.filter(model__icontains = search
                 ) | Product.objects.filter(description__icontains = search)
+    
+    message = search
 
-    return render(request, "search.html", {"search": search, "data": data})
+    return render(request, 'product_list.html', {'product':data,'category_id':1,"message":message})
+    # return render(request, "search.html", {"search": search, "data": data})
 
 def remove_car(request, id):
     cart = Cart.objects.get(id=id)
@@ -33,18 +37,23 @@ def remove_car(request, id):
 
 def show_cart(request):
     cart = Cart.objects.all()
-    # cart = Cart.objects.filter(user=request.user)
     return render(request, 'add_cart.html', {'cart':cart})
+
+# @login_required
+# def cart_count(request):
+#     cart_items_count = Cart.objects.filter(user=request.user).count()
+#     return {"cart_items_count": cart_items_count}
+
 
 @login_required(login_url='/userlogin')
 def add_to_cart(request, id):
-    print(request.POST)
+    
     product  = Product.objects.get(id=id)
     if request.method == 'POST':
         data = request.POST
 
         quantity = data['quantity']
-        
+        # total = product.price*quantity
 
         cart = Cart.objects.create( 
             user = request.user,
