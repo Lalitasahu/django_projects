@@ -17,8 +17,21 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from app.views import *
+from rest_framework import routers
+
+
+
+router = routers.DefaultRouter()
+router.register('User',UserSet)
+router.register('Profile',ProfileSet)
+router.register('Product',ProductSet)
+router.register('Order',OrderSet)
+router.register('Cart',CartSet)
+router.register('Category',CategorySet)
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -45,7 +58,8 @@ urlpatterns = [
     path('add_to_cart/<int:id>/',add_to_cart),
     path('show_cart/',show_cart),
     path('remove_car/<int:id>/',remove_car),
-    path('search/',searching)
+    path('search/',searching),
+    path('api/', include(router.urls)),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

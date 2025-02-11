@@ -14,23 +14,26 @@
     <div class="nav-margin">
         <div style="display: flex; width: 100%;" >
             <div class="filter-bar-left">
-                <div style="width: 100%; ">
+                <div style="width: 100%; margin-left: 40px; ">
                     {% if user.profile.is_vendor == 1  %}
-                    <div class="flex" style="margin: 10px;">
-                        <a href="/add_category/" style="margin: 0 auto;">
-                            <input type="button"  value="Add Category">
-                        </a>
+                    <!-- <div class="flex" style="margin: 10px;">
+                        <button class="button-cart">
+                            <a href="/add_category/" style="margin: 0 auto;">Add Category
+                                <input type="button"  value="Add Category">
+                            </a>
+                        </button>
                     </div>
                     <div class="flex">
                         <a href="/createuser/" style="margin: 0 auto;">
                             <input type="button"  value="Create User">
-                        </a>
-                    </div>                    <!-- <button style="margin: 8px;">
+                        </a> -->
+                    <!-- </div>                    -->
+                    <button style="margin: 8px;">
                         <a  href="/add_category/" style="color: white;">add new category</a>
                     </button>
                     <button style="margin: 8px;">
                         <a href="/createuser/" style="color: white;">Create New User</a>
-                    </button> -->
+                    </button>
                     {% endif %}
                 </div>
             </div>

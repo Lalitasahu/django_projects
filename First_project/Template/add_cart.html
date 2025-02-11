@@ -29,16 +29,9 @@
                             <p><strong>Quantity: </strong> {{c.quantity}} </p>
                             <p><strong>Dated: </strong> {{c.date}}</p> 
                             <p><strong>By: </strong> {{request.user}} </p>
-                            
                             <p><strong>Total: </strong> {{ c.product.price|multiply:c.quantity }}</p>
-                            
                         </div>
-
                     </div>
-                    <!-- <p><strong>Product: </strong> {{c.product.name}}</p>  -->
-
-
-
                    <div style="margin-top: 10px;">
                         <button>
                             <a href="/remove_car/{{c.id}}">Remove Cart</a>

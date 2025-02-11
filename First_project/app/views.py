@@ -7,13 +7,53 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status  
-# from .serializers import  UserSerializer, LikeSerializer
+from .serializer import  UserSerializer, ProductSerializer, OrderSerializer, CartSerializer, CategorySerializer, ProfileSerializer
 from rest_framework import viewsets
+from django.core.paginator import Paginator
 
+
+class UserSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class ProfileSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class =  ProfileSerializer
+
+class ProductSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class OrderSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def order_item(self, request, *args, **kwargs):
+        product = Product.objects.all()
+        order = Order.objects.all
+        product.stock -= order.quantity
+        product.is_available = product.stock > 0  
+        product.save()
+
+
+
+ 
+
+
+
+
+class CartSet(viewsets.ModelViewSet):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+
+class CategorySet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 def homepage(request):
     categories = Category.objects.all()
     return render(request, 'homepage.html', {'categories':categories})
+
 
 def searching(request):
     search = request.GET.get("search", " ")  
@@ -28,7 +68,6 @@ def searching(request):
     message = search
 
     return render(request, 'product_list.html', {'product':data,'category_id':1,"message":message})
-    # return render(request, "search.html", {"search": search, "data": data})
 
 def remove_car(request, id):
     cart = Cart.objects.get(id=id)
@@ -38,12 +77,6 @@ def remove_car(request, id):
 def show_cart(request):
     cart = Cart.objects.all()
     return render(request, 'add_cart.html', {'cart':cart})
-
-# @login_required
-# def cart_count(request):
-#     cart_items_count = Cart.objects.filter(user=request.user).count()
-#     return {"cart_items_count": cart_items_count}
-
 
 @login_required(login_url='/userlogin')
 def add_to_cart(request, id):
@@ -185,7 +218,11 @@ def edit_product(request, id):
 
 def pro_list(request,id):
     product = Product.objects.filter(category_id=id)
-    return render(request, 'product_list.html', {'product':product,'category_id':id})
+    product = Product.objects.all()
+    paginator = Paginator(product, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'product_list.html', {'product':product,'category_id':id, page_obj:page_obj})
 
 # def pro_list(request,id):#change function name 'sub_cat'
 #     return render(request, 'add_sub_cat.html')

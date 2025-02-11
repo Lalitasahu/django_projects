@@ -1,0 +1,66 @@
+
+label{
+    font-size: 20px;
+}
+
+form{
+    max-width: 500px; 
+    margin: 20px auto; 
+    padding: 10px 20px; 
+    background-color: #f9f9f9; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+}
+
+form button{
+    background-color: rgb(86, 180, 86);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 7px;
+    border-radius: 20px;
+    color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    
+}
+.button-css{
+    background-color: rgb(86, 180, 86);
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 7px;
+    border-radius: 20px;
+    color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Input and textarea etc styling */
+form input[type="text"],
+form input[type="number"],
+form input[type="file"],
+form input[type="date"],
+form input[type="password"],
+
+form textarea,
+form select {
+    width: 100%; 
+    padding: 10px 17px;
+    margin-bottom: 5px; 
+    border: 2px solid #ccc; 
+    border-radius: 15px; 
+    font-size: 16px; 
+    box-sizing: border-box;  
+}
+
+form img {
+    display: block;
+    margin: 10px auto; 
+    border: 2px solid #ccc; 
+    border-radius: 10px; 
+    width: 700px;
+    height: auto; 
+}
