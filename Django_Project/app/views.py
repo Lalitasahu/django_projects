@@ -1,5 +1,5 @@
 
-from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect,HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, HttpResponse
 from app.models import Product, Images, User, User_profile
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
@@ -85,7 +85,7 @@ def Createpage(request):
 
         # Save Product instance
         prd = Product.objects.create(title=T, price=P, description=D, user=request.user)
-
+        # breakpoint()
         # Save associated images
         for img in I:
             image = Images.objects.create(product=prd, image=img)

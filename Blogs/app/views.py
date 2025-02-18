@@ -144,7 +144,6 @@ def Userlogout(request):
     logout(request)
     return HttpResponseRedirect("/")
 
-
 def Userlogin(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -189,7 +188,7 @@ def createuser(request):
         profile = Profile.objects.create(is_admin=is_admin,
                                          phone_no=phone_no,
                                          user=user,
-                                         profile_pic=profile_pic)
+                                         profile_pic=profile_pic,)
         profile.save()
         return HttpResponseRedirect("/")
     else:

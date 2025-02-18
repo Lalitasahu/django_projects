@@ -15,10 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from app.views import *
 from django.conf.urls.static import static
 from django.conf import settings
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register('Room',RoomSet)
+router.register('User',UserSet)
+router.register('Booking', BookingSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,5 +45,6 @@ urlpatterns = [
     path('check_out_view/<int:id>/',check_out_view),
     path('cancel/<int:id>',cancel_booking),
     path('profile/',get_profile),
-    path('delete_image/<int:id>',DeleteImage)
+    path('delete_image/<int:id>',DeleteImage),
+    path('api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,6 @@
 
 from app.models import Profile, Product, Order, Images, Category, Cart
-from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,6 +10,8 @@ from rest_framework import status
 from .serializer import  UserSerializer, ProductSerializer, OrderSerializer, CartSerializer, CategorySerializer, ProfileSerializer
 from rest_framework import viewsets
 from django.core.paginator import Paginator
+from datetime import datetime
+import pandas as pd
 
 
 class UserSet(viewsets.ModelViewSet):
@@ -28,18 +30,31 @@ class OrderSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-    def order_item(self, request, *args, **kwargs):
-        product = Product.objects.all()
-        order = Order.objects.all
-        product.stock -= order.quantity
-        product.is_available = product.stock > 0  
+    def create(self, request, *args, **kwargs):
+        pro_id = request.data.get("pro_id")
+        product = Product.objects.get(id=pro_id)
+        quantity = request.data.get("quantity", 1) 
+        shipping_address = request.data.get("shipping_address")
+        user_id = request.data.get('user_id')
+        # delivery_date = request.data.get("delivery_date")
+        # print(request.data)
+
+        order = Order.objects.create(
+            product = product.name,
+            price = product.price,
+            quantity = quantity,
+            shipping_address = shipping_address,
+            delivery_date = datetime.today().date(),
+            user_id = user_id
+        )
+        order.save()
+    
+        product.stock -= quantity
+        product.is_available = product.stock > 0
         product.save()
-
-
-
- 
-
-
+        
+        serializer = OrderSerializer(order)
+        return Response(serializer.data)
 
 
 class CartSet(viewsets.ModelViewSet):
@@ -64,7 +79,7 @@ def searching(request):
                 ) | Product.objects.filter(brand__icontains = search
                 ) | Product.objects.filter(model__icontains = search
                 ) | Product.objects.filter(description__icontains = search)
-    
+
     message = search
 
     return render(request, 'product_list.html', {'product':data,'category_id':1,"message":message})
@@ -151,6 +166,8 @@ def order_item(request, id):
             status=data['status']
         )
         order.save()
+
+        Cart.objects.get(user_id = request.user.id, product_id =  product.id).delete()
   
         # Update product stock
         product.stock -= quantity
@@ -218,11 +235,11 @@ def edit_product(request, id):
 
 def pro_list(request,id):
     product = Product.objects.filter(category_id=id)
-    product = Product.objects.all()
+    # product = Product.objects.all()
     paginator = Paginator(product, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'product_list.html', {'product':product,'category_id':id, page_obj:page_obj})
+    return render(request, 'product_list.html', {'product':product,'category_id':id, 'page_obj':page_obj})
 
 # def pro_list(request,id):#change function name 'sub_cat'
 #     return render(request, 'add_sub_cat.html')

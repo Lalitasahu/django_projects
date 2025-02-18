@@ -5,7 +5,23 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login,logout
 from django.shortcuts import render, get_object_or_404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required 
- 
+from rest_framework.response import Response  
+from rest_framework import status  
+from .serializer import RoomSerializer, UserSerializer, BookingSerializer
+from rest_framework import viewsets
+
+
+class RoomSet(viewsets.ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+
+class UserSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class BookingSet(viewsets.ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
 
 @login_required(login_url='/userlogin')
 def homepage(request):

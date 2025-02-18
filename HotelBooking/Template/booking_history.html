@@ -63,8 +63,8 @@
         <div > 
             {% if user.profile.is_vendor %}
                 {%  for b in booking %}
-                <div class="room-item">
-                    <a href="/detail_confirm_booking/{{b.id}}" ><strong >Room No:</strong> {{ b.Room.Room_no }} </a><br> 
+                <div class="history-">
+                    <a href="/detail_confirm_booking/{{b.id}}" >Room No:</strong> {{ b.Room.Room_no }} </a><br> 
                     <strong>Room ID:</strong> {{ b.Room_id }} <br>
                     <strong>Total Price:</strong> {{ b.Total_price }} <br>
                     <strong>Status:</strong> {{ b.status }} <br>

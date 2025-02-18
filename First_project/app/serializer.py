@@ -4,6 +4,9 @@ from .models import User, Product, SubCategory, Category, Cart, Order,Profile
 from datetime import datetime
 
 
+
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -20,9 +23,10 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__' 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    # name_ = serializers.ReadOnlyField(source="product.product")
     class Meta:
         model = Order
-        fields = '__all__' 
+        fields = ('id','product','price','quantity','booking_date','delivery_date','shipping_address')
 
 
 class CartSerializer(serializers.HyperlinkedModelSerializer):

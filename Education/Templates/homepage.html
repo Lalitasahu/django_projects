@@ -1,0 +1,600 @@
+{% include 'navbar.html'%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index page</title>
+</head>
+<style>
+
+.flex{
+    display: flex;  
+}
+.justify{
+    justify-content: space-between;
+}
+.gap{
+    gap: 30px;
+}
+.left_1{
+    width: 800px;
+    height: 270px;
+    font-size: 75px;
+    margin-top: 80px;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    font-weight: bold;
+    /* border: 2px solid black; */
+}
+
+.left_2{
+    /* border: 2px solid black; */
+    width: 800px;
+    height: 80px;
+    font-size: 26px;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    /* background-color: aqua; */
+}
+
+.right_ img{
+    margin: 0px;
+    padding: 0px;
+    width: 800px;
+    height: 800px;
+    object-fit: cover;
+}
+.veiw{
+    margin-top: 60px;
+}
+.course-view{
+    /* border: 1px solid gray; */
+    background-color: rgb(233, 105, 14);
+    height: 50px;
+    width: 300px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 20px;
+    text-align: center;
+    align-content: center;
+}
+.demo{
+    /* border: 1px solid gray; */
+    /* background-color: rgb(233, 105, 14); */
+    height: 50px;
+    width: 300px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 20px;
+    text-align: center;
+    align-content: center;
+}
+.news{
+    margin: 10px;
+    margin-top: 45px;
+    /* background-color: antiquewhite; */
+    font-size: 20px;
+    
+}
+.logo-img img{
+    height: 80px;
+    width: 180px;
+    margin-top: 30px;
+}
+.logo3{
+    margin-top: 95px;
+    text-align: center;
+    align-items: center;
+    /* background-color: blue; */
+}
+.logo3 img{
+    height: 100px;
+    width: 100px;
+    border-radius: 100px;
+}
+.text_1 {
+    margin: 20px auto;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    height: 40px;
+    width: 200px;
+    text-align: center;
+    line-height: 40px; 
+    font-size: 20px;
+}
+.text_2{
+    margin-top: 20px auto;
+    font-weight: bold;
+    color: rgb(233, 105, 14);
+    font-size: x-large;
+    text-align: center;
+}
+.text_3{
+    margin: 30px auto;
+    width: 900px;
+    text-align: center;
+    font-size: 30px;
+    
+}
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 25px;
+}
+
+.card {
+    
+    background: whitesmoke;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 440px;
+    height: 300px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+.card1 {
+    
+    background: rgb(68, 67, 67);
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 440px;
+    height: 280px;
+    padding: 10px;
+    margin: 0px;
+    text-align: center;
+    /* margin: 0px auto; */
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.icon {
+    margin-bottom: 15px;
+    color:  rgb(233, 105, 14);
+    font-size: 45px;
+}
+
+h3 {
+    font-size: 30px;
+    margin: 10px 0;
+}
+h4{
+    font-size: 30px;
+    margin: 10px 0;
+}
+.heading{
+    font-size: 50px;
+    margin: 20px 0;
+}
+h5{
+    width: 150px;
+    line-height: 30px;
+    margin: 20px;
+    font-size: 20px;
+    margin: 10px 0;
+    color: white;
+    text-align: center;
+    background-color:  rgb(233, 105, 14);
+}
+
+p {
+    color: #666;
+    font-size: 25px;
+    line-height: 1.6;
+}
+.container{
+    margin: 80px;
+}
+.awad{
+    height: 500px;
+    width: 800px;
+    /* border: 2px solid gray; */
+}
+
+.awad1{
+    /* display:flex; */
+    margin: 20px auto;
+    font-size: 25px;
+    width: 550px;
+    /* height: 45px; */
+    line-height: 45px;
+    text-align: center;
+    border-radius: 10px;
+    background-color:  rgb(233, 105, 14);
+    color: white;
+    /* border: 2px solid gray; */
+}
+
+.awad2{
+    display:flex;
+    margin: 0 auto;
+    padding: 10px;
+    font-size: 45px;
+    width: 550px;
+
+}
+.awad3{
+
+    margin: 0px auto;
+    font-size: 28px;
+    width: 550px;
+    padding: 10px;
+    color: #444343;
+}
+
+.awad4{
+    margin-top: 10px;
+    margin-left: 120px;
+    padding: 8px;
+    font-size: 25px;
+    width: 250px;
+    line-height: 48px;
+    text-align: center;
+    border-radius: 8px;
+    background-color:  rgb(233, 105, 14);
+    color: white;
+}
+.awaded-child-img img{
+    /* border: 2px solid gray; */
+    height: 500px;
+    width: 600px;
+    object-fit: cover;
+}
+.pro-logo{
+    text-align: center;
+}
+.pro-logo img{
+    /* border: 2px solid gray; */
+    margin: 0 auto;
+    height: 90px;
+    width: 90px;
+}
+.pro-certi{
+    width: 800px;
+    margin: 0 auto;
+}
+.pro-des{
+    width: 800px;
+    margin: 0 auto;
+    font-size: 29px;
+    color: #444343;
+    text-align: center;
+}
+.more-certi{
+    color: white;
+    text-decoration: none;
+}
+.left-des{
+    margin: 0 auto;
+    width: 680px;
+    padding: 18px;
+    
+    /* border: 2px solid gray; */
+}
+.left-des p{
+    color: black;
+}
+.right-des{
+    margin: 0 auto;
+    padding: 18px;
+    width: 680px;
+    /* border: 2px solid gray; */
+}
+.right-des p{
+    color: black;
+}
+.ready-join{
+    text-align: center;
+}
+.ready-join p{
+    color: black;
+}
+.demo1{
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 25px;
+    width: 250px;
+    line-height: 38px;
+    text-align: center;
+    border-radius: 10px;
+    background-color:  rgb(223, 94, 2);
+    color: white;
+}
+.logo_{
+    text-align: center;
+    margin-top: 90px;
+}
+.logo_ img{
+    /* border: 2px solid gray; */
+    margin: 0px auto;
+    height: 90px;
+    width: 90px;
+    
+}
+.head{
+    margin: 0px;
+    font-size: 50px;
+    text-align: center;
+    color:  rgb(223, 94, 2);
+}
+.head_1{
+    margin: 0 auto;
+    text-align: center;
+    width: 900px;
+}
+.review{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 25px;
+}
+.review-card{
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    height: 500px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+.review-card:hover {
+    transform: translateY(-10px);
+}
+
+</style>
+<body>
+    <div>   
+    <div class="flex justify">
+        <div>
+            <div class="left_">
+                <div class="left_1">
+                    Asia's Leading Brand In Digital Career Training
+                </div>
+                <div class="left_2">
+                    <h4>Advance your career In Data Science and Digital Marketing with Most trusted brand in Digital Education.</h4>
+                </div>
+                <div class="flex veiw">
+                    <div class="course-view">View Courses</div>
+                    <div class="demo">Book for Demo</div>
+                </div>
+                <div class="news"><p>Digiperform In The News</p></div>
+                <div class="flex gap logo-img">
+                    <div>
+                        <img src="{% static 'image/zee.png' %}" alt="logo1">
+                    </div>
+                    <div>
+                        <img src="{% static 'image/TOI.png' %}" alt="logo1">
+                    </div>
+                    <div>
+                        <img src="{% static 'image/public.png' %}" alt="logo1">
+                    </div>
+                    <div>
+                        <img src="{% static 'image/the.png' %}" alt="logo1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right_">
+            <img src="{% static 'image/image2.png' %}" alt="image" >
+            
+        </div>
+        
+    </div>
+    <div>
+        <div class="logo3">
+            <img src="{% static 'image/logo3.png' %}" alt="">
+        </div>
+        <div class="text_1" >
+            <div>Asia’s Most Trusted Brand</div>
+        </div>
+        <div class="text_2">
+            <h1>Why Choose Digiperform?</h1>
+        </div>
+        <div class="text_3">
+            <div>Digiperform is awarded as the “Most Trusted Brand in Digital Education” by WCRC (Leading Marketing Research Firm and Magazine).</div>
+        </div>
+    </div>
+    <div class="cards-container">
+        <div class="card ">
+            <div class="icon">
+                <!-- Add your icon here, e.g., an image or font-awesome icon -->
+                <!-- <img src="icon1.png" alt="Icon"> -->
+                <i class="fa-solid fa-certificate"></i>
+            </div>
+            <h3>
+                
+                GET CERTIFIED</h3>
+            <p>Our curriculum is built on suggestions from over 450 corporates across Asia, Get certified to add an edge to your CV.</p>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <h3>AWARD-WINNING LMS</h3>
+            <p>Learn through 24×7 interactive LMS with PPTs, Videos, Assignments, Case Studies & Quizzes along with a progress tracker.</p>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <i class="fa-solid fa-magnifying-glass-dollar"></i>
+            </div>
+            <h3>MOST IN-DEPTH PROGRAM</h3>
+            <p>50+ Modules, 321+ learning hours, followed by 2 online certification tests. A training program that sets a benchmark.</p>
+        </div>
+    </div>
+    <div class="flex container">
+        <div class="awad">
+            <div class="awad1" >
+                Theory, Live Practical & Implementation
+            </div>
+            <div class="awad2">
+                Award Winning LMS – DOLMS!
+            </div>
+            <div class="awad3">
+                High-quality explainer videos of all topics. Learn on desktop or mobile-based on preferences
+                <br><br>
+                also you can track your learning progress with SMART tracker.
+            </div>
+            <div class="awad4">
+                Watch the Video
+            </div>
+        </div>
+        <div class="awaded-child-img">
+            <img src="{% static 'image/image3.png' %}" alt="image3">
+            
+        </div>
+    </div>
+    <div>
+        <div class="pro-logo">
+            <img src="{% static 'image/logo2.png' %}" alt="logo2">
+        </div>
+        <div class="pro-certi text_2">
+            <h1>Digiperform Certified Programs. Join The Next Revolution Now!</h1>
+        </div>
+        <div class="pro-des">
+            Digiperform, as a Leading Digital Marketing Courses & Certification Academy, provides value-for-money courses which you can afford at the best price in the market. 57,000+ Digiperformers got a placement with Digiperform Certifications in top brands.
+        </div>
+    </div>
+    <div class="cards-container ">
+        <div class="card1">
+            <h5>Data Scrience</h5>
+            <h4 class="heading">Data Scrience, AI & ML </h4>
+            <p><a class="more-certi" href="#">Know More </a></p>
+        </div>
+        <div class="card1">
+            <h5>Data Scrience</h5>
+            <h4 class="heading">Annual DigiHero Program </h4>
+            <p ><a class="more-certi"  href="#">Know More </a></p>
+        </div>
+        <div class="card1">
+            <h5>Data Scrience</h5>
+            <h4 class="heading">Online Marketing Professional</h4>
+            <p><a class="more-certi"  href="#">Know More </a></p>
+        </div>
+        <div class="card1">
+            <h5>Data Scrience</h5>
+            <h4 class="heading">Online Marketing Practitioner</h4>
+            <p><a class="more-certi"  href="#">Know More </a></p>
+        </div>
+
+    </div>
+    <div class="flex">
+        <div class="left-des">
+            <div class="top-des flex">
+                <div style="margin-top: 30px; margin-right: 10px; font-size: 35px; color:  rgb(233, 105, 14);">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div>
+                    <p>Innovative ideas are really important to make you different from others. Digiperform involves innovative ideologies for imparting knowledge and skills to our trainees.</p>
+                </div>
+            </div>
+            <div class="botton-des flex">
+                <div style="margin-top: 30px; margin-right: 10px; font-size: 30px; color:  rgb(233, 105, 14);">
+                    <i class="fa-solid fa-display"></i>
+                </div>
+                <div>
+                    <p>We believe in practical learning, and provides live training sessions and helped students understand each concept effectively in depth way..</p>
+                </div>
+                </div>
+        </div>
+        <div class="right-des">
+            <div class="flex" >
+                <div style="margin-top: 30px; margin-right: 10px; font-size: 35px; color:  rgb(233, 105, 14);">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <p>The quality of training is the key foundation of any institute. We are highly concerned towards quality. Our course modules are consistent and meet industry standards.</p>
+                </div>
+                </div>
+            <div class="flex">
+                <div style="margin-top: 30px; margin-right: 10px; font-size: 35px; color:  rgb(233, 105, 14);">
+                    <i class="fa-solid fa-user-group"></i>
+                </div>
+                <div>
+                    <p>Digiperform as a leading Digi Marketing Institute provides 100% job assistance to our students.We tied up with several organizations for Job placements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ready-join">
+        <p>Are you ready? Join our Digital Marketing Institute now.</p>
+    </div>
+    <div class="demo1">
+        Start with a Free Demo
+    </div>
+    <div class="logo_">
+        <img src="{% static 'image/logo2.png' %}" alt="logo2">
+    </div>
+    <div >
+        <h1 class="head">What Our Trainees Have To Say</h1>
+    </div>
+    <div class="head_1">
+        <p>Our Courses have Been Receiving an average rating of 9.4/10 from our course participants. Till date, Digiperform has trained more than 75,000+ individuals.</p>
+    </div>
+    </div>
+    <div class="review">
+        <div class="review-card"> 
+            <img src="" alt="">
+            <div class="user-review">
+                <p>My personal experience with Digiperform was good, especially when it comes to PPC the trainer here have the depth of knowledge over the subject line.</p>
+            </div>
+            <div class="rating">
+                <img src="" alt="star">
+            </div>
+            <div class="user-name">
+                <p>Suyash Chitre</p>
+            </div>
+        </div>
+        <div class="review-card"> 
+            <img src="" alt="">
+            <div class="user-review">
+                <p>Best Digital Marketing Career Academy among all! I suggest all my friends about Digiperform. They provide depth course module both technically and strategically. Happy to be a part of Digiperform.</p>
+            </div>
+            <div class="rating">
+
+            </div>
+            <div class="user-name">
+                <p>Harsh Rawat</p>
+            </div>
+        </div>
+        <div class="review-card"> 
+            <img src="" alt="">
+            <div class="user-review">
+                <p>If you are looking for an institute which helps you learn digital marketing, then you must consider Digiperform. They are the best in this field.</p>
+            </div>
+            <div class="rating">
+
+            </div>
+            <div class="user-name">
+                <p>Kimz Hnamte</p>
+            </div>
+        </div>
+        <div class="review-card"> 
+            <img src="" alt="">
+            <div class="user-review">
+                <p>kdsjflsdjflk;fksdjfklsdj</p>
+            </div>
+            <div class="rating">
+
+            </div>
+            <div class="user-name">
+                <p>koshal</p>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</body>
+</html>

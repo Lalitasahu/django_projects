@@ -21,7 +21,7 @@
     
     <form action="" enctype="multipart/form-data">
         {% csrf_token %}
-        {% for image in product.images_set.all %}
+        {% for image in Products.images_set.all %}
             <img src="{{ image.image.url }}" alt="Product Image">
         {% endfor %}
     </form>
