@@ -1,5 +1,7 @@
 {% include 'navbar.html' %}
 {% load static %}
+{% load math_filter %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,70 +14,358 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Product Detail</title>
 </head>
+<style>
+    
+    .one_img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        border: 10px;
+        padding: 20px;
+    }
+    .review{
+        max-width: 700px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
 
+    }
+    .review-card{
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        
+        
+    }
+    .review-card div {
+        margin-bottom: 8px;
+        color: #555;
+    }
+    .review-head{
+        font-size: 2rem;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;;
+    }
+</style>
 <body>
     <div class="nav-margin">
         <div class="page">
             <div class="item-de flex">
-                <div class="left">
-                    <div class="thumb-images">
-                        {% for im in product.images_set.all %}
-                            <!-- <p>{{im.image.url}}</p> -->
-                             <div>
-                                 <img src="{{im.image.url}}" style="width: 100px; height: 100px;" />
-                             </div>
-                        {% endfor %}
-                    </div>
-                    <div style="width: 80%; height: 500px;">
-                        <div>
-                            <img src="{{ product.images_set.first.image.url }}" alt="Image"
-                                style="height: 100%;width: 100%;object-fit: cover; border-radius: 10px;" />
+                <div>
+                    <div class="left">
+                        <div class="thumb-images">
+                            {% with img_list=product.image_list|string_to_list:"|" %}
+                                {% for m in img_list %}
+                                    <img src="{{ m }}" alt="Image" style="width: 100px; height: 100px; padding: 15px; object-fit: contain;">
+                                {% endfor %}
+                            {% endwith %}
+                            <!-- {% for im in product.images_set.all %}
+                                <div>
+                                    <img src="{{im.image.url}}" style="width: 100px; height: 100px;" />
+                                </div>
+                            {% endfor %} -->
+                        </div>
+                        <div style="width: 80%; height: 500px;">
+                            <div>
+                                <!-- <img src="{{ product.images_set.first.image.url }}" alt="Image" -->
+                                {% with img_list=product.image_list|string_to_list:"|" %}
+                                <img class="one_img" src="{{ img_list.0 }}" alt="Product Image">
+                                {% endwith %}  
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="right">
                     <div>
-                        <h1>{{product.name}}</h1>
+                        <h1>{{product.title}}</h1>
                         <div>
-                            <div class="flex gap">
+                            <div>
                                 <div class="flex align-center" style="font-size: 32px;font-weight: bold;gap:5px">
-                                    <i class="fa-solid fa-indian-rupee-sign"> </i>
-                                    <div>{{product.price}}</div>
-                                </div>
-                                <div>
-                                    <p><i class="fa-solid fa-indian-rupee-sign strikethrough"> {{product.dis_price}}</i></p>
+                                    <!-- <i class="fa-solid fa-indian-rupee-sign"> </i> -->
+                                    <div>
+                                        {{product.price}}
+                                        <div style="text-decoration: line-through; color: rgb(248, 57, 57); font-size: 16px;">M.R.P.: {{product.dis_price}}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="sp-item">
-                            <div class="sp-key"> brand:</div>
-                            <div class="sp-value">{{product.brand}}</div>
-                        </div>
-                        <div class="sp-item">
-                            <div class="sp-key"> Model:</div>
-                            <div class="sp-value">{{product.model}}</div>
-                        </div>
-                        <div class="sp-item">
-                            <div class="sp-key"> Storage:</div>
-                            <div class="sp-value">{{product.storage}}</div>
-                        </div>
-                        <div class="sp-item">
-                            <div class="sp-key"> Stock:</div>
-                            <div class="sp-value">{{product.stock}}</div>
-                        </div>
-                        <div class="sp-item">
-                            <div class="sp-key"> is_available:</div>
-                            <div class="sp-value">{{product.is_available}}</div>
-                        </div>
-                        <div class="sp-item">
-                            <div class="sp-key"> Created_at:</div>
-                            <div class="sp-value">{{product.created_at}}</div>
-                        </div>
-                        <!-- <div class="sp-item">
-                        <div class="sp-key"> Description:</div> 
-                        <div class="sp-value">{{product.description}}</div>
-                        </div> -->
+                        <div>
+                            <div class="sp-item">
+                                <div class="sp-key"> model Number:</div>
+                                <div class="sp-value">{{product.model_number }}</div>
+                            </div>
+                            <div class="sp-item">
+                                <div class="sp-key"> Part Number:</div>
+                                <div class="sp-value">{{product.part_number}}</div>
+                            </div>
+                            <div class="sp-item">
+                                <div class="sp-key"> model_name:</div>
+                                <div class="sp-value">{{product.model_name}}</div>
+                            </div>
+                            <div class="sp-item">
+                                <div class="sp-key"> Series:</div>
+                                <div class="sp-value">{{product.series}}</div>
+                            </div>
+                            <div class="sp-item">
+                                <div class="sp-key"> Color:</div>
+                                <div class="sp-value">{{product.color}}</div>
+                            </div>
+                            <div class="sp-item">
+                                <div class="sp-key"> Description:</div>
+                                <!-- <div class="sp-value">{% if product.description %}  {{product.description }} {% else %} &nbsp; {% endif %} </div> -->
+                                <div class="sp-value">{% if product.description %} {{ product.description }} {% else %} &nbsp; {% endif %} </div>
+                            </div>
 
+                            <div class="sp-item">
+                                <div class="sp-key"> Sales Package:</div>
+                                <div class="sp-value">{{product.sales_package }}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Power Supply:</div> 
+                            <div class="sp-value">{{product.power_supply}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Battery Cell:</div> 
+                            <div class="sp-value">{{product.battery_cell}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> MS Office:</div> 
+                            <div class="sp-value">{{product.ms_office}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Processor Brand:</div> 
+                            <div class="sp-value">{{product.processor_brand}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Processor Name:</div> 
+                            <div class="sp-value">{{product.processor_name}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> SSD:</div> 
+                            <div class="sp-value">{{product.ssd}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> SSD Capacity:</div> 
+                            <div class="sp-value">{{product.ssd_capacity}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> RAM:</div> 
+                            <div class="sp-value">{{product.ram}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> RAM Type:</div> 
+                            <div class="sp-value">{{product.ram_type}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Processor Variant:</div> 
+                            <div class="sp-value">{{product.processor_variant}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Clock Speed:</div> 
+                            <div class="sp-value">{{product.clock_speed}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Graphic Processor:</div> 
+                            <div class="sp-value">{{product.graphic_processor}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Storage Type:</div> 
+                            <div class="sp-value">{{product.storage_type}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Operating System:</div> 
+                            <div class="sp-value">{{product.operating_system}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> USB Port:</div> 
+                            <div class="sp-value">{{product.usb_port}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> HDMI Port:</div> 
+                            <div class="sp-value">{{product.hdmi_port}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Touchscreen:</div> 
+                            <div class="sp-value">{{product.touchscreen}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Screen Size:</div> 
+                            <div class="sp-value">{{product.screen_size}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Screen Resolution:</div> 
+                            <div class="sp-value">{{product.screen_resolution}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Screen Type:</div> 
+                            <div class="sp-value">{{product.screen_type}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Speakers:</div> 
+                            <div class="sp-value">{{product.speakers}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Internal Mic:</div> 
+                            <div class="sp-value">{{product.internal_mic}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Wireless LAN:</div> 
+                            <div class="sp-value">{{product.wireless_lan}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Bluetooth:</div> 
+                            <div class="sp-value">{{product.bluetooth}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Dimensions:</div> 
+                            <div class="sp-value">{{product.dimensions}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Weight:</div> 
+                            <div class="sp-value">{{product.weight}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Disk Drive:</div> 
+                            <div class="sp-value">{{product.disk_drive}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Web Camera:</div> 
+                            <div class="sp-value">{{product.web_camera}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Keyboard:</div> 
+                            <div class="sp-value">{{product.keyboard}}</div>
+                            </div>           
+
+                            <div class="sp-item">
+                                <div class="sp-key"> Suitable For:</div>
+                                <div class="sp-value">{{product.suitable_for}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Backlit Keyboard:</div> 
+                            <div class="sp-value">{{product.backlit_keyboard}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Warranty Summary:</div> 
+                            <div class="sp-value">{{product.warranty_summary}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Warranty Service Type:</div> 
+                            <div class="sp-value">{{product.warranty_service_type}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Covered in Warranty:</div> 
+                            <div class="sp-value">{{product.covered_in_warranty}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> not covered in warranty:</div> 
+                            <div class="sp-value">{{product.type}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> EMMC Storage Capacity:</div> 
+                            <div class="sp-value">{{product.emmc_storage_capacity}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Battery Backup:</div> 
+                            <div class="sp-value">{{product.battery_backup}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Number of Cores:</div> 
+                            <div class="sp-value">{{product.number_of_cores}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Mic In:</div> 
+                            <div class="sp-value">{{product.mic_in}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Sound Properties:</div> 
+                            <div class="sp-value">{{product.sound_properties}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Pointer Device:</div> 
+                            <div class="sp-value">{{product.pointer_device}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Included Software:</div> 
+                            <div class="sp-value">{{product.included_software}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Additional Features:</div> 
+                            <div class="sp-value">{{product.additional_features}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Domestic Warranty:</div> 
+                            <div class="sp-value">{{product.domestic_warranty}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Expandable Memory:</div> 
+                            <div class="sp-value">{{product.expandable_memory}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Processor Generation:</div> 
+                            <div class="sp-value">{{product.processor_generation}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Finger Print Sensor:</div> 
+                            <div class="sp-value">{{product.finger_print_sensor}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> RAM Frequency:</div> 
+                            <div class="sp-value">{{product.ram_frequency}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Cache:</div> 
+                            <div class="sp-value">{{product.cache}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Hardware Interface:</div> 
+                            <div class="sp-value">{{product.hardware_interface}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Refresh Rate:</div> 
+                            <div class="sp-value">{{product.refresh_rate}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Dedicated Graphic Memory Type:</div> 
+                            <div class="sp-value">{{product.dedicated_graphic_memory_type}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Face Recognition:</div> 
+                            <div class="sp-value">{{product.face_recognition}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Memory Slots:</div> 
+                            <div class="sp-value">{{product.memory_slots}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Supported Operating System:</div> 
+                            <div class="sp-value">{{product.supported_operating_system}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> RJ11:</div> 
+                            <div class="sp-value">{{product.rj11}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> RJ45:</div> 
+                            <div class="sp-value">{{product.rj45}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Laptop Bag:</div> 
+                            <div class="sp-value">{{product.laptop_bag}}</div>
+                            </div>
+                            <div class="sp-item">
+                            <div class="sp-key"> Multi Card Slot:</div> 
+                            <div class="sp-value">{{product.multi_card_slot}}</div>
+                            </div>                                             
+                        </div>
+                       
+                        </div>
                         <div class="flex gap ">
                             <div>
                                 {% if user.profile.is_vendor == 0 %}
@@ -107,24 +397,302 @@
                                 {% endif %}
                             </div>
                         </div>
-                    </div>
+                    
                 </div>
             </div>
-        </div>
-        <div class="description">
-            <div class="sp-item">
-                <div class="sp-key"> Description:</div>
-                <div class="sp-value">{{product.description}}</div>
+
+            <div style="margin-top: 10rem;">
+                <h1 style="font-size: 48px;">
+                    Description
+                </h1>
+                <div style="font-size: 28px;">
+                    {{product.description }}
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <br>
+                <!-- <div class="specifications-right">
+                    <div class="specifications">
+                        <div class="sp-key"> Sales Package:</div>
+                        <div class="sp-value">{{product.sales_package }}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Power Supply:</div> 
+                    <div class="sp-value">{{product.power_supply}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Battery Cell:</div> 
+                    <div class="sp-value">{{product.battery_cell}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> MS Office:</div> 
+                    <div class="sp-value">{{product.ms_office}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Processor Brand:</div> 
+                    <div class="sp-value">{{product.processor_brand}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Processor Name:</div> 
+                    <div class="sp-value">{{product.processor_name}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> SSD:</div> 
+                    <div class="sp-value">{{product.ssd}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> SSD Capacity:</div> 
+                    <div class="sp-value">{{product.ssd_capacity}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> RAM:</div> 
+                    <div class="sp-value">{{product.ram}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> RAM Type:</div> 
+                    <div class="sp-value">{{product.ram_type}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Processor Variant:</div> 
+                    <div class="sp-value">{{product.processor_variant}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Clock Speed:</div> 
+                    <div class="sp-value">{{product.clock_speed}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Graphic Processor:</div> 
+                    <div class="sp-value">{{product.graphic_processor}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Storage Type:</div> 
+                    <div class="sp-value">{{product.storage_type}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Operating System:</div> 
+                    <div class="sp-value">{{product.operating_system}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> USB Port:</div> 
+                    <div class="sp-value">{{product.usb_port}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> HDMI Port:</div> 
+                    <div class="sp-value">{{product.hdmi_port}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Touchscreen:</div> 
+                    <div class="sp-value">{{product.touchscreen}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Screen Size:</div> 
+                    <div class="sp-value">{{product.screen_size}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Screen Resolution:</div> 
+                    <div class="sp-value">{{product.screen_resolution}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Screen Type:</div> 
+                    <div class="sp-value">{{product.screen_type}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Speakers:</div> 
+                    <div class="sp-value">{{product.speakers}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Internal Mic:</div> 
+                    <div class="sp-value">{{product.internal_mic}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Wireless LAN:</div> 
+                    <div class="sp-value">{{product.wireless_lan}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Bluetooth:</div> 
+                    <div class="sp-value">{{product.bluetooth}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Dimensions:</div> 
+                    <div class="sp-value">{{product.dimensions}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Weight:</div> 
+                    <div class="sp-value">{{product.weight}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Disk Drive:</div> 
+                    <div class="sp-value">{{product.disk_drive}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Web Camera:</div> 
+                    <div class="sp-value">{{product.web_camera}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Keyboard:</div> 
+                    <div class="sp-value">{{product.keyboard}}</div>
+                    </div>
+                </div> -->
+                <!-- <div class="specifications-lef">
+                   
+                    <div class="specifications">
+                        <div class="sp-key"> Suitable For:</div>
+                        <div class="sp-value">{{product.suitable_for}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Backlit Keyboard:</div> 
+                    <div class="sp-value">{{product.backlit_keyboard}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Warranty Summary:</div> 
+                    <div class="sp-value">{{product.warranty_summary}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Warranty Service Type:</div> 
+                    <div class="sp-value">{{product.warranty_service_type}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Covered in Warranty:</div> 
+                    <div class="sp-value">{{product.covered_in_warranty}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> not covered in warranty:</div> 
+                    <div class="sp-value">{{product.type}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> EMMC Storage Capacity:</div> 
+                    <div class="sp-value">{{product.emmc_storage_capacity}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Battery Backup:</div> 
+                    <div class="sp-value">{{product.battery_backup}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Number of Cores:</div> 
+                    <div class="sp-value">{{product.number_of_cores}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Mic In:</div> 
+                    <div class="sp-value">{{product.mic_in}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Sound Properties:</div> 
+                    <div class="sp-value">{{product.sound_properties}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Pointer Device:</div> 
+                    <div class="sp-value">{{product.pointer_device}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Included Software:</div> 
+                    <div class="sp-value">{{product.included_software}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Additional Features:</div> 
+                    <div class="sp-value">{{product.additional_features}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Domestic Warranty:</div> 
+                    <div class="sp-value">{{product.domestic_warranty}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Expandable Memory:</div> 
+                    <div class="sp-value">{{product.expandable_memory}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Processor Generation:</div> 
+                    <div class="sp-value">{{product.processor_generation}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Finger Print Sensor:</div> 
+                    <div class="sp-value">{{product.finger_print_sensor}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> RAM Frequency:</div> 
+                    <div class="sp-value">{{product.ram_frequency}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Cache:</div> 
+                    <div class="sp-value">{{product.cache}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Hardware Interface:</div> 
+                    <div class="sp-value">{{product.hardware_interface}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Refresh Rate:</div> 
+                    <div class="sp-value">{{product.refresh_rate}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Dedicated Graphic Memory Type:</div> 
+                    <div class="sp-value">{{product.dedicated_graphic_memory_type}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Face Recognition:</div> 
+                    <div class="sp-value">{{product.face_recognition}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Memory Slots:</div> 
+                    <div class="sp-value">{{product.memory_slots}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Supported Operating System:</div> 
+                    <div class="sp-value">{{product.supported_operating_system}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> RJ11:</div> 
+                    <div class="sp-value">{{product.rj11}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> RJ45:</div> 
+                    <div class="sp-value">{{product.rj45}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Laptop Bag:</div> 
+                    <div class="sp-value">{{product.laptop_bag}}</div>
+                    </div>
+                    <div class="specifications">
+                    <div class="sp-key"> Multi Card Slot:</div> 
+                    <div class="sp-value">{{product.multi_card_slot}}</div>
+                    </div>
+                </div> -->
             </div>
         </div>
-        <!-- <div>
-            {% if product.user.id == user.id %}
-            <div>
-                <button class="button"><a href="/edit_product/{{ product.id }}">Edit Product</a></button>
-                <button class="button"><a href="/del_product/{{ product.id }}">Delete Product</a></button>
+        <div class="review">
+            <h4>Total Review {{ review_items_count }} hh</h4>
+            <h1 class="review-head">Ratings & Reviews</h1>
+            {% for r in product.reviews.all %}
+            <div class="review-card flex justify-between">
+                <div >
+                    <div>
+                        {{r.user}} <br>
+                    </div>
+                    <div>
+                        comment: {{r.comment}} <br>
+                    </div>
+                    <div>
+                        Rating: {{r.rating}}/5 <br>
+                    </div>
+                    <div>
+                    Created_at: {{r.created_at}} <br>
+                    </div>
+
+                    <div>
+                    {% if user.is_authenticated and user.id == r.user.id %}
+                        <button><a href="/edit_review/{{r.id}}">Edit Review</a></button>
+                        <button><a href="/delete_review/{{r.id}}">Delete Review</a></button>
+                    {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <!-- like & dislike thumb -->
+                    <i class="fa-solid fa-thumbs-up"></i> <i class="fa-solid fa-thumbs-down"></i>
+                </div>
             </div>
-            {% endif %}
-        </div> -->
+            {% endfor %}
+            <button><a href="/add_review/{{product.id}}">Add Review</a></button>
+        </div>
     </div>
 </body>
 </html>

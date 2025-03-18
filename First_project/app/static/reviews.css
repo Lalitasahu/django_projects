@@ -1,0 +1,96 @@
+/* Container for reviews */
+.review {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+.review-head {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+/* Each review card */
+.review-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* User and comment */
+.review-card div {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+/* Like & Dislike icons */
+.review-card i {
+    margin-right: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.review-card i:hover {
+    color: #007bff;
+}
+
+/* Buttons */
+a.btn, .btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin-right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+a.btn:hover, .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Delete button (different color) */
+a.btn.delete {
+    background-color: #dc3545;
+}
+
+a.btn.delete:hover {
+    background-color: #b02a37;
+}
+
+/* Add Review button */
+.add-review {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.add-review:hover {
+    background-color: #218838;
+}
+
+/* Empty state */
+.review p {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+}

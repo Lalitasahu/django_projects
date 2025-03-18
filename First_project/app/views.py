@@ -1,5 +1,5 @@
 
-from app.models import Profile, Product, Order, Images, Category, Cart
+from app.models import *
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -7,12 +7,13 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status  
-from .serializer import  UserSerializer, ProductSerializer, OrderSerializer, CartSerializer, CategorySerializer, ProfileSerializer
+from .serializer import  *
 from rest_framework import viewsets
 from django.core.paginator import Paginator
 from datetime import datetime
 import pandas as pd
-
+import re
+from django.db.models import Q
 
 class UserSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -65,9 +66,52 @@ class CategorySet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
 def homepage(request):
     categories = Category.objects.all()
     return render(request, 'homepage.html', {'categories':categories})
+
+def delete_review(request,id):
+    reviews = Reviews.objects.get(id=id)
+    reviews.delete()
+    return HttpResponse('Review Deleted')
+
+def show_reviews(request, product_id):
+    product = Product.objects.get(id=product_id)
+    reviews = Reviews.objects.filter(product=product)
+    paginator = Paginator(reviews, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'pro_detail.html', {'page_obj': page_obj, 'product': product})
+
+
+def edit_review(request,id):
+    # product = Product.objects.get(id=id)
+    reviews = get_object_or_404(Reviews, id=id)
+    if request.method == 'POST':
+        reviews.comment = request.POST['comment']
+        reviews.rating = request.POST['rating']
+         
+        reviews.save()
+
+    return render(request, 'reviewpage.html', {'reviews':reviews})
+
+def add_review(request,id):
+    product = Product.objects.get(id=id)
+    if request.method == 'POST':
+        comment = request.POST['comment']
+        rating = request.POST['rating']
+
+        reviews = Reviews.objects.create(
+            comment=comment,
+            rating=rating,
+            product=product,
+            user=request.user,
+        )
+        reviews.save()
+        # return redirect('/product_detail/')
+        return HttpResponse('sucessful')
+    return render(request, 'reviewpage.html')
 
 
 def searching(request):
@@ -75,23 +119,28 @@ def searching(request):
     data = Product.objects.none()  
 
     if search:
-        data = Product.objects.filter(name__icontains = search
-                ) | Product.objects.filter(brand__icontains = search
-                ) | Product.objects.filter(model__icontains = search
-                ) | Product.objects.filter(description__icontains = search)
+        data = Product.objects.filter(Q(title__icontains = search))
+        # data = Product.objects.filter(title__icontains = search
+        #         ) | Product.objects.filter(brand__icontains = search
+        #         ) | Product.objects.filter(model__icontains = search
+        #         ) | Product.objects.filter(description__icontains = search)
 
-    message = search
+        paginator = Paginator(data, 20)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
 
-    return render(request, 'product_list.html', {'product':data,'category_id':1,"message":message})
+    return render(request, 'product_list.html', {'data':data, "message":search, 'page_obj':page_obj})
 
-def remove_car(request, id):
+def remove_cart(request, id):
     cart = Cart.objects.get(id=id)
     cart.delete()
     return HttpResponseRedirect('/')
 
 def show_cart(request):
+    product = Product.objects.all()
     cart = Cart.objects.all()
-    return render(request, 'add_cart.html', {'cart':cart})
+    return render(request, 'add_cart.html', {'cart':cart,'product':product})
 
 @login_required(login_url='/userlogin')
 def add_to_cart(request, id):
@@ -99,7 +148,6 @@ def add_to_cart(request, id):
     product  = Product.objects.get(id=id)
     if request.method == 'POST':
         data = request.POST
-
         quantity = data['quantity']
         # total = product.price*quantity
 
@@ -154,13 +202,17 @@ def order_item(request, id):
         data = request.POST
         
         quantity = int(data['quantity'])
+
+        raw_price = str(product.price)
+        clean_price = re.sub(r'[^\d.]', '', raw_price)
+
         if quantity > product.stock:
             return render(request, 'order_pro.html', {'product': product,
                                                       'error': 'Quantity exceeds available stock.'})
         order = Order.objects.create(
             user=request.user,
-            product=product.name,
-            price=product.price,
+            product=product.title,
+            price=clean_price,
             quantity=quantity,
             shipping_address=data['shipping_address'],
             status=data['status']
@@ -181,10 +233,11 @@ def order_item(request, id):
 
 
 def pro_detail(request,id):
-    product = Product.objects.get(id=id)
-    # details = Product.product.first()
+    # product = ProductNew.objects.get(id=id)
+    product = get_object_or_404(Product, id=id)
+    
     is_in_cart = Cart.objects.filter(user=request.user, product=product).exists() if request.user.is_authenticated else False 
-    return render(request, 'pro_detail.html', {'product':product,  'is_in_cart':is_in_cart})
+    return render(request, 'pro_detail.html', {'product':product})
 
 @login_required(login_url='/userlogin')
 def DeleteImage(request, id):
@@ -234,9 +287,9 @@ def edit_product(request, id):
     return render(request, 'add_product.html', {'product': product, 'categories': categories})
 
 def pro_list(request,id):
-    product = Product.objects.filter(category_id=id)
-    # product = Product.objects.all()
-    paginator = Paginator(product, 4)
+    # product = ProductNew.objects.filter(cat_id=id)
+    product = Product.objects.filter(cat_id=id)
+    paginator = Paginator(product, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'product_list.html', {'product':product,'category_id':id, 'page_obj':page_obj})
@@ -250,6 +303,7 @@ def add_pro_list(request,id):
         data = request.POST
         files = request.FILES.getlist('image')
         product = Product.objects.create(
+        # product = ProductNew.objects.create(
             name = data['name'],
             price = data['price'],
             dis_price = data['dis_price'],
@@ -354,3 +408,8 @@ def createuser(request):
 
 def userprofile(request):
     return render(request, 'profile.html',{'user':request.user})
+
+
+
+def ajax_page(request):
+    return render(request,'new_page.html')

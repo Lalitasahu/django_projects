@@ -11,7 +11,7 @@
     {% if data %}
         
         {% for product in data %}
-            <a href="/pro_detail/{{product.id}}">{{ product.name }} - {{ product.brand }} - {{ product.model }}</a><br><br>
+            <a href="/pro_detail/{{product.id}}">{{ product.title }} </a><br><br>
         {% endfor %}
         
     {% else %}

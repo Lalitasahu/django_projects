@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -21,10 +21,12 @@ class SubCategory(models.Model):
     image = models.ImageField(upload_to='photos/',null=True)
 
 
-class AppProductNew(models.Model):
+class Product(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE)
-    category = models.TextField(null=True)
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    is_available = models.BooleanField(default=True)
+    stock = models.IntegerField(default=100)
+    category_name = models.TextField(null=True)
     links = models.TextField(blank=True, null=True)
     title = models.TextField(blank=True, null=True)
     price = models.TextField(blank=True, null=True)
@@ -99,94 +101,13 @@ class AppProductNew(models.Model):
     rj45 = models.TextField(db_column='RJ45', blank=True, null=True)  # Field name made lowercase.
     laptop_bag = models.TextField(db_column='Laptop_Bag', blank=True, null=True)  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'app_product_new'
+    # class Meta:
+    #     managed = True
+    #     db_table = 'app_product'
 
-
-class Product(models.Model):    
-    name = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    dis_price = models.DecimalField(max_digits=10,decimal_places=2)
-    brand = models.CharField(max_length=20, null=True, blank=True)
-    model = models.CharField(max_length=20,null=True, blank=True)
-    storage = models.CharField(max_length=20, null=True, blank=True)
-    stock = models.IntegerField(null=True, blank=True)
-    is_available = models.BooleanField(default=True, null=True, blank=True)
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    image_list = models.ImageField(upload_to='photos/', null=True, blank=True)
-    model_number = models.CharField(max_length=20,null=True,blank=True)
-    Sales_Package = models.CharField(max_length=30,null=True,blank=True)
-    Part_number = models.CharField(max_length=50,null=True,blank=True)
-    model_name = models.CharField(max_length=50,null=True,blank=True)
-    Series = models.CharField(max_length=50,null=True,blank=True)
-    Color = models.CharField(max_length=50,null=True,blank=True)
-    Type = models.CharField(max_length=50,null=True,blank=True)
-    Suitable_For = models.CharField(max_length=50,null=True,blank=True)
-    Power_Supply = models.CharField(max_length=50,null=True,blank=True)
-    Battery_Cell = models.CharField(max_length=20,null=True,blank=True)
-    MS_Office = models.CharField(max_length=20,null=True,blank=True)
-    Processor_Brand = models.CharField(max_length=20,null=True,blank=True)
-    Processor_Name = models.CharField(max_length=20,null=True,blank=True)
-    SSD = models.CharField(max_length=20,null=True,blank=True)
-    SSD_Capacity = models.CharField(max_length=20,null=True,blank=True)
-    RAM = models.CharField(max_length=20,null=True,blank=True)
-    RAM_Type = models.CharField(max_length=20,null=True,blank=True)
-    Processor_Variant = models.CharField(max_length=50,null=True,blank=True)
-    Clock_Speed = models.CharField(max_length=50,null=True,blank=True)
-    Graphic_Processor = models.CharField(max_length=50,null=True,blank=True)
-    Storage_Type = models.CharField(max_length=50,null=True,blank=True)
-    Operating_System = models.CharField(max_length=50,null=True,blank=True)
-    USB_Port = models.CharField(max_length=50,null=True,blank=True)
-    HDMI_Port = models.CharField(max_length=50,null=True,blank=True)
-    Touchscreen = models.CharField(max_length=20,null=True,blank=True)
-    Screen_Size = models.CharField(max_length=50,null=True,blank=True)
-    Screen_Resolution = models.CharField(max_length=50,null=True,blank=True)
-    Screen_Type = models.CharField(max_length=50,null=True,blank=True)
-    Speakers = models.CharField(max_length=50,null=True,blank=True)
-    Internal_Mic = models.CharField(max_length=50,null=True,blank=True)
-    Wireless_LAN = models.CharField(max_length=50,null=True,blank=True)
-    Bluetooth = models.CharField(max_length=50,null=True,blank=True)
-    Dimensions = models.CharField(max_length=50,null=True,blank=True)
-    Weight = models.CharField(max_length=50,null=True,blank=True)
-    Disk_Drive = models.CharField(max_length=50,null=True,blank=True)
-    Web_Camera = models.CharField(max_length=50,null=True,blank=True)
-    Keyboard = models.CharField(max_length=50,null=True,blank=True)
-    Backlit_Keyboard = models.CharField(max_length=50,null=True,blank=True)
-    Warranty_Summary = models.CharField(max_length=50,null=True,blank=True)
-    Warranty_Service_Type = models.CharField(max_length=50,null=True,blank=True)
-    Covered_in_Warranty = models.CharField(max_length=50,null=True,blank=True)
-    Not_Covered_in_Warranty = models.CharField(max_length=50,null=True,blank=True)
-    EMMC_Storage_Capacity = models.CharField(max_length=50,null=True,blank=True)
-    Battery_Backup = models.CharField(max_length=50,null=True,blank=True)
-    Number_of_Cores = models.CharField(max_length=50,null=True,blank=True)
-    Mic_In = models.CharField(max_length=50,null=True,blank=True)
-    Sound_Properties = models.CharField(max_length=50,null=True,blank=True)
-    Pointer_Device = models.CharField(max_length=50,null=True,blank=True)
-    Included_Software = models.CharField(max_length=50,null=True,blank=True)
-    Additional_Features = models.CharField(max_length=50,null=True,blank=True)
-    Domestic_Warranty = models.CharField(max_length=50,null=True,blank=True)
-    Expandable_Memory = models.CharField(max_length=50,null=True,blank=True)
-    Processor_Generation = models.CharField(max_length=50,null=True,blank=True)
-    Finger_Print_Sensor = models.CharField(max_length=50,null=True,blank=True)
-    RAM_Frequency = models.CharField(max_length=50,null=True,blank=True)
-    Cache = models.CharField(max_length=50,null=True,blank=True)
-    Multi_Card_Slot = models.CharField(max_length=50,null=True,blank=True)
-    Hardware_Interface = models.CharField(max_length=50,null=True,blank=True)
-    Refresh_Rate = models.CharField(max_length=50,null=True,blank=True)
-    Dedicated_Graphic_Memory_Type = models.CharField(max_length=50,null=True,blank=True)
-    Dedicated_Graphic_Memory_Capacity = models.CharField(max_length=50,null=True,blank=True)
-    Face_Recognition = models.CharField(max_length=50,null=True,blank=True)
-    Memory_Slots = models.CharField(max_length=50,null=True,blank=True)
-    Supported_Operating_System = models.CharField(max_length=50,null=True,blank=True)
-    RJ11 = models.CharField(max_length=50,null=True,blank=True)
-    RJ45 = models.CharField(max_length=50,null=True,blank=True)
-    Laptop_Bag = models.CharField(max_length=50,null=True,blank=True)
-    Multi_Card_Slot = models.CharField(max_length=50,null=True,blank=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True, default=1)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
+    
+def get_delivery_date():
+    return datetime.now().date() + timedelta(days=2)
 
 class Order(models.Model):
     STATUS = [
@@ -199,9 +120,16 @@ class Order(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     booking_date = models.DateTimeField(auto_now_add=True)
-    delivery_date = models.DateField(null=True, blank=True)
+    delivery_date = models.DateField(default=get_delivery_date)
     status = models.CharField(max_length=10, choices=STATUS, default='Cancelled')
     shipping_address = models.TextField()
+
+    # delivery_date = models.DateField(blank=True, null=True)
+    # def save(self, *args, **kwargs):
+    #         if not self.delivery_date and self.order_date:
+    #             self.delivery_date = self.order_date + timedelta(days=2)
+    #         super().save(*args, **kwargs)
+
 
 class Images(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE) 
@@ -215,4 +143,24 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True)
-    # _date = models.DateTimeField(auto_now_add=True)
+    
+
+class Reviews(models.Model):
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # Ratings from 1 to 5
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Comment(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Likes(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    

@@ -19,22 +19,26 @@
             {% for c in cart %}
                 <div class="main-container">
                     <div class="flex align-center">
-                        <div class="" style="width: 250px;height: 250px;">
-                            <img src="{{c.product.images_set.first.image.url}}" alt="" style="width: 100%;height: 100%;object-fit: cover;border-radius: 5px;">
+                        <div class="" >  
+                            <!-- <img src="{{c.product.images_set.first.image.url}}" alt="" style="width: 100%;height: 100%;object-fit: cover;border-radius: 5px;"> -->
+                            {% with img_list=c.product.image_list|string_to_list:"|" %}
+                            <img style="width: 80%; height: 200px; object-fit: contain;" src="{{ img_list.0 }}" alt="Product Image">
+                            {% endwith %}  
                         </div>
                         <div style="margin-left: 20px;">
                             <div class="prd-name">
-                                {{c.product.name}}
+                                {{c.product.title|truncatechars:20}}
                             </div>
                             <p><strong>Quantity: </strong> {{c.quantity}} </p>
                             <p><strong>Dated: </strong> {{c.date}}</p> 
                             <p><strong>By: </strong> {{request.user}} </p>
+                            <p><strong>Price: </strong> {{c.product.price}} </p>
                             <p><strong>Total: </strong> {{ c.product.price|multiply:c.quantity }}</p>
                         </div>
                     </div>
-                   <div style="margin-top: 10px;">
+                    <div style="margin-top: 10px;">
                         <button>
-                            <a href="/remove_car/{{c.id}}">Remove Cart</a>
+                            <a href="/remove_cart/{{c.id}}">Remove Cart</a>
                         </button>
                         <button>
                             <a href="/order_item/{{c.product.id}}">Buy Now</a>

@@ -57,8 +57,13 @@ urlpatterns = [
     path('confirm_order/<int:id>/',confirm_order),
     path('add_to_cart/<int:id>/',add_to_cart),
     path('show_cart/',show_cart),
-    path('remove_car/<int:id>/',remove_car),
+    path('remove_cart/<int:id>/',remove_cart),
     path('search/',searching),
+    path('add_review/<int:id>/',add_review),
+    path('edit_review/<int:id>/',edit_review),
+    path('delete_review/<int:id>/',delete_review),
+    path('show_reviews/',show_reviews),
+    path('ajax/',ajax_page),
     path('api/', include(router.urls)),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

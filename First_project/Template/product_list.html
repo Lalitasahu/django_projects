@@ -1,5 +1,7 @@
 {% include 'navbar.html' %}
 {% load static %}
+{% load math_filter %}
+
 <!DOCTYPE html>
 <html lang="en">
     
@@ -32,29 +34,58 @@
                 {% endif %}
                 <div class="sub-main flex">
                     {% for pro in page_obj.object_list %}
-                                        
                     <div class="product-item">
                         <div class="image-i">
-                            {% if pro.images_set.all %}
                             <a href="/pro_detail/{{pro.id}}">
-                                <img src="{{ pro.images_set.first.image.url }}" class="product-image" />
-                                {% else %}
-                                <img src="{% static 'images/default-product.jpg' %}" class="product-image" />
-                                    <!-- <i class="fa-solid fa-heart"></i> -->
-                                {% endif %}
+                                {% with im=pro.image_list|first_image:"|" %}
+                                    {% if im %}
+                                        <img src="{{ im }}" class="product-image" />
+                                    {% else %}
+                                        <img src="{% static 'images/default-product.jpg' %}" class="product-image" />
+                                    {% endif %}
+                                {% endwith %}                            
                             </a>
                         </div>
+
                         <div>
                             <div class="flex justify-between b-item">
                                 <div class="title">
-                                    <a href="/pro_detail/{{pro.id}}">{{pro.name}}</a>
+                                    {% if pro.processor_brand %} {{ pro.processor_brand }} {% else %} &nbsp; {% endif %}<br>
+                                    <a href="/pro_detail/{{pro.id}}">{{pro.title|truncatechars:25}}</a>
                                 </div>
-                                <div class="hear">
+                                <div>
+                                    {% if pro.model_name %} {{ pro.model_name }} {% else %} &nbsp; {% endif %}
+                                </div>
+                                <div class="heart">
                                     <i class="fa-solid fa-heart"></i>
                                 </div>
                             </div>
-                            <div class="price">
-                                <i class="fa-solid fa-indian-rupee-sign">   {{pro.price}}</i>
+                            <div class="price flex" style="gap: 7px;">
+                                <div> {{pro.price}} </div>
+                                <div style="text-decoration: line-through; font-size: 16px; color: gray;">
+                                    {% if pro.dis_price %} {{ pro.dis_price }} {% else %} &nbsp; {% endif %} 
+                                </div>
+                            </div>
+                            <!-- <div >
+                                {% if pro.ram %} {{ pro.ram }} {% else %} &nbsp; {% endif %} 
+                            </div>
+                            <div >
+                                {{pro.ssd_capacity}}
+                            </div>
+                            <div>
+                                {% if pro.ssd_capacity %} {{ pro.ssd_capacity }} {% else %} &nbsp; {% endif %} 
+                            </div>
+                            <div>
+                                {% if pro.ram %} {{ pro.ram }} {% else %} &nbsp; {% endif %}
+                            </div> -->
+                            <div>
+                                <ul >
+                                    {% if pro.color %} <li style="width: 350px;">{{ pro.color }} </li>{% else %} &nbsp; {% endif %} 
+                                    {% if pro.processor_variant %}  <li style="width: 350px;">{{ pro.processor_variant }} </li> {% else %} &nbsp; {% endif %} </li>
+                                    {% if pro.ssd_capacity %} <li style="width: 300px; ">{{ pro.ssd_capacity }} </li> {% else %} &nbsp; {% endif %} </li>
+                                    {% if pro.ram %}<li style="width: 300px;"> {{ pro.ram }}</li> {% else %} &nbsp; {% endif %} </li>
+                                    
+                                </ul>
                             </div>
                         </div>
                     </div>
