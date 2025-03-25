@@ -30,6 +30,7 @@ router.register('Product',ProductSet)
 router.register('Order',OrderSet)
 router.register('Cart',CartSet)
 router.register('Category',CategorySet)
+router.register('Reviews',ReviewSet)
 
 
 

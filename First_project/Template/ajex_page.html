@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>ajex page</title>
+    <form action="">
+        {% csrf_token %}
+
+        <label for="comment">Comment:</label>
+        <textarea id="comment" placeholder="your review..."></textarea><br><br>
+        
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" placeholder="Rating (1-5)"><br><br>
+        
+        <label for="product_id">Product_id:</label>
+        <input type="number" id="product_id" placeholder="Enther product id"><br><br>
+
+        <!-- <label for="user">User_url</label>
+        <input type="text" id="user" placeholder="User_url"><br><br> -->
+
+        <button type="button" class="submit_review">Submit Review</button>
+    </form>
+    
+    </form>
+    <script>
+        $(document).ready(()=>{
+            $(".get_data").click(()=>{
+                // console.log("This is my javascript page") 
+                $.ajax({
+                    method:'GET',
+                    url: "http://localhost:8000/api/Reviews/",
+                    success: ((res)=>{
+                        // console.log(res.results)
+
+                        var data = ""
+                        res.results.map((item,index)=>{
+                            // this is for the product Image
+                            // data+=`
+                            //     <div>
+                            //         <div class="image-container">
+                            //             <img src="${item.image}" style="width:300px;height:280px" />
+                            //         </div>
+                            //         <h1>${item.comment}</h1>
+                            //     </div>
+                            // `
+                            data+=`<h1>${item.comment}</h1>`
+                        })
+
+                        $(".show_data").html(data)
+
+                    }),
+                    error: ((err)=>{
+
+                    })
+                })
+            })
+            
+            $(".submit_review").click(() => {
+                
+                const comment = $("#comment").val()
+                const rating = $("#rating").val()
+                const product_id = $("#product_id").val()
+                // const user = $("#user").val()
+
+                console.log(rating)
+                console.log(comment)
+                console.log(product_id)
+                // console.log(user)
+
+                $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost:8000/api/Reviews/', 
+                    data: JSON.stringify({
+                        comment:comment,
+                        rating:rating,
+                        product_id:product_id,
+                        // user:user
+                        // rating :'3',
+                        // comment: "Not Best Product",
+                        // product: "http://localhost:8000/api/Product/1/",
+                        // user:"http://localhost:8000/api/User/3/"
+                    }),
+
+                    contentType: "application/json", 
+                    headers:{
+                        'X-CSRFToken': $("input[name=csrfmiddlewaretoken]").val(),
+                    },
+                    success: (res) => {
+                        console.log(res);
+                        
+                    }
+                });
+            });
+            
+                    
+            // $(".cal").click(()=>{
+            //     var num1 = parseInt($("input[name=val1]").val())
+            //     var num2 = parseInt($("input[name=val2]").val())
+
+            //     var result = num1+num2
+            //     // $("#result").val(result)
+            //     $("input[name=result]").val(result)
+            // })
+            
+            $(".cal").click(()=>{
+                var num1 = parseInt($("#val1").val())
+                var num2 = parseInt($("#val2").val())
+
+                var result = num1+num2
+                // $("#result").val(result)
+                $("#result").val(result)
+            })
+            
+            $(".show-msg").click(() => {
+                $(".message-container").html("This is my first message");
+            });
+
+            $(".show-msg").click(() => {
+                $(".show-msg").html("This is my first message");
+            });
+        })
+    </script>
+   
+</head>
+<!-- <body>
+    <h1>This is Ajax Page</h1>
+    <input type="button" value="javescript" class="get_data"> 
+    
+    <div class="show_data">
+    </div><br><br>
+
+    <input type="text" name="val1" id="val1">
+    <input type="text" name="val2" id="val2">
+    <input type="button" value="Sum" class="cal">
+    <input type="text" name="result" id="result">
+
+    <button class="show-msg">Click Me</button>
+    <div class="message-container"></div> -->
+
+    <!-- <button type="button" class="submit_review"> Review</button> -->
+    <!-- {% csrf_token %} -->
+</body>
+</html>

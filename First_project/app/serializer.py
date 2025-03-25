@@ -4,9 +4,6 @@ from .models import *
 from datetime import datetime
 
 
-
-
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -16,6 +13,22 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta :
         model = Profile
         fields = ('address','phone_no','is_vendor')
+
+class ReviewsSerializer(serializers.Serializer):
+    comment = serializers.CharField(max_length=200)
+    rating = serializers.IntegerField()
+    product_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+    created_at = serializers.DateTimeField()
+
+# class ReviewsSerializer(serializers.ModelSerializer):
+#     comment = serializers.CharField(max_length=200)  
+
+#     class Meta:
+#         model = Reviews
+#         fields = '__all__'
+
+        # fields = ('id','rating','comment','created_at')
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

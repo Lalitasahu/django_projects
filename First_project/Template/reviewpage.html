@@ -27,6 +27,17 @@
 
         <button type="submit">Submit Review</button>
     </form>
-
+    <!-- <form id="reviewForm">
+        {% csrf_token %}
+        <input type="hidden" id="product_id" value="{{ product.id }}">
+        <textarea id="comment" placeholder="Write your review..."></textarea>
+        <input type="number" id="rating" min="1" max="5" placeholder="Rating (1-5)">
+        <button type="button" class="submit_review">Submit Review</button>
+    </form>
+    
+    <div class="review_section">
+        <h3>Reviews</h3>
+    </div>
+     -->
 </body>
 </html>

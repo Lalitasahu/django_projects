@@ -57,7 +57,6 @@ class OrderSet(viewsets.ModelViewSet):
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
-
 class CartSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
@@ -66,6 +65,45 @@ class CategorySet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
+class ReviewSet(viewsets.ModelViewSet):
+    queryset = Reviews.objects.all()
+    serializer_class = ReviewsSerializer
+
+    # def create(self, request, *args, **kwargs):
+        # comment = request.data['comment']
+        # rating = request.data['rating']
+        # product_id = request.data.get('product_id', None)
+        
+        # print(comment,rating)
+        # review = Reviews.objects.create(
+        #         user_id = 1,
+        #         comment = comment,
+        #         rating = rating,
+        #         product_id = product_id
+        # )
+        # review.save()
+
+        # s = ReviewsSerializer(review)
+        # return Response(s.data, status=status.HTTP_201_CREATED)
+    def create(self, request, *args, **kwargs):
+        # print("Received Data:", request.data)
+
+        product_id = request.data.get('product_id')
+        comment = request.data.get('comment')
+        rating = request.data.get('rating')
+
+        print(comment,rating,product_id)
+        review = Reviews.objects.create(
+            user_id=1,
+            comment=comment,
+            rating=rating,
+            product_id=product_id
+        )
+        review.save()
+
+        serializer = ReviewsSerializer(review)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 def homepage(request):
     categories = Category.objects.all()
@@ -412,4 +450,5 @@ def userprofile(request):
 
 
 def ajax_page(request):
-    return render(request,'new_page.html')
+    # return render(request,'new_page.html')
+    return render(request,'ajex_page.html')
