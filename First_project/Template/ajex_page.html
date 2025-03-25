@@ -5,25 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>ajex page</title>
+    <h1 style= "text-align: center;">This is Ajax Page</h1>
     <form action="">
+        <h1>Add New Review</h1>
         {% csrf_token %}
+
+        <label for="product_id">Product_id:</label>
+        <input type="number" id="product_id" placeholder="Enther product id"><br><br>
+        
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" placeholder="Rating (1-5)"><br><br>
 
         <label for="comment">Comment:</label>
         <textarea id="comment" placeholder="your review..."></textarea><br><br>
         
-        <label for="rating">Rating:</label>
-        <input type="number" id="rating" placeholder="Rating (1-5)"><br><br>
-        
-        <label for="product_id">Product_id:</label>
-        <input type="number" id="product_id" placeholder="Enther product id"><br><br>
-
-        <!-- <label for="user">User_url</label>
-        <input type="text" id="user" placeholder="User_url"><br><br> -->
-
         <button type="button" class="submit_review">Submit Review</button>
     </form>
     
+    <form  method="POST" enctype="multipart/form-data">
+        <h1>Add New Category</h1>
+        {% csrf_token %}
+        <label for="name">Category Name</label>
+        <input type="text" id="name" placeholder="Enter category name" required><br><br>
+
+        <label for="image">Category Image</label>
+        <input type="file" id="image" ><br><br>
+
+        <button type="button" class="submit_category">Add Category</button>
     </form>
+
+    
     <script>
         $(document).ready(()=>{
             $(".get_data").click(()=>{
@@ -94,16 +105,43 @@
                 });
             });
             
-                    
-            // $(".cal").click(()=>{
-            //     var num1 = parseInt($("input[name=val1]").val())
-            //     var num2 = parseInt($("input[name=val2]").val())
+            $(".submit_category").click(() => {
+                // console.log("Category")
 
-            //     var result = num1+num2
-            //     // $("#result").val(result)
-            //     $("input[name=result]").val(result)
-            // })
-            
+                const formData = new FormData();
+                
+                formData.append("name", $("#name").val());
+                const fileInput = $("#image")[0].files[0];
+
+                if (fileInput) {
+                    formData.append("image", fileInput);  
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8000/api/Category/',
+                    data: formData,
+                    processData: false,
+                    // contentType: "application/json", 
+                    contentType: false,  
+                    headers: {
+                        'X-CSRFToken': $("input[name=csrfmiddlewaretoken]").val(),
+                    },
+                    success: (response) => {
+                        console.log(response);
+                    }
+                });
+            });
+
+            $(".cal").click(()=>{
+                var num1 = parseInt($("input[name=val1]").val())
+                var num2 = parseInt($("input[name=val2]").val())
+
+                var result = num1+num2
+                // $("#result").val(result)
+                $("input[name=result]").val(result)
+            })
+
             $(".cal").click(()=>{
                 var num1 = parseInt($("#val1").val())
                 var num2 = parseInt($("#val2").val())
@@ -124,9 +162,9 @@
     </script>
    
 </head>
-<!-- <body>
-    <h1>This is Ajax Page</h1>
-    <input type="button" value="javescript" class="get_data"> 
+<body>
+    
+    <!-- <input type="button" value="javescript" class="get_data"> 
     
     <div class="show_data">
     </div><br><br>
@@ -139,7 +177,5 @@
     <button class="show-msg">Click Me</button>
     <div class="message-container"></div> -->
 
-    <!-- <button type="button" class="submit_review"> Review</button> -->
-    <!-- {% csrf_token %} -->
 </body>
 </html>

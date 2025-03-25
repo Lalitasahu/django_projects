@@ -65,6 +65,20 @@ class CategorySet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def create(self, request, *args, **kwargs):
+        
+        name = request.data.get("name")
+        image = request.FILES.get("image")
+        
+        category = Category.objects.create(
+            name=name,
+            image=image
+        )
+        category.save()
+        
+        serializers = CategorySerializer(category)
+        return Response(serializers.data,status=status.HTTP_201_CREATED)
+    
 
 class ReviewSet(viewsets.ModelViewSet):
     queryset = Reviews.objects.all()
@@ -93,7 +107,7 @@ class ReviewSet(viewsets.ModelViewSet):
         comment = request.data.get('comment')
         rating = request.data.get('rating')
 
-        print(comment,rating,product_id)
+        # print(comment,rating,product_id)
         review = Reviews.objects.create(
             user_id=1,
             comment=comment,

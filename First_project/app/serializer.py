@@ -47,7 +47,13 @@ class CartSerializer(serializers.HyperlinkedModelSerializer):
         model = Cart
         fields = '__all__' 
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+# class CategorySerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Category
+#         fields = '__all__' 
+
+class CategorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Category
-        fields = '__all__' 
+        fields = '__all__'
