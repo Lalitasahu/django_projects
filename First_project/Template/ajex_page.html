@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.6.0/backbone.js" integrity="sha512-pHp0xx4+ibz4Pc5VOFo6IUNrGX86Ghv8GH6ZW7ws/3inN5TESxjzp2nVhn5nCdSl8R6N3F1EyEh14BbQoJCGZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"></script>
+
     <title>ajax page</title>
     <h1 style= "text-align: center;">This is Ajax Page</h1>
     <form action="">
@@ -50,10 +52,64 @@
         <div id="upload-status"></div>
         <button  type="button" class="submit_multimage">Submit all Images </button>
     </form>
+
     <br><br>
+    <button type="button" class="underscore-template">Underscore Ttemplate </button>
+    
+    <!-- <script type="text/template" id="user-template">
+        <h2>User List</h2>
+        <% user.forEach(function(user) { %>
+            <p><%= user.username %> - <%= user.email %></p>
+        <% }); %>
+    </script> 
+
+    <script>
+        $(document).ready(() => {
+            $("#user-template").click(()=>{
+            
+                $.ajax({
+                    url: "http://localhost:8000/api/User/",  
+                    method: "GET",
+                    success: function(data) {
+                        var templateHtml = $("#user-template").html();
+                        var template = _.template(templateHtml);
+                        var result = template({ user: data });
+        
+                        $("body").append(result);
+                    }
+                });
+            })
+        });
+    </script> -->
+    
+
+    <script type="text/template" id="new-template">
+        <div>
+            <% _.each(reviews,(item)=>{ %>
+                <p><%= item.comment %></p>
+                <p><%= item.rating %></p>
+                <p><%= item.created_at %></p>
+            <% })%>
+        </div>
+    </script>
+
+
 
     <script>
         $(document).ready(()=>{
+            $(".underscore-template").click(()=>{
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:8000/api/Reviews/",
+                    success: ((res)=>{
+                        res.results.map((item,index)=>{
+                            console.log(res);
+                        })
+                        let temp = _.template($("#new-template").html())
+                        $(".show_data").html(temp({reviews:res.results}))
+                    })
+                })
+            })
             $(".get_data").click(()=>{
                 // console.log("This is my javascript page") 
                 $.ajax({
@@ -64,20 +120,21 @@
 
                         var data = ""
                         res.results.map((item,index)=>{
-                            // this is for the product Image
-                            // data+=`
-                            //     <div>
-                            //         <div class="image-container">
-                            //             <img src="${item.image}" style="width:300px;height:280px" />
-                            //         </div>
-                            //         <h1>${item.comment}</h1>
-                            //     </div>
-                            // `
+                        //     // this is for the product Image
+                        //     data+=`
+                        //         <div>
+                        //             <div class="image-container">
+                        //                 <img src="${item.image}" style="width:300px;height:280px" />
+                        //             </div>
+                        //             <h1>${item.comment}</h1>
+                        //         </div>
+                        //     `
                             data+=`<h1>${item.comment}</h1>`
                         })
+                        
+                        $(".show-data").html(data)
 
-                        $(".show_data").html(data)
-                        // console.log("Submitting:", comment, rating, product_id);
+                        console.log("Submitting:", comment, rating, product_id);
 
                     }),
                     error: ((err)=>{
@@ -85,6 +142,7 @@
                     })
                 })
             })
+            
             
             $(".submit_review").click(() => {
                 
@@ -158,6 +216,7 @@
                 
                 const product_id = $("#product_id-img").val()
                 console.log(product_id)
+
                 const fileUpload = $("#images")[0].files;
 
                 // res.results.map((fileUpload,index)=>{
@@ -199,8 +258,8 @@
                         console.log(response);
                     }
                 });
-
             })
+
             $(".cal").click(()=>{
                 var num1 = parseInt($("input[name=val1]").val())
                 var num2 = parseInt($("input[name=val2]").val())
@@ -229,6 +288,13 @@
         
             $(".underscore").click(()=>{
                 
+                var compiled = _.template($("#new-template").html());
+
+                $(".res").html(compiled({name:"Hellllloooo "}))
+
+                // console.log(compiled());
+
+
                 // var template = _.template("Bye, <%= name %>!");
                 // console.log(template({ name: "John" }));
                 // console.log(typeof _);
@@ -250,10 +316,10 @@
    
 </head>
 <body>
-    <!-- <input type="button" value="javescript" class="get_data"> 
+    <input type="button" value="javescript" class="get_data"> 
     
     <div class="show_data">
-    </div><br><br>
+    <!-- </div><br><br>
     
     <input type="text" name="val1" id="val1">
     <input type="text" name="val2" id="val2">
@@ -264,6 +330,7 @@
     <div class="message-container"></div> -->
     
     <button type="button" class="underscore">underscore</button>
+    <div class="res"></div>
 </body>
 </html>
 

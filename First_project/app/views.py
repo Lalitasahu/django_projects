@@ -25,7 +25,7 @@ class ProfileSet(viewsets.ModelViewSet):
 
 class ImageSet(viewsets.ModelViewSet):
     queryset = Images.objects.all()
-    serializer_class = ImageSerializer
+    serializer_class = ImageSerializer  
 
     def create(self, request, *args, **kwargs):
         product_id = request.data.get('product_id')
