@@ -23,6 +23,24 @@ class ProfileSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class =  ProfileSerializer
 
+class ImageSet(viewsets.ModelViewSet):
+    queryset = Images.objects.all()
+    serializer_class = ImageSerializer
+
+    def create(self, request, *args, **kwargs):
+        product_id = request.data.get('product_id')
+        product = Product.objects.get(id=product_id)
+
+        images = request.FILES.getlist('image')  
+
+        uploaded_images = []
+        for img in images:
+            image_obj = Images.objects.create(product=product, image=img)
+            uploaded_images.append(image_obj)
+
+        serializer = ImageSerializer(uploaded_images, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 class ProductSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

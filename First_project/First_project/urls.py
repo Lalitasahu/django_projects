@@ -26,6 +26,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('User',UserSet)
 router.register('Profile',ProfileSet)
+router.register('Image',ImageSet)
 router.register('Product',ProductSet)
 router.register('Order',OrderSet)
 router.register('Cart',CartSet)

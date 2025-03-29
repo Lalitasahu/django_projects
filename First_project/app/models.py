@@ -130,7 +130,6 @@ class Order(models.Model):
     #             self.delivery_date = self.order_date + timedelta(days=2)
     #         super().save(*args, **kwargs)
 
-
 class Images(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE) 
     image = models.ImageField(upload_to='photos/')

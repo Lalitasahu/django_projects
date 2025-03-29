@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'app',
     'mathfilters',
     'rest_framework',
-    # 'corsheaders',
+    'corsheaders',
 ]
 
+
+CORS_ALLOW_ALL_ORIGINS = True 
 
 REST_FRAMEWORK = { 
     'DEFAULT_PERMISSION_CLASSES': [
@@ -69,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'First_project.urls'
