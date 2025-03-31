@@ -483,4 +483,5 @@ def userprofile(request):
 
 def ajax_page(request):
     # return render(request,'new_page.html')
-    return render(request,'ajex_page.html')
+    # return render(request,'ajex_page.html')
+    return render(request,'cat_ajax.html')
