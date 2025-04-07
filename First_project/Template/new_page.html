@@ -6,6 +6,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>Ajax request page</title>
 </head>
+    <input type="text" id="nameInput" placeholder="Enter your name" />
+    <button id="saveBtn">Save</button>
+
+    <button id="loadBtn">Load</button>
+
+    <p id="result"></p>
+
 <body>
 
     <script>
@@ -30,6 +37,17 @@
                     })
                 })
             })
+        
+            $('#saveBtn').click(function() {
+                let name = $('#nameInput').val();
+                localStorage.setItem('username', name);
+                console.log(name)
+            });
+
+            $('#loadBtn').click(function() {
+                let savedName = localStorage.getItem('username');
+                $('#result').text('Saved name: ' + savedName);
+            });
         })
 
     </script>
@@ -40,6 +58,68 @@
     <div class="show_data">
 
     </div>
+
 </body>
 </html>
 
+
+
+<!-- <script>
+  $('#loginBtn').click(function(e) {
+    let username = $('#username').val();
+    let password = $('#password').val();
+
+    // Sample: API call or dummy token generation (for demo)
+    if (username && password) {
+      // You can use AJAX here to authenticate and get token from Django
+      let dummyToken = 'abc123accessToken'; // In real app, get from server
+      
+      localStorage.setItem('access_token', dummyToken);
+      localStorage.setItem('username', username);
+
+      alert("Logged in! Token saved to localStorage.");
+      // Optionally redirect to dashboard
+      window.location.href = '/dashboard/';
+    } else {
+      alert('Please enter both fields');
+    }
+  });
+
+  // Optional: Check token on page load
+  $(document).ready(function() {
+    let token = localStorage.getItem('access_token');
+    if (token) {
+      console.log("Token found:", token);
+      // You can auto-login or redirect if needed
+    }
+  });
+</script> -->
+
+
+
+
+
+
+<!-- <script>
+    $(document).ready(function() {
+      let token = localStorage.getItem('access_token');
+      if (!token) {
+        alert('Please login first.');
+        window.location.href = '/login/';
+      } else {
+        console.log("Access token:", token);
+      }
+    });
+  </script>
+
+
+
+<button id="logoutBtn">Logout</button>
+
+<script>
+  $('#logoutBtn').click(function() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('username');
+    window.location.href = '/login/';
+  });
+</script> -->

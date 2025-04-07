@@ -14,14 +14,57 @@ from datetime import datetime
 import pandas as pd
 import re
 from django.db.models import Q
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
+
+
 
 class UserSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
+#     def create(self,request, *args, **kwargs):
+#         username = request.data.get("username")
+#         password = request.data.get("password")
+
+#         if not username or not password:
+#             return Response(
+#                 {"detail": "Username and password are required."},
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+        
+#         user = authenticate(request, username=username, password=password)
+
+#         if not user:
+#             return Response(
+#                 {"detail": "Invalid credentials."},
+#                 status=status.HTTP_401_UNAUTHORIZED
+
+#             )
+        
+#         refresh = RefreshToken.for_user(user)
+#         access_token = str(refresh.access_token)
+        
+#         return Response({
+#             "access": access_token,
+#             "refresh": str(refresh),
+#         }, status=status.HTTP_200_OK)
+    
+
+
 class ProfileSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class =  ProfileSerializer
+
+
+    def user_profile(request):
+        user = request.user
+        profile = user.profile 
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
 
 class ImageSet(viewsets.ModelViewSet):
     queryset = Images.objects.all()
@@ -126,8 +169,9 @@ class ReviewSet(viewsets.ModelViewSet):
         rating = request.data.get('rating')
 
         # print(comment,rating,product_id)
+        
         review = Reviews.objects.create(
-            user_id=1,
+            user_id=3,
             comment=comment,
             rating=rating,
             product_id=product_id
@@ -482,6 +526,6 @@ def userprofile(request):
 
 
 def ajax_page(request):
-    # return render(request,'new_page.html')
+    return render(request,'new_page.html')
     # return render(request,'ajex_page.html')
-    return render(request,'cat_ajax.html')
+    # return render(request,'cat_ajax.html')

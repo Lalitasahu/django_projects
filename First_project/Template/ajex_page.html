@@ -110,6 +110,7 @@
                     })
                 })
             })
+           
             $(".get_data").click(()=>{
                 // console.log("This is my javascript page") 
                 $.ajax({
@@ -176,6 +177,7 @@
 
                     success: (res) => {
                         console.log(res);
+                        // $(".res").html(data)
                         
                     }
                 });
@@ -202,6 +204,7 @@
                     contentType: false,  
                     headers: {
                         'X-CSRFToken': $("input[name=csrfmiddlewaretoken]").val(),
+                        'Autorization': `Bearer ${localStorage.getItem('access_token')}`
                     },
                     success: (response) => {
                         console.log(response);
@@ -334,7 +337,50 @@
 </html>
 
 
+
+<!-- <script>
+    $(document).ready(()=> {
+        $("#add-reviews").click(()=> {
+            $.ajax({
+                method: "GET",
+                url: "http://localhost:8000/api/Reviews/", // Adjust to your API endpoint
+                success: (res)=> {
+                    // Assuming 'res.results' is an array of review objects
+                    res.results.forEach((item, index)=> {
+                        console.log(res); // Debug to see response
+                    })
+                    // Use Underscore.js template to dynamically insert form
+                    let temp = _.template($("#review-sr").html());
+                    $(".show_data").html(temp({ reviews: res.results[0] })); // Only use the first review for now
+                }
+            });
+        })
+        // Handle form submission via AJAX
+        $(document).on('submit', '#review-form', function(e) {
+            e.preventDefault(); // Prevent form from submitting normall
+            let formData = {
+                rating: $('select[name="rating"]').val(),
+                comment: $('textarea[name="comment"]').val(),
+                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val() // CSRF token
+            }
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:8000/api/Reviews/", // API endpoint to submit review
+                data: formData,
+                success: function(response) {
+                    console.log("Review submitted successfully", response);
+                    // Optionally, clear the form or show a success message
+                    $('#review-form')[0].reset(); 
+                },
+                error: function(error) {
+                    console.error("Error submitting review", error);
+                }
+            });
+        });
+    });
+</script> -->
+
 <!-- underscore template  -->
 <!-- <%  %> - to execute some code
-<%= %> - to print some value in template
+<%= %> - to print so    me value in template
 <%- %> - to print some values HTML escaped -->

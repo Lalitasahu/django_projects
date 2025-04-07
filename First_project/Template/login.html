@@ -6,6 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'login.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Login</title>
 </head>
@@ -18,14 +21,92 @@
         <form method="POST" action="">
             {% csrf_token %}
             <label for="username">User Name: </label>
-            <input type="text" name="username" placeholder="Enter username" /><br><br>
+            <input type="text" id="username" name="username" placeholder="Enter username" /><br><br>
 
             <label for="password">Password: </label>
-            <input type="password" name="password" placeholder="Enter Password" /> <br><br>
+            <input type="password" id="password" name="password" placeholder="Enter Password" /> <br><br>
             
-            <button type="submit">Login</button>
+            <button type="button" id="loginBtn">Login</button>
         </form>
     </div>
+    
+    <script>
+        $(document).ready(()=>{
+            if (localStorage.getItem('access_token')){
+                // window.location.href="/"
+            }
+        })
+
+
+        $(document).on("click", "#loginBtn", (event) => {
+            event.preventDefault();
+        
+            var username = $('#username').val();
+            var password = $('#password').val();
+        
+            $.ajax({
+                url: 'http://localhost:8000/api/token/',
+                type: 'POST',
+                data: JSON.stringify({
+                    "username": username,
+                    "password": password
+                }),
+                contentType: 'application/json',
+                success: function(response) {
+                    const accessToken = response.access;
+                    localStorage.setItem('access_token', accessToken);
+                    alert("Login successful!");
+        
+                    // Fetch basic user info (username, email, profile_pic)
+                    $.ajax({
+                        method: "GET",
+                        url: "http://localhost:8000/api/User/",
+                        headers: {
+                            "Authorization": "Bearer " + accessToken
+                        },
+                        success: (userRes)=> {
+        
+                            // Then fetch profile info (phone, address, vendor)
+                            $.ajax({
+                                method: "GET",
+                                url: "http://localhost:8000/api/Profile/",
+                                headers: {
+                                    "Authorization": "Bearer " + accessToken
+                                },
+                                success: (profileRes)=> {
+                                    let data = `
+                                        <h2>User Profile</h2>
+                                        <p><strong>Username:</strong> ${userRes.username}</p>
+                                        <p><strong>Email:</strong> ${userRes.email}</p>
+                                    
+        
+                                        <p><strong>Phone No:</strong> ${profileRes.address}</p>
+                                        <p><strong>Address:</strong> ${profileRes.phone_no}</p>
+                                        <p><strong>Vendor:</strong> ${profileRes.is_vendor}</p>
+                                    `;
+                                    $(".show-datas").html(data);
+                                },
+                                error: function() {
+                                    console.error("Error fetching profile info");
+                                }
+                            });
+        
+                        },
+                        error: function() {
+                            console.error("Error fetching user info");
+                        }
+                    });
+        
+                },
+                error: function() {
+                    alert("Invalid credentials. Please try again.");
+                }
+            });
+        });
+    </script>
+        
+ 
 </body>
+<div class="show-datas"></div>
 </html>
 
