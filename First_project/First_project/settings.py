@@ -48,17 +48,24 @@ INSTALLED_APPS = [
 
 CORS_ALLOW_ALL_ORIGINS = True 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
 REST_FRAMEWORK = { 
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'  
-        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny',
+
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
 
     # authencated
     
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+       'rest_framework_simplejwt.authentication.JWTAuthentication',
+       'rest_framework.authentication.SessionAuthentication'
     ),
+
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10, 
     
@@ -68,11 +75,13 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(weeks=5),
 }
+
 # REST_FRAMEWORK = {
 #     # Use Django's standard `django.contrib.auth` permissions,
 #     # or allow read-only access for unauthenticated users.
 #     'DEFAULT_PERMISSION_CLASSES': [
 #         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+#         # 'rest_framework.permissions.IsAuthenticated',
 #     ]
 # }
 
@@ -85,6 +94,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'First_project.urls'

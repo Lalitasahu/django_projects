@@ -26,14 +26,15 @@
             <label for="password">Password: </label>
             <input type="password" id="password" name="password" placeholder="Enter Password" /> <br><br>
             
-            <button type="button" id="loginBtn">Login</button>
+            <!-- <button type="button" id="loginBtn">Login</button> -->
+            <button type="submit" >Login</button>
         </form>
     </div>
     
-    <script>
+    <!-- <script>
         $(document).ready(()=>{
             if (localStorage.getItem('access_token')){
-                // window.location.href="/"
+                window.location.href="/userprofile/"
             }
         })
 
@@ -52,61 +53,38 @@
                     "password": password
                 }),
                 contentType: 'application/json',
-                success: function(response) {
+                success: (response)=> {
                     const accessToken = response.access;
                     localStorage.setItem('access_token', accessToken);
                     alert("Login successful!");
+                    window.location.href="/"
         
-                    // Fetch basic user info (username, email, profile_pic)
                     $.ajax({
                         method: "GET",
-                        url: "http://localhost:8000/api/User/",
+                        url: "http://localhost:8000/api/Profile/",
                         headers: {
                             "Authorization": "Bearer " + accessToken
                         },
-                        success: (userRes)=> {
-        
-                            // Then fetch profile info (phone, address, vendor)
-                            $.ajax({
-                                method: "GET",
-                                url: "http://localhost:8000/api/Profile/",
-                                headers: {
-                                    "Authorization": "Bearer " + accessToken
-                                },
-                                success: (profileRes)=> {
-                                    let data = `
-                                        <h2>User Profile</h2>
-                                        <p><strong>Username:</strong> ${userRes.username}</p>
-                                        <p><strong>Email:</strong> ${userRes.email}</p>
-                                    
-        
-                                        <p><strong>Phone No:</strong> ${profileRes.address}</p>
-                                        <p><strong>Address:</strong> ${profileRes.phone_no}</p>
-                                        <p><strong>Vendor:</strong> ${profileRes.is_vendor}</p>
-                                    `;
-                                    $(".show-datas").html(data);
-                                },
-                                error: function() {
-                                    console.error("Error fetching profile info");
-                                }
-                            });
-        
-                        },
-                        error: function() {
-                            console.error("Error fetching user info");
+                        success: (res)=> {
+                            let data = `
+                                <h2>User Profile</h2>
+                                <p><strong>Phone No:</strong> ${res.address}</p>
+                                <p><strong>Address:</strong> ${res.phone_no}</p>
+                            `;
+                            $(".show-datas").html(data);
                         }
+                            
+        
+                        
                     });
         
-                },
-                error: function() {
-                    alert("Invalid credentials. Please try again.");
                 }
             });
         });
-    </script>
+    </script> -->
         
  
 </body>
-<div class="show-datas"></div>
+<!-- <div class="show-datas"></div> -->
 </html>
 

@@ -29,6 +29,39 @@
     /* border-left: 1px solid gray; */
 }
 
+
+/* Dropdown Menu */
+.dropdown-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background-color: yellow;
+    top: 100%;
+    left: 0;
+    width: 200px;
+    /* display: none; */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu div {
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-menu div:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 12px 16px;
+    display: block;
+}
+
+/* Hover Effect */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
 .right-nav{
     font-weight: bold;
     font-size: 20px;

@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -27,7 +28,6 @@ from rest_framework_simplejwt.views import (
 )
 
 
-
 router = routers.DefaultRouter()
 router.register('User',UserSet)
 router.register('Profile',ProfileSet)
@@ -38,9 +38,15 @@ router.register('Cart',CartSet)
 router.register('Category',CategorySet)
 router.register('Reviews',ReviewSet)
 
+# Retrieve function url
+router.register('CategroyByCategoryViewset',CategroyByCategoryViewset, basename='CategroyByCategoryViewset')
+router.register('ProductByCategoryViewset',ProductByCategoryViewset, basename='ProductByCategoryViewset')
+
 
 
 urlpatterns = [
+    # genric view set url
+    
     path('admin/', admin.site.urls),
     path('',homepage),
     path("createuser/",createuser),
@@ -71,6 +77,7 @@ urlpatterns = [
     path('delete_review/<int:id>/',delete_review),
     path('show_reviews/',show_reviews),
     path('ajax/',ajax_page),
+     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),

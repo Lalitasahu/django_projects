@@ -30,10 +30,18 @@ class ReviewsSerializer(serializers.Serializer):
 
         # fields = ('id','rating','comment','created_at')
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
+
+class ImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Images
+        fields = '__all__'
+
+class ProductSerializer(serializers.ModelSerializer):
+    # images = ImageSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = '__all__' 
+        fields = '__all__'
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     # name_ = serializers.ReadOnlyField(source="product.product")
@@ -47,19 +55,20 @@ class CartSerializer(serializers.HyperlinkedModelSerializer):
         model = Cart
         fields = '__all__' 
 
-# class CategorySerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Category
-#         fields = '__all__' 
-
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
         fields = '__all__'
 
-class ImageSerializer(serializers.ModelSerializer):
 
+class CategroyByCategory(serializers.ModelSerializer):
     class Meta:
-        model = Images
+        model = Category
         fields = '__all__'
+
+class ProductByCategory(serializers.ModelSerializer):
+    # images = ImageSerializer(many=True, read_only=True)
+    class Meta:
+        model = Product
+        fields = ['id','title','image_list','model_name','cat']
