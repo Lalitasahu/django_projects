@@ -20,6 +20,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import permissions
 
 
 # Genric view set 
@@ -57,6 +58,42 @@ class ProductByCategoryViewset(ModelViewSet):
 class UserSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def create(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
+        email = request.data.get('email')
+        address = request.data.get('address')
+        password = request.data.get('password')
+        phone_no = request.data.get('phone_no')
+        is_vendor = request.data.get('is_vendor')
+
+        user = User.objects.create(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            email=email
+        )
+        user.set_password(password)  # Securely hash the password
+        user.save()
+
+        profile = Profile.objects.create(
+            user=user,
+            address=address,
+            phone_no=phone_no,
+            is_vendor=is_vendor,
+            # profile_pic=profile_pic
+        )
+
+        profile.save()
+        
+    
+        # serializer = self.get_serializer( user, context={'request': request})
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 #     def create(self,request, *args, **kwargs):
 #         username = request.data.get("username")
