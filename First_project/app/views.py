@@ -100,7 +100,6 @@ class UserSet(viewsets.ModelViewSet):
             is_vendor=is_vendor,
             # profile_pic=profile_pic
         )
-
         profile.save()
     
         serializer = UserSerializer(user)
