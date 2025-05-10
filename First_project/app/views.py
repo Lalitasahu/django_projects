@@ -21,6 +21,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 
 # Genric view set 
@@ -34,6 +36,17 @@ from rest_framework import permissions
 #         serializer=SubCategoryByCategory(sub,many=True)
 #         return Response(serializer.data,status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    user = request.user
+    profile = request.user.profile
+    return Response({
+        "username": user.username,
+        "is_vendor": profile.is_vendor,
+    })
+
+
 class CategroyByCategoryViewset(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategroyByCategory
@@ -43,6 +56,7 @@ class CategroyByCategoryViewset(ModelViewSet):
         category = Category.objects.filter(id=_id)
         serializer = CategroyByCategory(category, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
     
 class ProductByCategoryViewset(ModelViewSet):
     queryset = Product.objects.all()
@@ -88,10 +102,7 @@ class UserSet(viewsets.ModelViewSet):
         )
 
         profile.save()
-        
     
-        # serializer = self.get_serializer( user, context={'request': request})
-
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -122,7 +133,6 @@ class ProfileSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class =  ProfileSerializer
 
-
     # def user_profile(request):
     #     user = request.user
     #     profile = user.profile 
@@ -150,6 +160,19 @@ class ImageSet(viewsets.ModelViewSet):
 class ProductSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    
+    def create(self, request, *args, **kwargs):
+        data = request.POST
+        
+        prodcut = Product.objects.create(
+            # is_available = data['is_available'],
+            title = data['title'],
+            user_id = request.user.id,
+            # stock = data['stock']
+        )
+        prodcut.save()
+        serializer = ProductSerializer(prodcut)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
 
 class OrderSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()

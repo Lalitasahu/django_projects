@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 ]
 
 
-CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -73,7 +73,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=10),
 }
 
 # REST_FRAMEWORK = {
@@ -86,6 +86,7 @@ SIMPLE_JWT = {
 # }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # ← MUST be first
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -93,10 +94,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    
 ]
-
 ROOT_URLCONF = 'First_project.urls'
 
 TEMPLATES = [

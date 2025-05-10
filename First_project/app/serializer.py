@@ -4,7 +4,6 @@ from .models import *
 from datetime import datetime
 
 class ImageSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Images
         fields = '__all__'
@@ -13,8 +12,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email')
-
-        
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta :
@@ -37,11 +34,9 @@ class ReviewsSerializer(serializers.Serializer):
 
         # fields = ('id','rating','comment','created_at')
 
-
-
-
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
+    user_id = serializers.ReadOnlyField(source = "user.id")
     class Meta:
         model = Product
         fields = '__all__'
