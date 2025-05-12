@@ -12,6 +12,7 @@ from rest_framework import viewsets
 from django.core.paginator import Paginator
 from datetime import datetime
 import pandas as pd
+from decimal import Decimal
 import re
 from django.db.models import Q
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -42,6 +43,7 @@ def current_user(request):
     user = request.user
     profile = request.user.profile
     return Response({
+        "user_id":user.id,
         "username": user.username,
         "is_vendor": profile.is_vendor,
     })
@@ -105,29 +107,6 @@ class UserSet(viewsets.ModelViewSet):
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-#     def create(self,request, *args, **kwargs):
-#         username = request.data.get("username")
-#         password = request.data.get("password")
-#         if not username or not password:
-#             return Response(
-#                 {"detail": "Username and password are required."},
-#                 status=status.HTTP_400_BAD_REQUEST
-#             ) 
-#         user = authenticate(request, username=username, password=password)
-#         if not user:
-#             return Response(
-#                 {"detail": "Invalid credentials."},
-#                 status=status.HTTP_401_UNAUTHORIZED
-#             )
-#         refresh = RefreshToken.for_user(user)
-#         access_token = str(refresh.access_token)
-#         return Response({
-#             "access": access_token,
-#             "refresh": str(refresh),
-#         }, status=status.HTTP_200_OK)
-    
-
-
 class ProfileSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class =  ProfileSerializer
@@ -167,7 +146,7 @@ class ProductSet(viewsets.ModelViewSet):
             # is_available = data['is_available'],
             title = data['title'],
             user_id = request.user.id,
-            # stock = data['stock']
+            # cat = request.category.id,
         )
         prodcut.save()
         serializer = ProductSerializer(prodcut)
@@ -179,20 +158,30 @@ class OrderSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         pro_id = request.data.get("pro_id")
+        # user_id = request.data.get('user_id')
+        username = request.data.get('user_id')
+        # user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
         product = Product.objects.get(id=pro_id)
-        quantity = request.data.get("quantity", 1) 
+        quantity = int(request.data.get("quantity", 1))
         shipping_address = request.data.get("shipping_address")
-        user_id = request.data.get('user_id')
-        # delivery_date = request.data.get("delivery_date")
-        # print(request.data)
+    #     # delivery_date = request.data.get("delivery_date")
+    #     # print(request.data)
+
+    #         # Convert price string to clean Decimal
+        if isinstance(product.price, str):
+            clean_price_str = re.sub(r"[₹,]", "", product.price)
+            clean_price = Decimal(clean_price_str)
+        else:
+            clean_price = product.price
 
         order = Order.objects.create(
-            product = product.name,
-            price = product.price,
-            quantity = quantity,
-            shipping_address = shipping_address,
-            delivery_date = datetime.today().date(),
-            user_id = user_id
+            user=user,
+            product=product.title,
+            price=clean_price,
+            quantity=quantity,
+            shipping_address=shipping_address,
+            delivery_date=datetime.today().date(),
         )
         order.save()
     
@@ -418,7 +407,7 @@ def order_item(request, id):
         )
         order.save()
 
-        Cart.objects.get(user_id = request.user.id, product_id =  product.id).delete()
+        # Cart.objects.get(user_id = request.user.id, product_id =  product.id).delete()  need to review this is not working incluede this then order is not work
   
         # Update product stock
         product.stock -= quantity
