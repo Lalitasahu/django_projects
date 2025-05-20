@@ -37,6 +37,7 @@ from rest_framework.permissions import IsAuthenticated
 #         serializer=SubCategoryByCategory(sub,many=True)
 #         return Response(serializer.data,status=status.HTTP_200_OK)
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def current_user(request):
@@ -136,21 +137,53 @@ class ImageSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class ProductSet(viewsets.ModelViewSet):
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    
+
     def create(self, request, *args, **kwargs):
-        data = request.POST
-        
+        data = request.POST       
         prodcut = Product.objects.create(
-            # is_available = data['is_available'],
             title = data['title'],
-            user_id = request.user.id,
-            # cat = request.category.id,
-        )
+            user_id = request.user.id )
+        
         prodcut.save()
         serializer = ProductSerializer(prodcut)
         return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+    # def retrieve(self, request, *args, **kwargs):
+    #     product_id = kwargs['pk']
+    #     user_id = request.user.id
+
+    #     product = Product.objects.get(id=product_id)
+    #     is_in_cart = Cart.objects.filter(product_id=product_id, user_id=user_id).exists()
+
+    #     serializer = ProductSerializer(product, context={'is_in_cart': is_in_cart})
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, *args, **kwargs):
+            product_id = kwargs['pk']
+            user_id = request.user.id
+
+            cart = Cart.objects.filter(
+                product_id = product_id,
+                user_id = user_id
+            )
+            product = Product.objects.get(id = product_id)
+            # print(cart)
+            if cart:
+                pser = ProductSerializer(product,data={'is_in_cart':True},partial=True)
+                if pser.is_valid():
+                    pser.save()
+                    # print(pser.data)
+                else:
+                    print(pser.errors)
+            else:
+                pser = ProductSerializer(product)
+            
+            return Response(pser.data,status=status.HTTP_200_OK)
+
+
 
 class OrderSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -195,6 +228,68 @@ class OrderSet(viewsets.ModelViewSet):
 class CartSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    # parser_classes = [JSONParser] 
+
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        product_id = data.get('product')
+        quantity = data.get('quantity', 1)
+        user = request.user
+
+        # ✅ Check if already in cart before creating
+        if Cart.objects.filter(product_id=product_id, user=user).exists():
+            return Response({"detail": "Product already in cart."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # ✅ Proceed to create cart item
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    
+    # def create(self, request, *args, **kwargs):
+    #     data = request.data
+    #     product_id = data.get('product')
+    #     quantity = data.get('quantity')
+    #     user_id = request.user.id
+    #     user = request.user
+
+    #     cart = Cart.objects.create(
+    #         product_id = product_id,
+    #         quantity = quantity,
+    #         user_id = user_id
+    #     )
+
+    #     cartSer = CartSerializer(cart)
+    #     # Check if already in cart
+    #     if Cart.objects.filter(product_id=product_id, user=user).exists():
+    #         return Response({"detail": "Product already in cart."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     # Proceed to add to cart
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save(user=user)
+
+    #     return Response(cartSer.data,status=status.HTTP_201_CREATED)
+    
+
+
+    # def create(self, request, *args, **kwargs):
+    #     user = request.user
+    #     product_id = request.data.get("product")
+        
+    #     # Check if already in cart
+    #     if Cart.objects.filter(product_id=product_id, user=user).exists():
+    #         return Response({"detail": "Product already in cart."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     # Proceed to add to cart
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save(user=user)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class CategorySet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -215,45 +310,56 @@ class CategorySet(viewsets.ModelViewSet):
         return Response(serializers.data,status=status.HTTP_201_CREATED)
     
 
+    
 class ReviewSet(viewsets.ModelViewSet):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
+    permission_classes = [IsAuthenticated]
 
-    # def create(self, request, *args, **kwargs):
-        # comment = request.data['comment']
-        # rating = request.data['rating']
-        # product_id = request.data.get('product_id', None)
+    def perform_create(self, serializer):
+        product_id = self.request.data.get('product')
+        serializer.save(user=self.request.user, product_id=product_id)
+
+
+# class ReviewSet(viewsets.ModelViewSet):
+#     queryset = Reviews.objects.all()
+#     serializer_class = ReviewsSerializer
+
+#     # def create(self, request, *args, **kwargs):
+#         # comment = request.data['comment']
+#         # rating = request.data['rating']
+#         # product_id = request.data.get('product_id', None)
         
-        # print(comment,rating)
-        # review = Reviews.objects.create(
-        #         user_id = 1,
-        #         comment = comment,
-        #         rating = rating,
-        #         product_id = product_id
-        # )
-        # review.save()
+#         # print(comment,rating)
+#         # review = Reviews.objects.create(
+#         #         user_id = 1,
+#         #         comment = comment,
+#         #         rating = rating,
+#         #         product_id = product_id
+#         # )
+#         # review.save()
 
-        # s = ReviewsSerializer(review)
-        # return Response(s.data, status=status.HTTP_201_CREATED)
-    def create(self, request, *args, **kwargs):
-        # print("Received Data:", request.data)
+#         # s = ReviewsSerializer(review)
+#         # return Response(s.data, status=status.HTTP_201_CREATED)
+#     def create(self, request, *args, **kwargs):
+#         # print("Received Data:", request.data)
 
-        product_id = request.data.get('product_id')
-        comment = request.data.get('comment')
-        rating = request.data.get('rating')
+#         product_id = request.data.get('product_id')
+#         comment = request.data.get('comment')
+#         rating = request.data.get('rating')
 
-        # print(comment,rating,product_id)
+#         # print(comment,rating,product_id)
         
-        review = Reviews.objects.create(
-            user_id=3,
-            comment=comment,
-            rating=rating,
-            product_id=product_id
-        )
-        review.save()
+#         review = Reviews.objects.create(
+#             user_id=3,
+#             comment=comment,
+#             rating=rating,
+#             product_id=product_id
+#         )
+#         review.save()
 
-        serializer = ReviewsSerializer(review)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         serializer = ReviewsSerializer(review)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 def homepage(request):
     categories = Category.objects.all()
