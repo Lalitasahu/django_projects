@@ -19,11 +19,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 
 
 # Genric view set 
@@ -37,7 +38,62 @@ from rest_framework.permissions import IsAuthenticated
 #         serializer=SubCategoryByCategory(sub,many=True)
 #         return Response(serializer.data,status=status.HTTP_200_OK)
 
+class BuyAllProductsCreateView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        user = request.user
+        shipping_address = request.data.get("shipping_address")
+
+        cart_items = Cart.objects.filter(user=user)
+
+        if not cart_items.exists():
+            return Response({"error": "Your cart is empty!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        order_items = []
+
+        for item in cart_items:
+            product = item.product
+            quantity = item.quantity
+
+            raw_price = product.price  # e.g., ₹18,990
+            clean_price = Decimal(re.sub(r'[^\d.]', '', str(raw_price)))
+
+            order = Order.objects.create(
+                user=user,
+                product=product,
+                quantity=quantity,
+                price=clean_price,
+                shipping_address=shipping_address,
+                delivery_date=datetime.today().date()
+            )
+
+            order_items.append(order)
+            order.save()
+
+            # Update product stock
+            product.stock -= quantity
+            product.is_available = product.stock > 0
+            product.save()
+
+        # Clear cart
+        cart_items.delete()
+
+        # Serialize
+        serializer = BuyAllProductSerializer(order_items, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ReviewListView(ListAPIView):
+    queryset = Reviews.objects.all()
+    serializer_class = ReviewByProductSerializer
+
+    def get(self, request, *args, **kwargs):
+        _id = kwargs['id']
+        review = Reviews.objects.filter(product_id=_id)
+        serializer = ReviewByProductSerializer(review, many = True)
+        return Response (serializer.data, status=status.HTTP_200_OK)
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def current_user(request):
@@ -46,6 +102,12 @@ def current_user(request):
     return Response({
         "user_id":user.id,
         "username": user.username,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "phone_no": profile.phone_no,
+        "address": profile.address,
+        "profile_pic": profile.profile_pic.url if profile.profile_pic else None,  
         "is_vendor": profile.is_vendor,
     })
 
@@ -70,7 +132,6 @@ class ProductByCategoryViewset(ModelViewSet):
         product = Product.objects.filter(cat_id=_id)
         serializer = ProductByCategory(product, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
 class UserSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -151,16 +212,6 @@ class ProductSet(viewsets.ModelViewSet):
         serializer = ProductSerializer(prodcut)
         return Response(serializer.data,status=status.HTTP_201_CREATED)
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     product_id = kwargs['pk']
-    #     user_id = request.user.id
-
-    #     product = Product.objects.get(id=product_id)
-    #     is_in_cart = Cart.objects.filter(product_id=product_id, user_id=user_id).exists()
-
-    #     serializer = ProductSerializer(product, context={'is_in_cart': is_in_cart})
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-
     def retrieve(self, request, *args, **kwargs):
             product_id = kwargs['pk']
             user_id = request.user.id
@@ -183,8 +234,6 @@ class ProductSet(viewsets.ModelViewSet):
             
             return Response(pser.data,status=status.HTTP_200_OK)
 
-
-
 class OrderSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -198,24 +247,22 @@ class OrderSet(viewsets.ModelViewSet):
         product = Product.objects.get(id=pro_id)
         quantity = int(request.data.get("quantity", 1))
         shipping_address = request.data.get("shipping_address")
-    #     # delivery_date = request.data.get("delivery_date")
-    #     # print(request.data)
-
-    #         # Convert price string to clean Decimal
+    
         if isinstance(product.price, str):
             clean_price_str = re.sub(r"[₹,]", "", product.price)
             clean_price = Decimal(clean_price_str)
         else:
             clean_price = product.price
 
-        order = Order.objects.create(
-            user=user,
-            product=product.title,
-            price=clean_price,
-            quantity=quantity,
-            shipping_address=shipping_address,
-            delivery_date=datetime.today().date(),
-        )
+        # for ord in Order:
+            order = Order.objects.create(
+                user=user,
+                product=product.title,
+                price=clean_price,
+                quantity=quantity,
+                shipping_address=shipping_address,
+                delivery_date=datetime.today().date(),
+            )
         order.save()
     
         product.stock -= quantity
@@ -225,11 +272,28 @@ class OrderSet(viewsets.ModelViewSet):
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
+
 class CartSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    pagination_class = PageNumberPagination
+    
+    # pagination_class = Paginator
     # parser_classes = [JSONParser] 
+    
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.is_authenticated:
+    #         return Cart.objects.filter(user=user)
+    #     return Cart.objects.none()
 
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated:
+            cart_items = Cart.objects.filter(user=user)
+            serializer = self.get_serializer(cart_items, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"detail": "Authentication credentials were not provided."}, status=status.HTTP_401_UNAUTHORIZED)
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -237,60 +301,20 @@ class CartSet(viewsets.ModelViewSet):
         quantity = data.get('quantity', 1)
         user = request.user
 
-        # ✅ Check if already in cart before creating
         if Cart.objects.filter(product_id=product_id, user=user).exists():
             return Response({"detail": "Product already in cart."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # ✅ Proceed to create cart item
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=user)
-
+        product = Product.objects.get(id = product_id)
+        cart = Cart.objects.create(
+            # data = data,
+            product = product,
+            quantity = quantity,
+            user = user
+        )
+        cart.save()
+        serializer = self.get_serializer(cart)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
     
-    # def create(self, request, *args, **kwargs):
-    #     data = request.data
-    #     product_id = data.get('product')
-    #     quantity = data.get('quantity')
-    #     user_id = request.user.id
-    #     user = request.user
-
-    #     cart = Cart.objects.create(
-    #         product_id = product_id,
-    #         quantity = quantity,
-    #         user_id = user_id
-    #     )
-
-    #     cartSer = CartSerializer(cart)
-    #     # Check if already in cart
-    #     if Cart.objects.filter(product_id=product_id, user=user).exists():
-    #         return Response({"detail": "Product already in cart."}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     # Proceed to add to cart
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save(user=user)
-
-    #     return Response(cartSer.data,status=status.HTTP_201_CREATED)
-    
-
-
-    # def create(self, request, *args, **kwargs):
-    #     user = request.user
-    #     product_id = request.data.get("product")
-        
-    #     # Check if already in cart
-    #     if Cart.objects.filter(product_id=product_id, user=user).exists():
-    #         return Response({"detail": "Product already in cart."}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     # Proceed to add to cart
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save(user=user)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
 class CategorySet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -308,9 +332,7 @@ class CategorySet(viewsets.ModelViewSet):
         
         serializers = CategorySerializer(category)
         return Response(serializers.data,status=status.HTTP_201_CREATED)
-    
-
-    
+       
 class ReviewSet(viewsets.ModelViewSet):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
@@ -320,46 +342,26 @@ class ReviewSet(viewsets.ModelViewSet):
         product_id = self.request.data.get('product')
         serializer.save(user=self.request.user, product_id=product_id)
 
-
-# class ReviewSet(viewsets.ModelViewSet):
-#     queryset = Reviews.objects.all()
-#     serializer_class = ReviewsSerializer
-
-#     # def create(self, request, *args, **kwargs):
-#         # comment = request.data['comment']
-#         # rating = request.data['rating']
-#         # product_id = request.data.get('product_id', None)
-        
-#         # print(comment,rating)
-#         # review = Reviews.objects.create(
-#         #         user_id = 1,
-#         #         comment = comment,
-#         #         rating = rating,
-#         #         product_id = product_id
-#         # )
-#         # review.save()
-
-#         # s = ReviewsSerializer(review)
-#         # return Response(s.data, status=status.HTTP_201_CREATED)
-#     def create(self, request, *args, **kwargs):
-#         # print("Received Data:", request.data)
-
-#         product_id = request.data.get('product_id')
-#         comment = request.data.get('comment')
-#         rating = request.data.get('rating')
-
-#         # print(comment,rating,product_id)
-        
-#         review = Reviews.objects.create(
-#             user_id=3,
-#             comment=comment,
-#             rating=rating,
-#             product_id=product_id
+# @api_view(["POST"])
+# @permission_classes([IsAuthenticated])
+# def buy_all_products(request):
+#     user = request.user
+#     cart_ids = request.data.get("cart_ids", [])
+#     if not cart_ids:
+#         return Response({"message": "No cart items provided."}, status=400)
+#     cart_items = Cart.objects.filter(id__in=cart_ids, user=user)
+#     if not cart_items.exists():
+#         return Response({"message": "Cart items not found."}, status=404)
+#     for cart in cart_items:
+#         Order.objects.create(
+#             user=user,
+#             product=cart.product,
+#             quantity=cart.quantity,
+#             order_date=datetime.now(),
+#             status="Ordered"
 #         )
-#         review.save()
-
-#         serializer = ReviewsSerializer(review)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         cart.delete()
+#     return Response({"message": "All products bought successfully."})
 
 def homepage(request):
     categories = Category.objects.all()
@@ -378,14 +380,12 @@ def show_reviews(request, product_id):
     page_obj = paginator.get_page(page_number)
     return render(request, 'pro_detail.html', {'page_obj': page_obj, 'product': product})
 
-
 def edit_review(request,id):
     # product = Product.objects.get(id=id)
     reviews = get_object_or_404(Reviews, id=id)
     if request.method == 'POST':
         reviews.comment = request.POST['comment']
         reviews.rating = request.POST['rating']
-         
         reviews.save()
 
     return render(request, 'reviewpage.html', {'reviews':reviews})
@@ -415,15 +415,12 @@ def searching(request):
     if search:
         data = Product.objects.filter(Q(title__icontains = search))
         # data = Product.objects.filter(title__icontains = search
-        #         ) | Product.objects.filter(brand__icontains = search
-        #         ) | Product.objects.filter(model__icontains = search
         #         ) | Product.objects.filter(description__icontains = search)
 
         paginator = Paginator(data, 20)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         
-
     return render(request, 'product_list.html', {'data':data, "message":search, 'page_obj':page_obj})
 
 def remove_cart(request, id):

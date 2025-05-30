@@ -18,28 +18,12 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         model = Profile
         fields = ('address','phone_no','is_vendor')
 
-# class ReviewsSerializer(serializers.Serializer):
-#     comment = serializers.CharField(max_length=200)
-#     rating = serializers.IntegerField()
-#     product_id = serializers.IntegerField()
-#     user_id = serializers.IntegerField()
-#     created_at = serializers.DateTimeField()
-
 class ReviewsSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = Reviews
         fields = ['id', 'product', 'user','user_name' ,'comment', 'rating', 'created_at']
         read_only_fields = ['user', 'created_at']
-
-# class ReviewsSerializer(serializers.ModelSerializer):
-#     comment = serializers.CharField(max_length=200)  
-
-#     class Meta:
-#         model = Reviews
-#         fields = '__all__'
-
-        # fields = ('id','rating','comment','created_at')
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
@@ -50,21 +34,32 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     # name_ = serializers.ReadOnlyField(source="product.product")
+
     class Meta:
         model = Order
-        fields = ('id','product','price','quantity','booking_date','delivery_date','shipping_address')
+        fields = '__all__'
+        # fields = ('id','product','price','quantity','booking_date','delivery_date','shipping_address')
 
+class BuyAllProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = '__all__'
 
 class CartSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Cart
         fields = '__all__'
-        read_only_fields = ('user','date') 
+        # fields = ('id', 'product','quantity','data' )
+        # read_only_fields = ('user','date') 
 
 class CategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
         fields = '__all__'
@@ -81,3 +76,10 @@ class ProductByCategory(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
         # fields = ['id','title','image_list','model_name','cat']
+
+
+# class ReviewByProduct(generics.RetrieveUpdateDestroyAPIView):
+class ReviewByProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reviews
+        fields = "__all__"

@@ -41,13 +41,15 @@ router.register('Reviews',ReviewSet)
 # Retrieve function url
 router.register('CategroyByCategoryViewset',CategroyByCategoryViewset, basename='CategroyByCategoryViewset')
 router.register('ProductByCategoryViewset',ProductByCategoryViewset, basename='ProductByCategoryViewset')
-
+# router.register('ReviewByProductViewset',ReviewByProductViewset, basename='ReviewByProductViewset')
 
 
 urlpatterns = [
     # genric view set url
     
+    path('BuyAllProductsCreateView/', BuyAllProductsCreateView.as_view()),
     path('admin/', admin.site.urls),
+    # path('ReviewByProductViewset/<int:id>/', ReviewByProductViewset.as_view()),
     path('',homepage),
     path("createuser/",createuser),
     path('userlogin/',userlogin),
@@ -76,12 +78,14 @@ urlpatterns = [
     path('edit_review/<int:id>/',edit_review),
     path('delete_review/<int:id>/',delete_review),
     path('show_reviews/',show_reviews),
+    # path('buy_all_products/',buy_all_products),
     path('ajax/',ajax_page),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/user/me/', current_user),
+    path('api/reviews_by_product_id/<int:id>/',ReviewListView.as_view()),
     path('api/', include(router.urls)),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
