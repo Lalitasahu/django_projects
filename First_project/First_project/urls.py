@@ -48,6 +48,7 @@ urlpatterns = [
     # genric view set url
     
     path('BuyAllProductsCreateView/', BuyAllProductsCreateView.as_view()),
+    path('ProductSearchListAPIView/', ProductSearchListAPIView.as_view()),
     path('admin/', admin.site.urls),
     # path('ReviewByProductViewset/<int:id>/', ReviewByProductViewset.as_view()),
     path('',homepage),

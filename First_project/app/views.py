@@ -21,7 +21,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import permissions
+from rest_framework import permissions, generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
@@ -37,6 +37,12 @@ from rest_framework.pagination import PageNumberPagination
 #         sub = sub_cat.objects.filter(cat_id = _id)
 #         serializer=SubCategoryByCategory(sub,many=True)
 #         return Response(serializer.data,status=status.HTTP_200_OK)
+
+class ProductSearchListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'category_name','price','description'] 
 
 class BuyAllProductsCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -255,14 +261,14 @@ class OrderSet(viewsets.ModelViewSet):
             clean_price = product.price
 
         # for ord in Order:
-            order = Order.objects.create(
-                user=user,
-                product=product.title,
-                price=clean_price,
-                quantity=quantity,
-                shipping_address=shipping_address,
-                delivery_date=datetime.today().date(),
-            )
+        order = Order.objects.create(
+            user=user,
+            product=product,
+            price=clean_price,
+            quantity=quantity,
+            shipping_address=shipping_address,
+            delivery_date=datetime.today().date(),
+        )
         order.save()
     
         product.stock -= quantity
