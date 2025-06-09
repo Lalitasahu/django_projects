@@ -35,7 +35,8 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
-    # name_ = serializers.ReadOnlyField(source="product.product")
+    product = ProductSerializer(read_only=True)
+    cancellation_reason = serializers.CharField(source='cancel_reason', read_only=True)
 
     class Meta:
         model = Order

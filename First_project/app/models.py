@@ -99,12 +99,6 @@ class Product(models.Model):
     supported_operating_system = models.TextField(db_column='Supported_Operating_System', blank=True, null=True)  # Field name made lowercase.
     rj11 = models.TextField(db_column='RJ11', blank=True, null=True)  # Field name made lowercase.
     rj45 = models.TextField(db_column='RJ45', blank=True, null=True)  # Field name made lowercase.
-    laptop_bag = models.TextField(db_column='Laptop_Bag', blank=True, null=True)  # Field name made lowercase.
-
-    # class Meta:
-    #     managed = True
-    #     db_table = 'app_product'
-
     
 def get_delivery_date():
     return datetime.now().date() + timedelta(days=2)
@@ -121,8 +115,9 @@ class Order(models.Model):
     quantity = models.IntegerField()
     booking_date = models.DateTimeField(auto_now_add=True)
     delivery_date = models.DateField(default=get_delivery_date)
-    status = models.CharField(max_length=10, choices=STATUS, default='Cancelled')
+    status = models.CharField(max_length=10, choices=STATUS, default='pending')
     shipping_address = models.TextField()
+    cancel_reason = models.TextField(null=True, blank=True)
 
     # delivery_date = models.DateField(blank=True, null=True)
     # def save(self, *args, **kwargs):
@@ -135,14 +130,11 @@ class Images(models.Model):
     image = models.ImageField(upload_to='photos/')
     upload_date = models.DateTimeField(auto_now_add=True)
 
-    
-
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
-    date = models.DateTimeField(auto_now_add=True)
-    
+    date = models.DateTimeField(auto_now_add=True)   
 
 class Reviews(models.Model):
     product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
@@ -151,13 +143,11 @@ class Reviews(models.Model):
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
 class Comment(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
 
 class Likes(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)

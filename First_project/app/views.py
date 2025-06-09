@@ -4,6 +4,7 @@ from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, Ht
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import action
 from rest_framework.views import APIView  
 from rest_framework.response import Response  
 from rest_framework import status  
@@ -11,10 +12,11 @@ from .serializer import  *
 from rest_framework import viewsets
 from django.core.paginator import Paginator
 from datetime import datetime
+from django.utils import timezone
 import pandas as pd
 from decimal import Decimal
 import re
-from django.db.models import Q
+from django.db.models import Q, Count
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -37,6 +39,50 @@ from rest_framework.pagination import PageNumberPagination
 #         sub = sub_cat.objects.filter(cat_id = _id)
 #         serializer=SubCategoryByCategory(sub,many=True)
 #         return Response(serializer.data,status=status.HTTP_200_OK)
+
+class MostOrderedProductsAPIView(APIView):
+    def get(self, request):
+        most_ordered = (
+            Order.objects.values('product')
+            .annotate(order_count=Count('id'))
+            .order_by('-order_count')[:5]
+        )
+
+        product_ids = [item['product'] for item in most_ordered]
+        products = Product.objects.filter(id__in=product_ids)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    
+# class TrendingProductsAPIView(APIView):
+#     def get(self, request):
+#         delivery_date = timezone.now() - timedelta(days=7)
+#         trending = (
+#             Order.objects.filter(booking_date=delivery_date)
+#             .values('product')
+#             .annotate(order_count=Count('id'))
+#             .order_by('-order_count')[:10]
+#         )
+#         product_ids = [item['product'] for item in trending]
+#         products = Product.objects.filter(id__in=product_ids)
+#         serializer = ProductSerializer(products, many=True)
+#         return Response(serializer.data)
+
+# class TrendingProductsAPIView(APIView):
+#     def get(self, request):
+#         one_week_ago = timezone.now() - timedelta(days=7)
+
+#         trending = (
+#             ProductSearchLog.objects
+#             .filter(searched_at__gte=one_week_ago)
+#             .values('product')
+#             .annotate(search_count=Count('id'))
+#             .order_by('-search_count')[:10]
+#         )
+
+#         product_ids = [item['product'] for item in trending]
+#         products = Product.objects.filter(id__in=product_ids)
+#         serializer = ProductSerializer(products, many=True)
+        # return Response(serializer.data)
 
 class ProductSearchListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()
@@ -243,24 +289,24 @@ class ProductSet(viewsets.ModelViewSet):
 class OrderSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         pro_id = request.data.get("pro_id")
-        # user_id = request.data.get('user_id')
-        username = request.data.get('user_id')
-        # user = User.objects.get(id=user_id)
-        user = User.objects.get(username=username)
-        product = Product.objects.get(id=pro_id)
         quantity = int(request.data.get("quantity", 1))
         shipping_address = request.data.get("shipping_address")
-    
+
+        user = request.user
+        product = get_object_or_404(Product, id=pro_id)
+
         if isinstance(product.price, str):
-            clean_price_str = re.sub(r"[₹,]", "", product.price)
-            clean_price = Decimal(clean_price_str)
+            clean_price = Decimal(re.sub(r"[₹,]", "", product.price))
         else:
             clean_price = product.price
 
-        # for ord in Order:
         order = Order.objects.create(
             user=user,
             product=product,
@@ -269,14 +315,32 @@ class OrderSet(viewsets.ModelViewSet):
             shipping_address=shipping_address,
             delivery_date=datetime.today().date(),
         )
-        order.save()
-    
+
         product.stock -= quantity
         product.is_available = product.stock > 0
         product.save()
-        
+
         serializer = OrderSerializer(order)
         return Response(serializer.data)
+
+    @action(detail=True, methods=["patch"])
+    def update_status(self, request, pk=None):
+        order = self.get_object()
+        status_value = request.data.get("status")
+        reason = request.data.get("cancel_reason")
+        print("this the reasoon",reason)
+        if status_value == "cancelled" and not reason:
+            return Response({"error": "Please provide a cancellation reason."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if status_value not in dict(Order.STATUS):
+            return Response({"error": "Invalid status."}, status=status.HTTP_400_BAD_REQUEST)
+
+        order.status = status_value
+        if status_value == "cancelled":
+            order.cancel_reason = reason  # ✅ FIXED HERE
+        order.save()
+
+        return Response({"message": f"Order marked as {status_value}."}, status=status.HTTP_200_OK)
 
 
 class CartSet(viewsets.ModelViewSet):
