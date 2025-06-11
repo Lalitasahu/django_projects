@@ -108,7 +108,7 @@ class BuyAllProductsCreateView(APIView):
             product = item.product
             quantity = item.quantity
 
-            raw_price = product.price  # e.g., ₹18,990
+            raw_price = product.price 
             clean_price = Decimal(re.sub(r'[^\d.]', '', str(raw_price)))
 
             order = Order.objects.create(

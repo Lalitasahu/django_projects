@@ -1,0 +1,70 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login page</title>
+</head>
+<body>
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>Login</h1>
+        
+        <label for="first_name">User Name: </label>
+        <input type="text" name="first_name" placeholder="Enter User Name " required /><br><br>
+        
+        <label for="password">Password: </label>
+        <input type="password" name="set_password" placeholder="Password" required /><br><br>
+        
+        <button type="submit">Login</button>
+    </form>|
+    
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>Login</h1>
+    <form id="loginForm" method="POST">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" placeholder="Enter Username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" placeholder="Password" required><br><br>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div id="responseMessage" style="margin-top: 20px;"></div>
+
+    <script>
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8000/api/token/',
+            data: {
+                username: $('#username').val(),
+                password: $('#password').val()
+            },
+            success: function (response) {
+                localStorage.setItem("access_token", response.access);
+                localStorage.setItem("refresh_token", response.refresh);
+                $('#responseMessage').css("color", "green").text("Login successful! Access token saved.");
+                window.location.href = "http://localhost:8000/";  
+            },
+            error: function (xhr) {
+                $('#responseMessage').css("color", "red").text("Login failed.");
+            }
+        });
+    </script>
+</body>
+</html>
