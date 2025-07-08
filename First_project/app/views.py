@@ -67,12 +67,78 @@ class MostOrderedProductsAPIView(APIView):
 #         serializer = ProductSerializer(products, many=True)
 #         return Response(serializer.data)
 
+# def get_trending_products():
+#     one_week_ago = timezone.now() - timedelta(days=7)
+    
+#     trending_products = (
+#         Product.objects
+#         .annotate(order_count=Count('order', filter=models.Q(order__timestamp__gte=one_week_ago)))
+#         .order_by('-order_count', '-views')[:10]  # Top 10 trending
+#     )
+#     return trending_products
+
+
+# class TrendingProductsView(APIView):
+#     def get(self, request):
+#         products = get_trending_products()# This function should be defined to fetch trending product
+#         serializer = ProductSerializer(products, many=True)
+#         return Response(serializer.data)
+
+
+# from django.db.models import Q
+# from .models import Product, SearchLog
+
+# def search_products(request):
+#     query = request.GET.get('q')
+#     results = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
+#     # Log search if it exactly matches any product name
+#     for product in results:
+#         if query.lower() in product.name.lower():
+#             SearchLog.objects.create(product=product)
+
+#     return render(request, 'search_results.html', {'results': results})
+
+
+# def get_trending_products_by_search():
+#     one_week_ago = timezone.now() - timedelta(days=7)
+    
+#     trending = (
+#         Product.objects
+#         .filter(searchlog__searched_at__gte=one_week_ago)
+#         .annotate(search_count=Count('searchlog'))
+#         .order_by('-search_count')[:10]
+#     )
+#     return trending
+
+# class TrendingSearchView(APIView):
+#     def get(self, request):
+#         products = get_trending_products_by_search()
+#         serializer = ProductSerializer(products, many=True)
+#         return Response(serializer.data)
+
+
+
+# def get_combined_trending_products():
+#     one_week_ago = timezone.now() - timedelta(days=7)
+#     return (
+#         Product.objects
+#         .annotate(
+#             order_count=Count('order', filter=Q(order__timestamp__gte=one_week_ago)),
+#             search_count=Count('searchlog', filter=Q(searchlog__searched_at__gte=one_week_ago)),
+#         )
+#         .annotate(trending_score=F('order_count')*2 + F('search_count'))  # You can tweak weights
+#         .order_by('-trending_score')[:10]
+#     )
+
+
+
 # class TrendingProductsAPIView(APIView):
 #     def get(self, request):
 #         one_week_ago = timezone.now() - timedelta(days=7)
 
 #         trending = (
-#             ProductSearchLog.objects
+#             .objects
 #             .filter(searched_at__gte=one_week_ago)
 #             .values('product')
 #             .annotate(search_count=Count('id'))
@@ -84,11 +150,34 @@ class MostOrderedProductsAPIView(APIView):
 #         serializer = ProductSerializer(products, many=True)
         # return Response(serializer.data)
 
-class ProductSearchListAPIView(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'category_name','price','description'] 
+# class ProductSearchListAPIView(generics.ListAPIView):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     filter_backends = [filters.SearchFilter]
+#     search_fields = ['title', 'category_name','price','description'] 
+
+
+class ProductSearchListAPIView(APIView):
+    def get(self, request):
+        search_term = request.GET.get("search", "")
+        
+        # Filter products
+        products = Product.objects.filter(
+            Q(title__icontains=search_term)
+            # Q(description__icontains=search_term) |
+            # Q(category__name__icontains=search_term)
+        ).distinct()
+        
+        # Filter categories
+        categories = Category.objects.filter(name__icontains=search_term)
+
+        product_serializer = ProductSerializer(products, many=True)
+        category_serializer = CategorySerializer(categories, many=True)
+
+        return Response({
+            "products": product_serializer.data,
+            "categories": category_serializer.data
+        })
 
 class BuyAllProductsCreateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -327,21 +416,31 @@ class OrderSet(viewsets.ModelViewSet):
     def update_status(self, request, pk=None):
         order = self.get_object()
         status_value = request.data.get("status")
-        reason = request.data.get("cancel_reason")
-        print("this the reasoon",reason)
+        reason = request.data.get("cancellation_reason")  # ✅ updated key name
+
+        print("This is the cancellation reason:", reason)
+
         if status_value == "cancelled" and not reason:
-            return Response({"error": "Please provide a cancellation reason."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Please provide a cancellation reason."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         if status_value not in dict(Order.STATUS):
-            return Response({"error": "Invalid status."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid status."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         order.status = status_value
         if status_value == "cancelled":
-            order.cancel_reason = reason  # ✅ FIXED HERE
+            order.cancel_reason = reason
         order.save()
 
-        return Response({"message": f"Order marked as {status_value}."}, status=status.HTTP_200_OK)
-
+        return Response(
+            {"message": f"Order marked as {status_value}."},
+            status=status.HTTP_200_OK
+        )
 
 class CartSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()

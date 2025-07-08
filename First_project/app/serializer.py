@@ -25,10 +25,16 @@ class ReviewsSerializer(serializers.ModelSerializer):
         fields = ['id', 'product', 'user','user_name' ,'comment', 'rating', 'created_at']
         read_only_fields = ['user', 'created_at']
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
     user_id = serializers.ReadOnlyField(source = "user.id")
     is_in_cart = serializers.BooleanField(default=False)
+    category = serializers.CharField(source='cat.title', read_only=True)
 
     class Meta:
         model = Product
@@ -59,11 +65,6 @@ class CartSerializer(serializers.ModelSerializer):
         fields = '__all__'
         # fields = ('id', 'product','quantity','data' )
         # read_only_fields = ('user','date') 
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
 
 
 class CategroyByCategory(serializers.ModelSerializer):

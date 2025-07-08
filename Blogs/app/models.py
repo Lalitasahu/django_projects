@@ -30,6 +30,16 @@ class Blogs(models.Model):
     def __str__(self) -> str:
         return self.title
     
+class Comment(models.Model):
+    blog = models.ForeignKey(Blogs, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment_text = models.TextField()
+    comment_deate = models.DateTimeField(default=datetime.now)
+
+    def __str__(self) -> str:
+        return self.comment_text
+    
+
 class Images(models.Model):
     image = models.ImageField(upload_to='photos/')
     blog = models.ForeignKey(Blogs,on_delete=models.CASCADE)
@@ -40,12 +50,3 @@ class Likes(models.Model):
     liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
     # date = models.DateTimeField(auto_now_add=True)
 
-
-class Comment(models.Model):
-    blog = models.ForeignKey(Blogs, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment_text = models.TextField()
-    comment_deate = models.DateTimeField(default=datetime.now)
-
-    def __str__(self) -> str:
-        return self.comment_text
